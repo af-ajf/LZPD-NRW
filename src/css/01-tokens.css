@@ -1,0 +1,25 @@
+/* 01-tokens.css
+   Design tokens. Single source of truth for colour, radius, shadow, type.
+*/
+
+:root {
+  --navy: #082b4b;
+  --navydeep: #142839;
+  --blue: #005a9e;
+  --ink: #182c3b;
+  --muted: #536576;
+  --line: #dce3e9;
+  --paper: #f7f8fc;
+  --white: #fff;
+  --soft: #eaf2f8;
+  --green: #176547;
+  --greenbg: #e9f5ed;
+  --amber: #765300;
+  --amberbg: #fff4d7;
+  --radius: 12px;
+  --shadow: 0 12px 45px #0e2f4910;
+  font-family: Inter, Arial, sans-serif;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.55;
+}

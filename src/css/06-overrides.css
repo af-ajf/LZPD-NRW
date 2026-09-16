@@ -1,0 +1,334 @@
+/* 06-overrides.css
+   LATE PATCH LAYER - appended after the original sheet, so it wins on specificity ties.
+   It re-declares tokens (--radius, --paper, --ink) and restyles .shell/.btn/.login/.hero.
+   Fold these into the files above when reworking the design.
+*/
+
+/* Composition and interaction details taken from the supplied VITA and mobile references. */
+:root {
+  --radius: 16px;
+  --paper: #f7f8fb;
+  --ink: #14192b;
+}
+.shell {
+  background: linear-gradient(160deg, #443162 0%, #153c58 48%, #004b76 100%);
+}
+.btn {
+  border-radius: 28px;
+}
+.home-search {
+  display: flex;
+  align-items: center;
+  border: 1px solid #bccbd6;
+  border-radius: 30px;
+  padding: 3px 5px 3px 17px;
+  background: white;
+  max-width: 420px;
+  margin-top: 23px;
+  gap: 6px;
+}
+.home-search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  padding: 9px 0;
+  min-height: 44px;
+  width: 100%;
+  font-size: 0.9rem;
+}
+.home-search button {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  background: var(--navy);
+  color: white;
+}
+.learning-banner {
+  padding: 30px 34px;
+  border-radius: 12px 12px 0 0;
+  background:
+    linear-gradient(90deg, #f7f8fbfa 0%, #f7f8fbd9 50%, #f7f8fb11),
+    url("../assets/texture.webp") center 38% / cover;
+  margin-bottom: 24px;
+  min-height: 170px;
+}
+.learning-banner h2 {
+  font-size: 2.3rem;
+}
+.learning-banner p:last-child {
+  color: var(--muted);
+  margin: 0;
+}
+.pathstep {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+}
+.faq {
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+}
+.faq summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 32px;
+  line-height: 1.5;
+  padding-right: 10px;
+}
+.faq p {
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.login {
+  grid-template-columns: 1fr;
+  gap: 25px;
+  justify-items: center;
+  background:
+    linear-gradient(120deg, #15355260, #092b4930),
+    url("../assets/texture.webp") center/cover;
+  padding: 35px 24px;
+}
+.login-brand {
+  max-width: 640px;
+  text-align: center;
+}
+.login-brand .brand {
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.login-brand h1 {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+.login-brand p {
+  max-width: 100%;
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+.login-card {
+  max-width: 480px;
+  padding: 34px 38px;
+}
+.login-card .eyebrow {
+  margin-bottom: 9px;
+}
+.login-card h2 {
+  margin-bottom: 12px;
+}
+.login-card .field {
+  margin: 18px 0;
+}
+.login-note {
+  margin-top: 19px;
+  padding-top: 15px;
+}
+.mobile-nav-dialog {
+  max-height: 100dvh;
+  height: 100dvh;
+  width: min(420px, 100%);
+  max-width: 100%;
+  margin: 0 0 0 auto;
+  border-radius: 0;
+  background: linear-gradient(155deg, #443162, #004b76);
+  color: white;
+}
+.mobile-nav-dialog .iconbtn {
+  color: white;
+}
+.mobile-nav-dialog .menu-links a {
+  color: white;
+  padding: 15px 13px;
+}
+.mobile-nav-dialog .menu-links a[aria-current="page"] {
+  background: #ffffff22;
+}
+.mobile-nav-dialog .rolebox {
+  margin: 25px 0;
+}
+.mobile-nav-dialog .dialog-head {
+  padding-top: 26px;
+}
+@media (max-width: 850px) {
+  .topbar {
+    background: linear-gradient(110deg, #443162, #004b76);
+    color: white;
+    border-bottom: 0;
+  }
+  .topbar .iconbtn {
+    color: white;
+  }
+  .topbar .iconbtn:hover {
+    background: #ffffff22;
+  }
+  .workspace {
+    background: linear-gradient(110deg, #443162, #004b76);
+  }
+  .main {
+    background: var(--paper);
+    border-radius: 18px 18px 0 0;
+    min-height: calc(100vh - 70px);
+  }
+  .profile .avatar {
+    background: #ffffff22;
+    color: white;
+  }
+  .learning-banner {
+    padding: 24px;
+  }
+  .pathstep {
+    border-left: 0;
+    border-bottom: 3px solid #d6e1e9;
+  }
+  .pathstep.active {
+    border-bottom: 3px solid var(--blue);
+  }
+}
+@media (max-width: 560px) {
+  .quicklinks {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .quick {
+    align-items: center;
+    min-height: 74px;
+    padding: 14px 18px;
+  }
+  .quick-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .quick strong {
+    font-size: 0.95rem;
+  }
+  .quick small {
+    font-size: 0.82rem;
+  }
+  .quick {
+    gap: 14px;
+  }
+  .login-brand h1 {
+    font-size: 2rem;
+  }
+  .login-card {
+    padding: 25px 24px;
+  }
+  .login {
+    gap: 22px;
+    padding: 28px 16px;
+  }
+  .login-brand .brand {
+    margin-bottom: 20px;
+  }
+  .learning-banner h2 {
+    font-size: 1.9rem;
+  }
+}
+.hero {
+  background: transparent;
+  border: 0;
+  gap: 30px;
+  min-height: 370px;
+  overflow: visible;
+}
+.hero-copy {
+  padding: 35px 0;
+}
+.hero-copy h1 strong {
+  font-family: Arial, sans-serif;
+  font-weight: 650;
+  font-size: 0.86em;
+  letter-spacing: -0.035em;
+}
+.hero-art {
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.hero-caption {
+  margin: 0 30px 0 0;
+  border-radius: 0 22px 0 0;
+  max-width: 100%;
+  width: 86%;
+  padding: 22px 25px;
+}
+.quick-icon {
+  background: #004b76;
+  color: white;
+}
+.quick:nth-child(2) .quick-icon {
+  background: #443162;
+}
+.quick:nth-child(3) .quick-icon {
+  background: #142839;
+}
+.quick:nth-child(4) .quick-icon {
+  background: #005e83;
+}
+.panel,
+.stat,
+.course-card {
+  box-shadow: 0 9px 24px #172b4510;
+}
+.course-card {
+  border-color: transparent;
+}
+.course-art {
+  height: 175px;
+}
+@media (max-width: 560px) {
+  .hero {
+    gap: 20px;
+    min-height: 0;
+  }
+  .hero-copy {
+    padding: 10px 4px 0;
+  }
+  .hero-art {
+    min-height: 230px;
+    max-height: 230px;
+  }
+  .hero-caption {
+    padding: 16px 20px;
+  }
+  .course-art {
+    height: 210px;
+  }
+}
+
+/* Language switch. Reuses the existing demo-control box in the sidebar and the
+   mobile menu; on the login screen it sits in the footer row. */
+.rolebox-row {
+  margin-top: 12px;
+}
+.login-lang select {
+  font-size: 0.8rem;
+  color: #42576c;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 6px;
+  min-height: 32px;
+}
+.login-lang label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.login-footer {
+  align-items: center;
+}
