@@ -16,7 +16,7 @@ python3 -m http.server 4173 --directory src
 src/
   index.html          markup shell, webfonts, stylesheet/script order
   assets/
-    logo.png          LZPD NRW badge, used in the sidebar brand and on login
+    logo.png          NRW police star, used in the sidebar brand and on login
     flag-de.svg       flags for the language switch (exported from the
     flag-en.svg       Figma design system)
   css/
@@ -43,19 +43,26 @@ order in `index.html` matters. Each file is `"use strict"`.
 
 ## Design system
 
-The visual language comes from the BDBOS / iBMS 3.0 Figma library. Token names in
-`01-tokens.css` mirror the Figma style names — a Figma style `Surface/Card` is
-`--surface-card` here — so a value can be traced back to the design file.
+The visual language comes from the Figma frame "MAIN" (node 3107:224) in the
+LZPD NRW file. Token names in `01-tokens.css` mirror the Figma style names — a
+Figma style `Surface/Card` is `--surface-card` here — so a value can be traced
+back to the design file.
 
 - **Colour.** One light page surface (`--surface-page`) with white cards; the
-  sidebar is the only dark area. `--accent-surface` (#5757C7) is for filled
-  controls and the active nav item, `--accent-primary` (#3D4FD6) for links and
-  text emphasis. Status colours are success / attention only.
+  sidebar and the top bar / footer band are the only dark areas.
+  `--accent-surface` (#0054CA) is for filled controls, the active nav item and
+  the active language, `--accent-primary` (the same blue) for links and text
+  emphasis. Status colours are success / attention only.
 - **Type.** Lora for headings and display numbers, Inter for everything else.
   Both are loaded from Google Fonts in `index.html`; the stacks fall back to
   Georgia and system sans.
-- **Shape.** Cards 20px, controls 12px, buttons/pills/chips fully rounded.
-  One card shadow (`--shadow-card`), a stronger one for hover and overlays.
+- **Shape.** Cards 10px, controls 8px, category badges 4px, buttons/pills/chips
+  fully rounded. One card shadow (`--shadow-card`), a stronger one for hover and
+  overlays.
+- **Accent rules.** `--rule-blue` / `-cyan` / `-green` / `-amber` are the 3px
+  gradient hairlines on the top edge of a card: the four stat cards in a row
+  take one each, `.panel.ruled` takes the blue one. The figure itself stays
+  navy — the hue lives in the rule.
 - **Spacing** is a 4px scale (`--space-1` … `--space-16`); no loose pixel values
   in layout rules.
 - **Course artwork** is generated, not photographic: the gradient on

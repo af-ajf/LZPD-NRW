@@ -1,7 +1,6 @@
 /* 02-base.css
    Element resets, typography scale, focus rings, utility classes.
-   Headings and body share one grotesque (Inter), as on
-   internetwache.polizei.nrw.
+   Headings and figures are set in Lora, everything else in Inter.
 */
 
 * {
@@ -50,16 +49,16 @@ img {
   max-width: 100%;
 }
 
-/* Focus ring: accent halo that stays visible on both light cards and the
-   dark sidebar, without the white box-shadow the old sheet used. */
+/* Focus ring: accent halo on light cards, white on the dark sidebar and the
+   navy chrome, where the accent blue would disappear into the background. */
 :focus-visible {
   outline: 3px solid var(--accent-primary);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: var(--radius-badge);
 }
 .sidebar :focus-visible,
 .mobile-nav-dialog :focus-visible {
-  outline-color: var(--accent-highlight);
+  outline-color: var(--text-on-dark);
 }
 #page-title:focus,
 #page-title:focus-visible {
@@ -82,30 +81,31 @@ h4 {
   color: var(--text-primary);
 }
 h1 {
-  /* Display Large - Inter Bold 40/48 */
-  font-size: clamp(2rem, 1.4rem + 1.7vw, 2.75rem);
+  /* Display Large - Lora Bold 34/52 */
+  font-size: clamp(1.75rem, 1.35rem + 1.1vw, 2.125rem);
   font-weight: 700;
-  line-height: 1.18;
-  letter-spacing: -0.01em;
+  line-height: 1.52;
+  letter-spacing: -0.024em;
   margin-bottom: var(--space-3);
 }
 h2 {
-  /* Heading H2 - Inter Bold 28/36 */
-  font-size: 1.75rem;
+  /* Heading H2 - Lora Bold 24/36 */
+  font-size: 1.5rem;
   font-weight: 700;
-  line-height: 1.28;
-  letter-spacing: -0.005em;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   margin-bottom: var(--space-3);
 }
 h3 {
-  /* Heading H4 - Inter Bold 20/28 */
+  /* Heading H4 - Lora SemiBold 18/26 */
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: var(--space-2);
 }
 h4 {
-  /* Heading H6 - Inter Semi Bold 16/24 */
+  /* Heading H6 - Inter SemiBold 16/24, the one heading that stays grotesque */
+  font-family: var(--font-sans);
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.5;

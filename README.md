@@ -8,7 +8,7 @@ memory and reset on every reload.
 
 | | |
 | --- | --- |
-| Figma design + design system | <https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=95-6098&t=ioWlPggJ1wffyexn-1> |
+| Figma design + design system | <https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=3107-224> |
 | Click dummy (live) | <https://af-ajf.github.io/LZPD-NRW/> |
 | Repository | <https://github.com/af-ajf/LZPD-NRW> |
 | Mockups | <https://drive.google.com/drive/folders/1h7x0dAbAFc18pJkblcIazHJ0QmRwza9N?usp=sharing> |
@@ -28,13 +28,14 @@ file-by-file breakdown, the design-token system, and how routing and state work.
 
 ## Design
 
-This branch carries the NRW web style: the palette, type and shapes of
-<https://internetwache.polizei.nrw> applied to the iBMS 3.0 layout. Inter for
-headings and body, navy `#08152c` chrome and sidebar, NRW red for filled
-controls and links, lime `#ebff00` as the accent marker, square cards with
-hairline borders instead of shadows. Tokens in `src/css/01-tokens.css` mirror
-the Figma collection "NRW Web 2026", so a value can be traced back to the
-design file. The violet iBMS 3.0 styling stays on `main`.
+This branch carries the NRW web style: Lora for headings and figures, Inter for
+everything else, navy `#172b4d` chrome over a `#08152c` sidebar, `#0054ca` blue
+for filled controls, links and the active nav item, 10px cards on a soft shadow,
+and a 3px gradient rule on the top edge of the stat and summary cards. Tokens in
+`src/css/01-tokens.css` follow the Figma frame
+[MAIN](https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=3107-224),
+so a value can be traced back to the design file. The violet iBMS 3.0 styling
+stays on `main`.
 
 ## Language
 

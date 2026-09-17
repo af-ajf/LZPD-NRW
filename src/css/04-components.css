@@ -68,7 +68,7 @@
   align-items: center;
   gap: 2px;
   padding: 3px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   border: 1px solid var(--border);
   background: var(--surface-page);
 }
@@ -77,7 +77,7 @@
   align-items: center;
   gap: 6px;
   padding: 4px 10px 4px 8px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   color: var(--text-secondary);
   font-size: 0.6875rem;
   font-weight: 500;
@@ -193,8 +193,8 @@
   padding: 8px 16px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border);
-  background: var(--surface-page);
-  color: var(--text-secondary);
+  background: var(--surface-card);
+  color: var(--text-primary);
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
@@ -293,6 +293,21 @@
 }
 .sectionhead h2 {
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+/* The 32px gradient tile with a white arrow that opens every section title. */
+.sectionhead h2::before {
+  content: "";
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--radius-control);
+  background:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>')
+      center / 16px 16px no-repeat,
+    var(--marker-fill);
 }
 
 /* ---------- hero band ---------- */
@@ -342,7 +357,6 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   background: var(--surface-card);
-  box-shadow: var(--shadow-card);
   transition: border-color var(--fast);
 }
 .home-search:focus-within {
@@ -357,7 +371,7 @@
   font-size: 0.875rem;
 }
 .home-search input::placeholder {
-  color: var(--text-tertiary);
+  color: var(--text-placeholder);
 }
 .home-search input:focus-visible {
   outline: none;
@@ -369,12 +383,12 @@
   height: 36px;
   flex-shrink: 0;
   border-radius: var(--radius-pill);
-  background: var(--surface-inverse);
+  background: var(--accent-surface);
   color: #fff;
   transition: background var(--fast);
 }
 .home-search button:hover {
-  background: var(--accent-surface);
+  background: var(--accent-hover);
 }
 
 /* Open task row inside the hero band. */
@@ -423,6 +437,7 @@
 
 /* ---------- stat cards ---------- */
 .stat {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -431,6 +446,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
+  overflow: hidden;
   text-decoration: none;
   color: inherit;
   transition:
@@ -442,6 +458,28 @@ a.stat:hover {
   border-color: var(--accent-surface);
   box-shadow: var(--shadow-raised);
   transform: translateY(-2px);
+}
+/* Each figure in a row carries its own hue, left to right. */
+.stat::before,
+.panel.ruled::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--rule-blue);
+}
+.grid.four > .stat:nth-child(2)::before {
+  background: var(--rule-cyan);
+}
+.grid.four > .stat:nth-child(3)::before {
+  background: var(--rule-green);
+}
+.grid.four > .stat:nth-child(4)::before {
+  background: var(--rule-amber);
+}
+.panel.ruled {
+  position: relative;
+  overflow: hidden;
 }
 .stat h3 {
   font-family: var(--font-sans);
@@ -455,18 +493,14 @@ a.stat:hover {
 }
 .stat .number {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  line-height: 1.28;
-  letter-spacing: -0.005em;
+  line-height: 1.13;
+  letter-spacing: -0.025em;
   color: var(--text-primary);
 }
-.stat .number.green {
-  color: var(--success);
-}
-.stat .number.amber {
-  color: var(--attention);
-}
+/* The figure itself stays navy in every tone - the hue of a stat card is
+   carried by its top rule, as in the design file. */
 .stat p {
   margin: 0;
   font-size: 0.75rem;
@@ -491,7 +525,7 @@ a.stat:hover {
 }
 .course-art {
   position: relative;
-  height: 180px;
+  height: 207px;
   display: flex;
   align-items: flex-end;
   padding: var(--space-4);
@@ -549,7 +583,7 @@ a.stat:hover {
   position: relative;
   background: #fff;
   color: var(--text-primary);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-badge);
 }
 .course-body {
   display: flex;
@@ -649,7 +683,7 @@ a.stat:hover {
   color: var(--text-primary);
 }
 .tab[aria-current="true"] {
-  background: var(--surface-inverse);
+  background: var(--accent-surface);
   color: #fff;
   font-weight: 600;
 }
@@ -819,7 +853,7 @@ a.stat:hover {
 }
 .field input::placeholder,
 .field textarea::placeholder {
-  color: var(--text-tertiary);
+  color: var(--text-placeholder);
 }
 .field textarea {
   min-height: 110px;
@@ -857,7 +891,7 @@ a.stat:hover {
   overflow: auto;
   max-width: 100%;
   border: 1px solid var(--border);
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-card);
   background: var(--surface-card);
 }
 table {
@@ -870,7 +904,7 @@ caption {
   text-align: left;
   padding: var(--space-4) var(--space-5);
   font-weight: 600;
-  background: var(--surface-chrome);
+  background: var(--surface-sunken);
 }
 th {
   font-size: 0.6875rem;
@@ -878,7 +912,7 @@ th {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-secondary);
-  background: var(--surface-chrome);
+  background: var(--surface-sunken);
   white-space: nowrap;
 }
 th,
@@ -891,7 +925,7 @@ tbody tr:last-child td {
   border-bottom: 0;
 }
 tbody tr:hover {
-  background: var(--surface-chrome);
+  background: var(--surface-sunken);
 }
 td strong {
   display: block;
@@ -991,7 +1025,7 @@ td .avatar {
   transition: background var(--fast);
 }
 .pathstep:hover {
-  background: var(--surface-chrome);
+  background: var(--surface-sunken);
 }
 .pathstep strong {
   display: block;
@@ -1128,7 +1162,7 @@ td .avatar {
   transition: background var(--fast);
 }
 .reportnav button:hover {
-  background: var(--surface-chrome);
+  background: var(--surface-sunken);
 }
 .reportnav button[aria-current="true"] {
   background: var(--accent-soft);
@@ -1154,7 +1188,7 @@ td .avatar {
 .bar {
   height: 10px;
   border-radius: var(--radius-pill);
-  background: #c9cbe2;
+  background: #c7cedb;
   min-width: 3px;
 }
 .bar.ist {
@@ -1172,7 +1206,7 @@ td .avatar {
   border-radius: 3px;
   display: inline-block;
   margin-right: 6px;
-  background: #c9cbe2;
+  background: #c7cedb;
 }
 .chartlegend i.blue {
   background: var(--accent-surface);
@@ -1247,6 +1281,8 @@ td .avatar {
 .login-brand h1 {
   color: #fff;
   font-size: clamp(2.25rem, 1.4rem + 3vw, 3.5rem);
+  /* Two short lines set tight, against the airier body line-height of h1. */
+  line-height: 1.16;
   margin-bottom: var(--space-4);
 }
 .login-brand p {

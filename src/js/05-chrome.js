@@ -18,7 +18,7 @@ function navItems() {
 }
 
 function brand(sub = "NRW") {
-  return `<span class="brand-badge"><img src="assets/logo.svg" alt=""></span><span class="brand-text"><strong>POLIZEI-ONLINE</strong><span>iBMS 3.0 · ${sub}</span></span>`;
+  return `<span class="brand-badge"><img src="assets/logo.png" alt=""></span><span class="brand-text"><strong>POLIZEI-ONLINE</strong><span>iBMS 3.0 · ${sub}</span></span>`;
 }
 
 // The top-bar context pill doubles as the click-dummy role switch: the label it

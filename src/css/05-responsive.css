@@ -59,7 +59,7 @@
   .topbar {
     min-height: 60px;
     padding: 10px 18px;
-    background: #08152cf2;
+    background: #172b4df2;
     backdrop-filter: blur(12px);
   }
   .mobile-menu {
@@ -73,8 +73,8 @@
     color: var(--chrome-text);
   }
   .mobile-brand .brand-badge {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
   }
   .mobile-brand .brand-badge img {
     width: 100%;
@@ -191,7 +191,13 @@
     align-items: flex-start;
   }
   .sectionhead h2 {
-    font-size: 1.375rem;
+    font-size: 1.25rem;
+    gap: var(--space-3);
+  }
+  .sectionhead h2::before {
+    width: 26px;
+    height: 26px;
+    background-size: 14px 14px;
   }
   .sectionhead .textlink {
     font-size: 0.8125rem;
