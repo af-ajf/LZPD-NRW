@@ -69,8 +69,10 @@
   overflow: hidden;
 }
 .brand-badge img {
-  width: 30px;
-  height: 30px;
+  /* The SVG carries the full circle box, so the crest keeps the exact
+     offset it has inside the circle in Figma. */
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 .brand-text strong {
