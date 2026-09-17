@@ -30,7 +30,20 @@
   pointer-events: none;
   color: var(--text-tertiary);
 }
+/* Hidden copy of the selected label: it sets the pill width so the control
+   hugs the current option instead of the widest one in the list. */
+.rolepill-sizer {
+  padding: 6px 30px 6px 12px;
+  border: 1px solid transparent;
+  font-size: 0.75rem;
+  line-height: 1.34;
+  white-space: nowrap;
+  visibility: hidden;
+}
 .rolepill select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
   appearance: none;
   padding: 6px 30px 6px 12px;
   border-radius: var(--radius-pill);
@@ -1265,7 +1278,7 @@ td .avatar {
   z-index: 1;
 }
 .login-brand .brand {
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-8);
 }
 .login-brand h1 {
   color: #fff;
@@ -1306,13 +1319,13 @@ td .avatar {
   gap: var(--space-4);
   margin-top: var(--space-6);
 }
-.login-footer button {
+.login-footer > button {
   font-size: 0.75rem;
   color: var(--text-secondary);
   padding: 4px 0;
   border-radius: 4px;
 }
-.login-footer button:hover {
+.login-footer > button:hover {
   color: var(--accent-primary);
 }
 .login-footer .langswitch {

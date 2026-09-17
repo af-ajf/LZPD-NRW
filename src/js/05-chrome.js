@@ -31,7 +31,9 @@ function rolePill(id) {
       (r) =>
         `<option value="${r}" ${state.role === r ? "selected" : ""}>${t("Nordrhein-Westfalen")} / ${t(roleNames[r])}</option>`,
     )
-    .join("")}</select>${icon("chevrondown", "xs")}</span>`;
+    .join(
+      "",
+    )}</select><span class="rolepill-sizer" aria-hidden="true">${t("Nordrhein-Westfalen")} / ${t(roleNames[state.role])}</span>${icon("chevrondown", "xs")}</span>`;
 }
 
 function langSwitch() {
