@@ -619,6 +619,25 @@ const EN = {
   "Ihre Erg\u00e4nzung steht zur fachlichen Pr\u00fcfung bereit.":
     "Your addition is ready for review.",
   Filtern: "Filter",
+
+  // --- watchlist / favourites ---
+  Merkliste: "Saved",
+  Merken: "Save",
+  Gemerkt: "Saved",
+  "Angebote, die Sie sich f\u00fcr sp\u00e4ter gemerkt haben.":
+    "Courses you have saved for later.",
+  "gemerkte Angebote": "saved courses",
+  "gemerktes Angebot": "saved course",
+  "Noch nichts gemerkt": "Nothing saved yet",
+  "Mit dem Herz auf einem Angebot merken Sie es sich f\u00fcr sp\u00e4ter. Die Merkliste bleibt auf diesem Ger\u00e4t erhalten.":
+    "Use the heart on a course to save it for later. Your saved list stays on this device.",
+  "Angebot auf Ihrer Merkliste gespeichert.": "Course saved to your list.",
+  "Angebot von Ihrer Merkliste entfernt.": "Course removed from your list.",
+  "Merkliste leeren": "Clear saved list",
+  "Merkliste leeren?": "Clear your saved list?",
+  "Alle gemerkten Angebote werden von Ihrer Merkliste entfernt. Ihre Registrierungen bleiben davon unber\u00fchrt.":
+    "Every saved course is removed from your list. Your registrations are not affected.",
+  "Merkliste geleert.": "Saved list cleared.",
 };
 
 function t(s) {

@@ -22,6 +22,9 @@ function render(focus = true) {
     case "lastminute":
       content = catalog(true);
       break;
+    case "favorites":
+      content = favorites();
+      break;
     case "course":
       content = courseDetail(Number(r.split("/")[1]));
       break;

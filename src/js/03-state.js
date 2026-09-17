@@ -31,9 +31,40 @@ const state = {
   lesson: 1,
   wishDone: false,
   needs: [],
-  favorites: [],
+  savedSearches: [],
+  // Course ids the user has marked. Unlike the rest of the sample data this
+  // survives a reload, the same way the language does: a watchlist that is
+  // emptied by every refresh cannot be demonstrated.
+  favorites: (() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("ibms-favorites") || "[]");
+      return Array.isArray(saved)
+        ? saved.filter((x) => Number.isInteger(x))
+        : [];
+    } catch (e) {
+      return [];
+    }
+  })(),
   exportJobs: [],
 };
+
+const isFavorite = (id) => state.favorites.includes(id);
+
+// Returns the new state, so the caller can pick the matching toast.
+function toggleFavorite(id) {
+  const on = isFavorite(id);
+  state.favorites = on
+    ? state.favorites.filter((x) => x !== id)
+    : [...state.favorites, id];
+  persistFavorites();
+  return !on;
+}
+
+function persistFavorites() {
+  try {
+    localStorage.setItem("ibms-favorites", JSON.stringify(state.favorites));
+  } catch (e) {}
+}
 
 const roleNames = {
   learner: "Anwenderin",

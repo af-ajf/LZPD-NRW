@@ -321,7 +321,8 @@
   .stat,
   .chip,
   .pill,
-  .course-card {
+  .course-card,
+  .favmark {
     border: 1px solid CanvasText;
   }
   .bar {
@@ -329,7 +330,10 @@
   }
   .navlink[aria-current="page"],
   .tab[aria-current="true"],
-  .langswitch button[aria-pressed="true"] {
+  .tab-item[aria-current="page"],
+  .langswitch button[aria-pressed="true"],
+  .favmark[aria-pressed="true"],
+  .favtoggle[aria-pressed="true"] {
     outline: 2px solid Highlight;
   }
 }

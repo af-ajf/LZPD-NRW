@@ -585,6 +585,60 @@ a.stat:hover {
   color: var(--text-primary);
   border-radius: var(--radius-badge);
 }
+/* Favourite marker: a small white chip floating in the top corner of the
+   course art. Off it carries the outline heart in the page ink, on it carries
+   the filled heart in the accent blue - the same pair the detail button uses. */
+.favmark {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  color: var(--text-primary);
+  background: #ffffffe6;
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  box-shadow:
+    0 0 0 0.5px #ffffff8c,
+    0 2px 8px #08152c29;
+  transition:
+    color var(--fast),
+    background var(--fast),
+    transform var(--fast);
+}
+.favmark:hover {
+  background: #fff;
+  transform: scale(1.06);
+}
+.favmark:active {
+  transform: scale(0.94);
+}
+.favmark.on {
+  color: var(--accent-primary);
+}
+.favmark .icon {
+  width: 22px;
+  height: 22px;
+}
+/* Same toggle, labelled, in the page header of a course. */
+.favtoggle.on {
+  color: var(--accent-primary);
+  border-color: var(--accent-surface);
+  background: var(--accent-soft);
+}
+.favtoggle.on:hover {
+  background: var(--accent-soft);
+  color: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.emptyicon {
+  margin: 0 auto var(--space-4);
+}
+
 .course-body {
   display: flex;
   flex-direction: column;

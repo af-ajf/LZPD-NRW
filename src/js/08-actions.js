@@ -83,12 +83,41 @@ document.addEventListener("click", (e) => {
       render();
       break;
     case "save-search":
-      state.favorites.push({
+      state.savedSearches.push({
         q: state.query,
         module: state.module,
         type: state.type,
       });
       toast(t("Ihre Suchauswahl wurde für diese Demonstration gemerkt."));
+      break;
+    // Marking a course re-renders: the card, the sidebar count and the
+    // watchlist itself all show the new state. Focus is put back on the
+    // button that was pressed, unless un-marking removed it from the page.
+    case "fav": {
+      const on = toggleFavorite(id);
+      render(false);
+      document
+        .querySelector(`[data-action="fav"][data-id="${id}"]`)
+        ?.focus({ preventScroll: true });
+      toast(
+        on
+          ? t("Angebot auf Ihrer Merkliste gespeichert.")
+          : t("Angebot von Ihrer Merkliste entfernt."),
+      );
+      break;
+    }
+    case "clear-favorites":
+      modal(
+        t("Merkliste leeren?"),
+        `<p>${t("Alle gemerkten Angebote werden von Ihrer Merkliste entfernt. Ihre Registrierungen bleiben davon unberührt.")}</p><div class="dialog-actions">${btn(t("Abbrechen"), "close", "secondary")}${btn(t("Merkliste leeren"), "confirm-clear-favorites")}</div>`,
+      );
+      break;
+    case "confirm-clear-favorites":
+      state.favorites = [];
+      persistFavorites();
+      close();
+      render(false);
+      toast(t("Merkliste geleert."));
       break;
     case "registration":
       registration(id);

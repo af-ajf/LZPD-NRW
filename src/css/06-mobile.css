@@ -401,14 +401,15 @@
   -webkit-tap-highlight-color: transparent;
   transition: color 0.24s var(--ease);
 }
-/* One pill for all five tabs: switching tabs moves it instead of redrawing it,
-   with a small overshoot so it settles the way the Apple kit does. */
+/* One pill for every tab: switching tabs moves it instead of redrawing it,
+   with a small overshoot so it settles the way the Apple kit does.
+   --tab-count is set by syncTabbar() from the number of rendered tabs. */
 .tab-indicator {
   position: absolute;
   top: 2px;
   bottom: 2px;
   left: 2px;
-  width: calc((100% - 4px) / 5);
+  width: calc((100% - 4px) / var(--tab-count, 5));
   border-radius: 100px;
   background: #0054ca24;
   transform: translateX(calc(var(--tab-index, 0) * 100%));
@@ -449,6 +450,31 @@
 }
 .tab-item:active .tab-symbol {
   transform: scale(0.9);
+}
+
+/* Six tabs on a narrow phone: give the capsule the side margin back and let
+   the labels use it. */
+@media (max-width: 430px) {
+  .tabbar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .tab-item {
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+  /* "Last Minute" is the widest label and needs every pixel of the six. */
+  .tab-label {
+    letter-spacing: -0.02em;
+  }
+}
+
+/* The favourite marker overlaps the rail card art, which is shorter. */
+.rail .favmark {
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 36px;
+  height: 36px;
 }
 
 /* ---------- profile sheet ---------- */

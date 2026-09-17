@@ -57,10 +57,10 @@ order in `index.html` matters. Each file is `"use strict"`.
 bar) above 900px, the phone one below it. The phone shell follows the Figma
 frame "MOBILE" (node 3059:159) — an iOS-style large title over the page
 surface, a compact glass bar that fades in on scroll, and a floating Liquid
-Glass tab bar carrying the five main routes. `home()` branches the same way:
+Glass tab bar carrying the six main routes. `home()` branches the same way:
 `mobileHome()` keeps search, chips, the course rail, the news card and the next
 appointment, and drops the greeting, the hero copy, the open-task row and the
-stat cards. The routes outside the five tabs, the role switch and the language
+stat cards. The routes outside the tabs, the role switch and the language
 switch live in the profile sheet behind the avatar.
 
 Because the two shells are different markup rather than one reflowed layout,
@@ -69,7 +69,9 @@ crossing 900px re-renders (`mobileMQ` listener in `08-actions.js`).
 The tab bar itself lives in `#tabbar-root`, outside `#app`, and `syncTabbar()`
 only updates it — it is rebuilt when it is missing or the language changed.
 That keeps its nodes across a route change, so the selection pill slides from
-one tab to the next instead of being redrawn. Routes outside the five tabs
+one tab to the next instead of being redrawn. The selection pill is sized
+from `--tab-count`, which `syncTabbar()` sets from the number of rendered
+tabs. Routes outside the tabs
 (help, the admin and report views) drop the pill rather than moving it, and
 `mobilehead()` gives those routes a glass "Zurück" button — the phone shell has
 no breadcrumb rail of its own, so without it a course detail is a dead end.
@@ -140,7 +142,15 @@ To add or correct a translation, edit the `EN` object in `00-i18n.js` only.
   so re-rendering never leaves listeners behind.
 - **State** — one mutable `state` object plus the `courses` / `people` arrays.
   Mutate, then call `render(false)` (skips scroll/focus reset) or set
-  `location.hash`. Nothing persists across a reload.
+  `location.hash`. Nothing persists across a reload, apart from the language
+  (`ibms-lang`) and the watchlist (`ibms-favorites`).
+- **Watchlist** — `state.favorites` holds course ids; `isFavorite()`,
+  `toggleFavorite()` and `persistFavorites()` in `03-state.js` are the only way
+  to touch it. `favButton()` in `05-chrome.js` renders the toggle in both
+  presentations (the round marker on the course art, the labelled button in the
+  course header) and the `fav` action re-renders so the card, the sidebar count
+  and the `#favorites` route all follow. `state.savedSearches` is a separate
+  list, fed by "Suche merken" in the catalogue.
 - **Roles** — `state.role` is `learner | admin | report`. It drives `navItems()`
   and gates the `users` and `report` routes via `restricted()`. The role switch is
   the context pill in the top bar: it reads "NRW / Anwenderin", which is exactly

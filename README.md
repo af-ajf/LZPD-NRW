@@ -44,13 +44,13 @@ Below 900px the app renders a phone shell instead of the desktop one, following
 the Figma frame
 [MOBILE](https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=3059-159):
 no sidebar and no navy top bar, an iOS-style large title that collapses into a
-glass bar on scroll, and a floating Liquid Glass tab bar with the five main
+glass bar on scroll, and a floating Liquid Glass tab bar with the six main
 routes. The home screen keeps search, the module chips, a horizontal course
 rail, the news card and the next appointment; the greeting, the hero copy, the
 open-task row and the four stat cards are left to the desktop layout, since
 Mein iBMS is one tab away. Everything the sidebar used to hold — the remaining
 routes, the role switch and the language switch — moved into the profile sheet
-behind the avatar. A route outside the five tabs (a course, an article, help)
+behind the avatar. A route outside the tabs (a course, an article, help)
 carries a glass "Zurück" button in its place.
 
 ## Structure
@@ -68,6 +68,15 @@ and a 3px gradient rule on the top edge of the stat and summary cards. Tokens in
 [MAIN](https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=3107-224),
 so a value can be traced back to the design file. The violet iBMS 3.0 styling
 stays on `main`.
+
+## Watchlist
+
+Every course carries a heart toggle — on the catalogue card, on the rail card
+and, labelled, in the header of the course page. Marked courses collect on the
+`#favorites` route ("Merkliste"), which is reachable from the sidebar (with a
+count) and from the phone tab bar. Unlike the rest of the sample data the
+watchlist is written to `localStorage` under `ibms-favorites`, so it survives a
+reload; "Merkliste leeren" empties it again.
 
 ## Language
 

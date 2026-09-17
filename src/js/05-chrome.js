@@ -12,12 +12,13 @@
 const mobileMQ = window.matchMedia("(max-width: 900px)");
 const isMobile = () => mobileMQ.matches;
 
-// The five tabs of the phone shell, in the order of the Figma frame. Routes
+// The tabs of the phone shell, in the order of the Figma frame. Routes
 // that only exist for the admin and report roles stay in the profile sheet.
 function tabItems() {
   return [
     ["home", "Start", "home"],
     ["catalog", "Angebote", "book"],
+    ["favorites", "Merkliste", "heart"],
     ["lastminute", "Last Minute", "clock"],
     ["dashboard", "Mein iBMS", "users"],
     ["learning", "Lernpfad", "activity"],
@@ -30,6 +31,7 @@ function navItems() {
     ["dashboard", "Mein iBMS", "users"],
     ["catalog", "Gesamtangebot", "book"],
     ["lastminute", "Last Minute", "clock"],
+    ["favorites", "Merkliste", "heart"],
     ["learning", "Mein Lernpfad", "activity"],
   ];
   if (state.role === "admin") n.push(["users", "Anwender verwalten", "grid"]);
@@ -95,7 +97,7 @@ function sidebar(route) {
   return `<aside class="sidebar" aria-label="${t("Hauptnavigation")}"><div class="sidebar-top"><a class="brand" href="#home">${brand()}</a><hr><div><p class="nav-label">${t("Aus- und Fortbildung")}</p><nav class="sidenav">${navItems()
     .map(
       ([r, n, i]) =>
-        `<a class="navlink" href="#${r}" ${route === r ? 'aria-current="page"' : ""}>${icon(i)}${t(n)}</a>`,
+        `<a class="navlink" href="#${r}" ${route === r ? 'aria-current="page"' : ""}>${icon(i)}${t(n)}${r === "favorites" && state.favorites.length ? `<span class="navcount">${state.favorites.length}</span>` : ""}</a>`,
     )
     .join(
       "",
@@ -117,7 +119,7 @@ function layout(content, route) {
 // route the large title follows underneath; every other route brings its own
 // pagehead, so only the accessory row is rendered there.
 function mobilehead(route) {
-  // A route that is not one of the five tabs was pushed on top of one, so it
+  // A route that is not one of the tabs was pushed on top of one, so it
   // gets the iOS back affordance instead of relying on the system gesture.
   const back = tabItems().some(([r]) => r === route)
     ? ""
@@ -172,9 +174,10 @@ function syncTabbar(route) {
     else el.removeAttribute("aria-current");
   });
   const glass = root.querySelector(".tabbar-glass");
-  // A route outside the five tabs (help, users, report) parks the pill where
+    // A route outside the tabs (help, users, report) parks the pill where
   // it is and simply drops the highlight.
   if (glass) {
+    glass.style.setProperty("--tab-count", items.length);
     glass.classList.toggle("off-tab", active < 0);
     if (active >= 0) glass.style.setProperty("--tab-index", active);
   }
@@ -198,6 +201,17 @@ const courseGlyphs = {
   "Digitale Kompetenz": "monitor",
 };
 
+// Favourite toggle. `variant` picks the presentation: "mark" is the round chip
+// that floats over the course art, "button" is the labelled control on the
+// detail page. Both are the same control, so both carry aria-pressed.
+function favButton(c, variant = "mark") {
+  const on = isFavorite(c.id);
+  const label = on ? t("Gemerkt") : t("Merken");
+  const glyph = icon(on ? "heartfull" : "heart", variant === "mark" ? "" : "sm");
+  const cls = variant === "mark" ? "favmark" : "btn secondary favtoggle";
+  return `<button class="${cls}${on ? " on" : ""}" data-action="fav" data-id="${c.id}" aria-pressed="${on}" title="${label}" aria-label="${label}: ${esc(t(c.title))}">${glyph}${variant === "mark" ? "" : `<span>${label}</span>`}</button>`;
+}
+
 function courseCard(c) {
   const seats = c.seats
     ? `${c.seats} ${t("freie Plätze")}`
@@ -206,7 +220,7 @@ function courseCard(c) {
     c.type === "E-Learning"
       ? t("Ab") + " " + formatDate(c.date)
       : formatDate(c.date);
-  return `<article class="panel course-card"><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${t(c.module)}</span></div><div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${t(c.type)} · ${t(c.duration)}</p><h3>${esc(t(c.title))}</h3></div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${t(c.place)}</p><p class="course-meta">${start} · ${seats}</p></div><a class="textlink" href="#course/${c.id}">${t("Angebot ansehen")}${icon("arrow", "xs")}</a></div></div></article>`;
+  return `<article class="panel course-card"><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${t(c.module)}</span>${favButton(c)}</div><div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${t(c.type)} · ${t(c.duration)}</p><h3>${esc(t(c.title))}</h3></div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${t(c.place)}</p><p class="course-meta">${start} · ${seats}</p></div><a class="textlink" href="#course/${c.id}">${t("Angebot ansehen")}${icon("arrow", "xs")}</a></div></div></article>`;
 }
 
 function formatDate(d) {

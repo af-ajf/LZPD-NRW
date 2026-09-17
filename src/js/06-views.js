@@ -161,6 +161,29 @@ function catalog(last = false) {
   );
 }
 
+// The watchlist. It reuses the catalogue card, so a course can be un-marked
+// straight from here; the list then shrinks under the click.
+function favorites() {
+  const list = state.favorites
+    .map((id) => courses.find((c) => c.id === id))
+    .filter(Boolean);
+  if (!list.length)
+    return (
+      pagehead(
+        t("Merkliste"),
+        t("Angebote, die Sie sich für später gemerkt haben."),
+      ) +
+      `<section class="panel empty"><span class="iconbox accent emptyicon">${icon("heart")}</span><h2>${t("Noch nichts gemerkt")}</h2><p>${t("Mit dem Herz auf einem Angebot merken Sie es sich für später. Die Merkliste bleibt auf diesem Gerät erhalten.")}</p><div class="mt">${link(t("Zum Gesamtangebot"), "catalog")}</div></section>`
+    );
+  return (
+    pagehead(
+      t("Merkliste"),
+      t("Angebote, die Sie sich für später gemerkt haben."),
+    ) +
+    `<div class="sectionhead"><p class="muted small" role="status">${list.length} ${list.length === 1 ? t("gemerktes Angebot") : t("gemerkte Angebote")}</p><div class="chips"><button class="chip" data-action="clear-favorites">${icon("close", "xs")}${t("Merkliste leeren")}</button></div></div><div class="grid three">${list.map(courseCard).join("")}</div>`
+  );
+}
+
 function courseDetail(id) {
   const c = courses.find((x) => x.id === id);
   if (!c)
@@ -171,7 +194,7 @@ function courseDetail(id) {
   let reg = state.registrations.find((r) => r.course === c.id);
   return (
     `<div class="breadcrumb"><a href="#catalog">${t("Gesamtangebot")}</a>${icon("chevron", "xs")}<span>${t(c.module)}</span></div>` +
-    pagehead(t(c.title), t(c.desc)) +
+    pagehead(t(c.title), t(c.desc), favButton(c, "button")) +
     `<div class="detailgrid"><section class="panel"><p class="eyebrow accent">${t(c.category)}</p><h2>${t("Worum es geht")}</h2><p class="muted">${t(c.desc)}</p><h3 class="mt">${t("Zielgruppe")}</h3><p class="muted">${t("Mitarbeitende mit einem entsprechenden Fortbildungsbedarf im jeweiligen Zuständigkeitsbereich.")}</p><h3 class="mt">${t("Inhalte und Lernziele")}</h3><ul class="support-list"><li>${t("Fachliche Grundlagen auffrischen und einordnen")}</li><li>${t("Typische Situationen aus dem Arbeitsalltag bearbeiten")}</li><li>${t("Das Gelernte auf die eigene Aufgabe übertragen")}</li></ul><div class="notice mt">${icon("help")}<span>${t("Dies ist ein Beispielangebot. Inhalte, Voraussetzungen und Genehmigungsregeln werden durch die verantwortliche Stelle gepflegt.")}</span></div></section><aside class="panel"><h2>${t("Ihre Teilnahme")}</h2><dl class="factlist"><div><dt>${t("Format")}</dt><dd>${t(c.type)}</dd></div><div><dt>${t("Beginn")}</dt><dd>${formatDate(c.date)}</dd></div><div><dt>${t("Uhrzeit")}</dt><dd>${t(c.time)}</dd></div><div><dt>${t("Ort")}</dt><dd>${t(c.place)}</dd></div><div><dt>${t("Umfang")}</dt><dd>${t(c.duration)}</dd></div><div><dt>${t("Verfügbarkeit")}</dt><dd>${c.seats ? c.seats + " " + t("freie Plätze") : t("Ausgebucht")}</dd></div></dl><div class="mt">${reg ? `${badge(reg.status)}<p class="small muted mt">${t("Für dieses Angebot liegt bereits eine Registrierung vor.")}</p><button class="btn mt" data-action="registration" data-id="${c.id}">${t("Registrierung ansehen")}</button>` : c.seats ? `<p class="small muted">${c.approval ? t("Ihre Anmeldung benötigt eine Freigabe durch die zuständige Stelle.") : t("Für dieses Beispielangebot ist keine Genehmigung erforderlich.")}</p><button class="btn mt" data-action="book" data-id="${c.id}">${c.approval ? t("Teilnahme anfragen") : t("Verbindlich buchen")}</button>` : `<p class="notice amber">${t("Zurzeit sind keine Plätze verfügbar.")}</p><div class="mt">${btn(t("Bedarf melden"), "need", "secondary")}</div>`}</div></aside></div>`
   );
 }
