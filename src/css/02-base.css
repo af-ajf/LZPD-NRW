@@ -1,5 +1,7 @@
 /* 02-base.css
    Element resets, typography scale, focus rings, utility classes.
+   Headings are Lora (Display/Heading Serif in the Figma library); everything
+   else is Inter.
 */
 
 * {
@@ -7,13 +9,15 @@
 }
 body {
   margin: 0;
-  background: var(--navy);
+  background: var(--surface-page);
+  color: var(--text-primary);
 }
 button,
 input,
 select,
 textarea {
   font: inherit;
+  color: inherit;
 }
 button,
 a,
@@ -28,89 +32,174 @@ a {
 }
 button {
   cursor: pointer;
-}
-a {
-  color: var(--blue);
-  text-underline-offset: 4px;
-}
-button {
   border: 0;
+  background: none;
 }
 button:disabled {
   cursor: not-allowed;
 }
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible,
-summary:focus-visible {
-  outline: 3px solid #005a9e;
-  outline-offset: 4px;
-  box-shadow: 0 0 0 6px white;
+a {
+  color: var(--accent-primary);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
-h1:focus {
+a:hover {
+  color: var(--accent-hover);
+}
+img {
+  max-width: 100%;
+}
+
+/* Focus ring: accent halo that stays visible on both light cards and the
+   dark sidebar, without the white box-shadow the old sheet used. */
+:focus-visible {
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.sidebar :focus-visible,
+.mobile-nav-dialog :focus-visible {
+  outline-color: #a9b2ff;
+}
+#page-title:focus,
+#page-title:focus-visible {
   outline: none;
 }
+
+/* --- headings --- */
 h1,
 h2,
 h3,
+h4,
 p {
   margin-top: 0;
 }
 h1,
-h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  color: var(--text-primary);
 }
 h1 {
-  font-size: clamp(2rem, 3.3vw, 3.6rem);
-  margin-bottom: 12px;
+  /* Display/Serif Large - Lora Bold 44/52 */
+  font-size: clamp(2rem, 1.4rem + 1.7vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-3);
 }
 h2 {
-  font-size: 1.9rem;
-  margin-bottom: 14px;
+  /* Heading/Serif H2 - Lora Bold 28/36 */
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: -0.005em;
+  margin-bottom: var(--space-3);
 }
 h3 {
-  font-size: 1.05rem;
+  /* Heading/Serif H4 - Lora Bold 20/28 */
+  font-size: 1.25rem;
+  font-weight: 700;
   line-height: 1.4;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-2);
 }
+h4 {
+  /* Heading/Serif H6 - Lora SemiBold 16/24 */
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: var(--space-2);
+}
+
+/* --- text utilities --- */
 small,
 .small {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  line-height: 1.34;
 }
 .muted {
-  color: var(--muted);
+  color: var(--text-secondary);
+}
+.subtle {
+  color: var(--text-tertiary);
 }
 .eyebrow {
-  font-size: 0.78rem;
-  letter-spacing: 0.13em;
+  /* Label/Eyebrow - Inter SemiBold 11/14, 0.66px tracking, uppercase */
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.28;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-weight: 700;
-  color: var(--blue);
-  margin-bottom: 14px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
 }
+.eyebrow.accent {
+  color: var(--accent-primary);
+}
+.eyebrow.attention {
+  color: var(--attention);
+}
+.lead {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.stack {
+  display: grid;
+  gap: var(--space-6);
+}
+.mt {
+  margin-top: var(--space-7);
+}
+.mb {
+  margin-bottom: var(--space-7);
+}
+
 .icon {
   width: 20px;
   height: 20px;
   stroke: currentColor;
   stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   fill: none;
   flex-shrink: 0;
   vertical-align: middle;
 }
+.icon.sm {
+  width: 16px;
+  height: 16px;
+}
+.icon.xs {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2;
+}
+
 .skip {
   position: fixed;
   top: -100px;
   left: 20px;
   z-index: 100;
-  background: white;
+  background: var(--surface-card);
+  color: var(--text-primary);
+  font-weight: 600;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-raised);
+  transition: top var(--fast);
 }
 .skip:focus {
   top: 12px;
+}
+
+.hidesr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

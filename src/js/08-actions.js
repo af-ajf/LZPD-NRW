@@ -13,6 +13,25 @@ document.addEventListener("click", (e) => {
     case "close":
       close();
       break;
+    case "setlang":
+      if (state.lang !== a.dataset.langValue) setLang(a.dataset.langValue);
+      break;
+    // Hero chips: jump into the catalogue with the filter already applied.
+    case "chip":
+      if (a.dataset.kind === "module") {
+        state.module = a.dataset.value;
+        state.type = "Alle Formate";
+        state.query = "";
+        if (location.hash === "#catalog") render(false);
+        else location.hash = "catalog";
+      } else {
+        location.hash = "lastminute";
+      }
+      break;
+    // Stat cards link to #dashboard; pick the tab they stand for on the way.
+    case "stat-link":
+      state.mytab = a.dataset.tab;
+      break;
     case "menu":
       modal(
         t("Menü"),
@@ -30,7 +49,7 @@ document.addEventListener("click", (e) => {
     case "notifications":
       modal(
         t("Benachrichtigungen"),
-        `<div class="newsrow"><span class="quick-icon">${icon("calendar")}</span><div><h3>${t("Teilnahme bestätigt")}</h3><p>${t("Deeskalation im Einsatz")} · 15.10.2026</p><a class="textlink" href="#dashboard">${t("Meine Registrierungen öffnen")}</a></div></div><div class="newsrow"><span class="quick-icon">${icon("file")}</span><div><h3>${t("Nachweis verfügbar")}</h3><p>${t("Grundlagen der Kommunikation")}</p><button class="textlink" data-action="certificate">${t("Nachweis ansehen")}</button></div></div>`,
+        `<div class="event"><span class="iconbox accent">${icon("calendar")}</span><div class="event-main"><h3>${t("Teilnahme bestätigt")}</h3><p>${t("Deeskalation im Einsatz")} · 15.10.2026</p><a class="textlink" href="#dashboard">${t("Meine Registrierungen öffnen")}${icon("arrow", "xs")}</a></div></div><div class="event"><span class="iconbox">${icon("file")}</span><div class="event-main"><h3>${t("Nachweis verfügbar")}</h3><p>${t("Grundlagen der Kommunikation")}</p><button class="textlink" data-action="certificate">${t("Nachweis ansehen")}${icon("arrow", "xs")}</button></div></div>`,
       );
       break;
     case "profile":

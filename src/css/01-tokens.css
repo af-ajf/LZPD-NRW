@@ -1,25 +1,92 @@
 /* 01-tokens.css
-   Design tokens. Single source of truth for colour, radius, shadow, type.
+   Design tokens. Single source of truth for colour, type, spacing, radius,
+   shadow and motion. Names follow the Figma library (BDBOS / iBMS 3.0):
+   a Figma style "Surface/Card" is --surface-card here.
 */
 
 :root {
-  --navy: #082b4b;
-  --navydeep: #142839;
-  --blue: #005a9e;
-  --ink: #182c3b;
-  --muted: #536576;
-  --line: #dce3e9;
-  --paper: #f7f8fc;
-  --white: #fff;
-  --soft: #eaf2f8;
-  --green: #176547;
-  --greenbg: #e9f5ed;
-  --amber: #765300;
-  --amberbg: #fff4d7;
-  --radius: 12px;
-  --shadow: 0 12px 45px #0e2f4910;
-  font-family: Inter, Arial, sans-serif;
-  color: var(--ink);
+  /* --- surface --- */
+  --surface-page: #eceef5;
+  --surface-card: #fff;
+  --surface-chrome: #f8f8fc;
+  --surface-sunken: #f2f3f9;
+  --surface-inverse: #1f242e;
+
+  /* --- sidebar (only place with a dark background) --- */
+  --sidebar-from: #1a1f2e;
+  --sidebar-to: #1d2235;
+  --sidebar-line: #ffffff17;
+  --sidebar-hover: #ffffff0f;
+
+  /* --- text --- */
+  --text-primary: #1f242e;
+  --text-secondary: #6e7582;
+  --text-tertiary: #9ca3ad;
+  --text-on-dark: #fff;
+  --text-on-dark-muted: #c8cde0;
+  --text-on-dark-subtle: #9ba3b8;
+
+  /* --- accent --- */
+  --accent-primary: #3d4fd6; /* links, emphasis */
+  --accent-surface: #5757c7; /* filled buttons, active nav */
+  --accent-hover: #4646b4;
+  --accent-soft: #eceafb;
+
+  /* --- status --- */
+  --success: #176547;
+  --success-surface: #e4f3ec;
+  --attention: #765300;
+  --attention-surface: #fff4d7;
+  --danger: #a22630;
+  --danger-surface: #fdeced;
+
+  /* --- line --- */
+  --border: #dfe0ef;
+  --border-strong: #c9cbe2;
+
+  /* --- radius --- */
+  --radius-card: 20px;
+  --radius-control: 12px;
+  --radius-input: 12px;
+  --radius-pill: 999px;
+
+  /* --- elevation --- */
+  --shadow-card: 0 4px 16px #5757c70f;
+  --shadow-raised: 0 10px 30px #5757c71f;
+  --shadow-overlay: 0 24px 70px #1f242e33;
+
+  /* --- spacing scale --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* --- type --- */
+  --font-sans:
+    Inter, "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
+  --font-serif: Lora, Georgia, "Times New Roman", serif;
+
+  /* --- layout --- */
+  --sidebar-width: 260px;
+  --gutter: 40px;
+  --content-max: 1440px;
+
+  /* --- motion --- */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --fast: 0.14s var(--ease);
+  --slow: 0.28s var(--ease);
+
+  font-family: var(--font-sans);
+  color: var(--text-primary);
   font-size: 16px;
-  line-height: 1.55;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }

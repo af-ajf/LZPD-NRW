@@ -1,4 +1,6 @@
 // 01-icons.js - Inline SVG icon set.
+// 24x24 grid, stroke-only, drawn to match the Lucide-style set used in the
+// design file. Stroke width, caps and joins come from `.icon` in 02-base.css.
 
 "use strict";
 
@@ -10,6 +12,7 @@ const paths = {
   users:
     '<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 5"/>',
   chart: '<path d="M3 3v18h18M7 16v-5m5 5V7m5 9V4"/>',
+  activity: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
   route:
     '<circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 5h9a4 4 0 0 1 0 8H8a4 4 0 0 0 0 8h9"/>',
   search: '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>',
@@ -19,6 +22,7 @@ const paths = {
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   arrow: '<path d="M4 12h16m-6-6 6 6-6 6"/>',
   chevron: '<path d="m9 5 7 7-7 7"/>',
+  chevrondown: '<path d="m6 9 6 6 6-6"/>',
   check: '<path d="m5 12 4 4L19 6"/>',
   calendar:
     '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v5m10-5v5M3 11h18"/>',
@@ -31,6 +35,9 @@ const paths = {
   plus: '<path d="M12 4v16M4 12h16"/>',
   monitor:
     '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/>',
+  external: '<path d="M14 4h6v6M20 4 10 14M18 14v6H4V6h6"/>',
+  sliders: '<path d="M4 8h10m4 0h2M4 16h4m4 0h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/>',
 };
-const icon = (n) =>
-  `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${paths[n] || paths.book}</svg>`;
+
+const icon = (n, cls = "") =>
+  `<svg class="icon${cls ? " " + cls : ""}" viewBox="0 0 24 24" aria-hidden="true">${paths[n] || paths.book}</svg>`;

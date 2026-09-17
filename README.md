@@ -15,11 +15,17 @@ Then open <http://localhost:4173>.
 ## Structure
 
 The source lives in [`src/`](src/) — see [`src/README.md`](src/README.md) for the
-file-by-file breakdown, how routing and state work, and notes for reworking the
-design.
+file-by-file breakdown, the design-token system, and how routing and state work.
+
+## Design
+
+The interface follows the BDBOS / iBMS 3.0 Figma design system: Lora headings on
+Inter body text, a light page surface with white cards, one dark sidebar, and a
+violet accent for filled controls and links. Tokens in `src/css/01-tokens.css`
+carry the Figma style names, so a value can be traced back to the design file.
 
 ## Language
 
 The interface ships in German (default) and English, switchable at runtime from
-the sidebar, the mobile menu, or the login footer. German is the source
+the top bar, the mobile menu, or the login card. German is the source
 language; English lives in a single dictionary in `src/js/00-i18n.js`.

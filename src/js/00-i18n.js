@@ -597,6 +597,22 @@ const EN = {
   "09:00\u201316:00 Uhr": "09:00\u201316:00",
   "10:00\u201311:30 Uhr": "10:00\u201311:30",
   "Zeitlich flexibel": "Flexible timing",
+
+  // --- home screen (design-system layout) ---
+  "Guten Morgen, Maria": "Good morning, Maria",
+  "Guten Tag, Maria": "Good afternoon, Maria",
+  "Guten Abend, Maria": "Good evening, Maria",
+  Fortbildungsjahr: "Training year",
+  "Durchsuchen Sie das Gesamtangebot \u2013 Bildung, Einsatztraining und Sport.":
+    "Search the full catalogue \u2013 Education, Operational Training and Sport.",
+  "Ihre Fortbildung auf einen Blick": "Your training at a glance",
+  "Mein iBMS \u00f6ffnen": "Open My iBMS",
+  Aktuelles: "Updates",
+  Fortbildungsnews: "Training news",
+  Erledigt: "Done",
+  "Ihre Erg\u00e4nzung steht zur fachlichen Pr\u00fcfung bereit.":
+    "Your addition is ready for review.",
+  Filtern: "Filter",
 };
 
 function t(s) {

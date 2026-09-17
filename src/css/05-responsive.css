@@ -1,316 +1,222 @@
 /* 05-responsive.css
-   Breakpoints and user preference queries.
+   Breakpoints (1280 / 1100 / 900 / 600) and user preference queries.
+   The sidebar disappears below 900px and is replaced by the mobile menu.
 */
 
-@media (min-width: 1600px) {
-  .main {
-    padding-top: 45px;
-  }
-  .hero {
-    min-height: 370px;
-  }
-  .hero-art {
-    min-height: 370px;
-  }
-  .course-art {
-    height: 170px;
-  }
-}
-@media (max-width: 1150px) {
-  .shell {
-    padding-left: 215px;
-  }
-  .sidebar {
-    width: 215px;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  .main {
-    padding: 28px 24px;
-  }
-  .quicklinks {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .hero-copy {
-    padding: 27px;
+@media (max-width: 1280px) {
+  :root {
+    --gutter: 28px;
   }
   .grid.four {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .grid.two {
-    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --sidebar-width: 220px;
   }
-  .topbar {
-    padding: 15px 23px;
+  .main {
+    padding-top: var(--space-8);
+    gap: var(--space-8);
   }
-  .context {
-    max-width: 210px;
+  .hero {
+    padding: var(--space-7);
   }
-  .profile span:last-child {
-    display: none;
+  .grid.three,
+  .grid.split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .pathlayout {
-    grid-template-columns: 240px minmax(0, 1fr);
+  .grid.three > :nth-child(3) {
+    grid-column: span 2;
   }
-  .event {
-    gap: 10px;
-  }
-  .event-action {
-    max-width: 110px;
-  }
+  .pathlayout,
   .reportlayout {
     grid-template-columns: 1fr;
   }
   .reportnav {
-    display: flex;
-    gap: 6px;
-  }
-  .reportnav button {
-    width: auto;
-    flex: 1;
-  }
-  .login {
-    gap: 35px;
-  }
-}
-@media (max-width: 850px) {
-  .sidebar {
-    display: none;
-  }
-  .shell {
-    padding: 0;
-    background: var(--paper);
-  }
-  .workspace {
-    border-radius: 0;
-    min-height: 100vh;
-  }
-  .topbar {
-    position: sticky;
-    top: 0;
-    z-index: 25;
-    min-height: 70px;
-    background: #ffffffee;
-    backdrop-filter: blur(12px);
-    padding: 10px 18px;
-  }
-  .mobile-menu {
-    display: inline-flex;
-  }
-  .context {
-    display: none;
-  }
-  .mobile-brand {
-    display: flex;
-    gap: 9px;
-    align-items: center;
-    font-size: 0.72rem;
-    font-weight: 700;
-    line-height: 1.3;
-    letter-spacing: 0.03em;
-  }
-  .mobile-brand img {
-    width: 35px;
-    height: 35px;
-    object-fit: contain;
-  }
-  .top-actions {
-    gap: 2px;
-  }
-  .prototype {
-    display: none;
-  }
-  .main {
-    padding: 25px 20px 30px;
-  }
-  .hero {
-    grid-template-columns: 1fr 1fr;
-  }
-  .hero-copy {
-    padding: 25px;
-  }
-  .hero-copy h1 {
-    font-size: 2.35rem;
-  }
-  .hero-caption {
-    margin: 15px;
-    padding: 15px;
-  }
-  .grid.two {
-    grid-template-columns: 1fr;
-  }
-  .grid.three {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .pathlayout {
-    grid-template-columns: 1fr;
-  }
-  .pathnav {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 15px;
-  }
-  .pathnav > h3,
-  .pathnav > p,
-  .pathnav > .progress {
-    display: none;
-  }
-  .pathstep {
-    min-width: 170px;
-    border-left: 0;
-    border-bottom: 3px solid #d6e1e9;
-    margin: 0;
-  }
-  .pathstep.active {
-    border-bottom-color: var(--blue);
-    border-left: 0;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
   }
   .detailgrid {
     grid-template-columns: 1fr;
   }
-  .pagehead {
-    gap: 15px;
+  .profile span:last-child {
+    display: none;
   }
-  .pagehead > .btn {
-    flex-shrink: 0;
+  .top-actions {
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .workspace {
+    margin-left: 0;
+  }
+  .topbar {
+    min-height: 60px;
+    padding: 10px 18px;
+    background: #f8f8fcf2;
+    backdrop-filter: blur(12px);
+  }
+  .mobile-menu {
+    display: inline-flex;
+  }
+  .mobile-brand {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+  .mobile-brand .brand-badge {
+    width: 32px;
+    height: 32px;
+  }
+  .mobile-brand .brand-badge img {
+    width: 24px;
+    height: 24px;
+  }
+  .mobile-brand .brand-text strong {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+  .mobile-brand .brand-text > span {
+    display: block;
+    font-size: 0.625rem;
+    color: var(--text-secondary);
+  }
+  .rolepill,
+  .langswitch,
+  .topbar-divider {
+    display: none;
+  }
+  .main {
+    padding: var(--space-6) 18px var(--space-10);
+    gap: var(--space-8);
+  }
+  .grid.two,
+  .grid.split {
+    grid-template-columns: 1fr;
+  }
+  .grid.split > * {
+    grid-column: auto;
+  }
+  .hero {
+    gap: var(--space-5);
+    padding: var(--space-6);
+  }
+  .taskrow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+  }
+  .taskrow .btn {
+    width: 100%;
+  }
+  .pagehead {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .event-action {
+    align-items: flex-end;
   }
   .login {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 30px 22px;
+    gap: var(--space-8);
+    padding: var(--space-10) 24px;
   }
   .login-brand {
     max-width: 100%;
   }
   .login-brand .brand {
-    margin-bottom: 25px;
-  }
-  .login-brand h1 {
-    font-size: 2.75rem;
-    max-width: 630px;
-    margin-bottom: 18px;
-  }
-  .login-brand p {
-    font-size: 1rem;
-    max-width: 100%;
+    margin-bottom: var(--space-6);
   }
   .login-card {
-    justify-self: start;
+    justify-self: stretch;
     max-width: 100%;
-    padding: 28px;
-  }
-  .event-action {
-    max-width: none;
   }
 }
-@media (max-width: 560px) {
-  h1 {
-    font-size: 2.2rem;
-  }
+
+@media (max-width: 600px) {
   .main {
-    padding: 22px 16px;
+    padding: var(--space-5) 16px var(--space-8);
+    gap: var(--space-7);
   }
-  .pagehead {
-    display: block;
-    margin-bottom: 23px;
-  }
-  .pagehead > .btn {
-    margin-top: 17px;
-  }
-  .pagehead p {
-    font-size: 0.95rem;
-  }
-  .hero {
-    display: flex;
-    flex-direction: column;
-  }
-  .hero-copy {
-    padding: 25px 22px;
-  }
-  .hero-copy h1 {
-    font-size: 2.45rem;
-  }
-  .hero-art {
-    min-height: 200px;
-    max-height: 220px;
-  }
-  .hero-caption {
-    max-width: 290px;
-    margin: 16px;
-  }
-  .hero-caption h3 {
-    font-size: 1.25rem;
-  }
-  .quicklinks {
-    gap: 9px;
-  }
-  .quick {
-    padding: 12px;
-    gap: 8px;
-    min-height: 96px;
-    align-items: start;
-  }
-  .quick-icon {
-    width: 32px;
-    height: 32px;
-  }
-  .quick strong {
-    font-size: 0.83rem;
-  }
-  .quick small {
-    font-size: 0.75rem;
-  }
-  .grid.three {
+  .grid.three,
+  .grid.four {
     grid-template-columns: 1fr;
   }
+  .grid.three > :nth-child(3) {
+    grid-column: auto;
+  }
   .grid.four {
-    gap: 12px;
+    gap: var(--space-3);
   }
-  .stat {
-    padding: 17px;
+  .hero {
+    padding: var(--space-5);
   }
-  .stat .number {
-    font-size: 2rem;
+  .hero-topline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+  .home-search {
+    padding-left: 14px;
+  }
+  .chips {
+    gap: var(--space-2);
+    margin: 0 -16px;
+    padding: 0 16px 4px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+  .chip {
+    white-space: nowrap;
   }
   .panel {
-    padding: 20px;
+    padding: var(--space-5);
   }
-  .course-art {
-    height: 180px;
-  }
-  .course-body h3 {
-    min-height: 0;
+  .stat {
+    padding: var(--space-4);
   }
   .sectionhead {
-    align-items: start;
+    align-items: flex-start;
   }
   .sectionhead h2 {
-    font-size: 1.7rem;
+    font-size: 1.375rem;
   }
   .sectionhead .textlink {
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     white-space: nowrap;
+  }
+  .course-art {
+    height: 160px;
+  }
+  .learning-banner {
+    padding: var(--space-6);
   }
   .event {
     flex-wrap: wrap;
-    gap: 13px;
   }
   .event-main {
-    min-width: 180px;
+    min-width: 170px;
   }
   .event-action {
     flex-direction: row;
     width: 100%;
-    padding-left: 75px;
     align-items: center;
     justify-content: space-between;
   }
-  .tabs {
-    gap: 22px;
-  }
   .filterbar {
-    gap: 12px;
+    padding: var(--space-4);
   }
   .filterbar .field {
     flex-basis: 100%;
@@ -318,6 +224,51 @@
   .filterbar .btn {
     width: 100%;
   }
+  .chartrow {
+    grid-template-columns: 100px minmax(0, 1fr) 48px;
+    gap: var(--space-2);
+    font-size: 0.75rem;
+  }
+  .reportnav {
+    grid-auto-flow: row;
+  }
+  .factlist div {
+    gap: var(--space-4);
+  }
+  .dialog-head {
+    padding: var(--space-5) var(--space-5) var(--space-2);
+  }
+  .dialog-body {
+    padding: var(--space-3) var(--space-5) var(--space-6);
+  }
+  .dialog-actions .btn {
+    flex: 1;
+  }
+  .profile {
+    display: none;
+  }
+  .login {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    padding: var(--space-8) 16px;
+  }
+  .login-brand .brand {
+    margin-bottom: var(--space-6);
+  }
+  .login-card {
+    padding: var(--space-6);
+  }
+  .article-cover {
+    height: 180px;
+  }
+  .footer {
+    gap: var(--space-2);
+  }
+  .footer-links {
+    gap: var(--space-4);
+  }
+
+  /* Tables become stacked cards. */
   .mobilecards table,
   .mobilecards tbody,
   .mobilecards tr,
@@ -332,109 +283,47 @@
   }
   .mobilecards td {
     border: 0;
-    padding: 7px 16px;
+    padding: 6px var(--space-4);
   }
   .mobilecards tr {
-    padding: 14px 0;
-    border-bottom: 1px solid var(--line);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border);
   }
-  .mobilecards td[data-label]:before {
+  .mobilecards td[data-label]::before {
     content: attr(data-label);
     display: block;
-    font-size: 0.74rem;
-    color: var(--muted);
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
     margin-bottom: 2px;
   }
-  .mobilecards td:first-child {
-    padding-bottom: 9px;
-  }
-  .mobilecards .textlink {
-    padding: 8px 0;
-  }
-  .reportnav {
-    flex-direction: column;
-  }
-  .chartrow {
-    grid-template-columns: 97px 1fr 44px;
-    gap: 9px;
-    font-size: 0.78rem;
-  }
-  .chartrow > strong {
-    font-size: 0.78rem;
-  }
-  .chart {
-    gap: 20px;
-  }
-  .lesson {
-    gap: 12px;
-  }
-  .lesson h3 {
-    font-size: 1rem;
-  }
-  .factlist div {
-    gap: 15px;
-  }
-  .newsrow {
-    gap: 12px;
-  }
-  .newsrow time {
-    font-size: 0.72rem;
-  }
-  .dialog-head {
-    padding: 20px 20px 4px;
-  }
-  .dialog-body {
-    padding: 12px 20px 22px;
-  }
-  .dialog-actions .btn {
-    flex: 1;
-  }
-  .profile {
-    display: none;
-  }
-  .topbar {
-    gap: 10px;
-  }
-  .login-brand h1 {
-    font-size: 2.5rem;
-  }
-  .login-card h2 {
-    font-size: 2rem;
-  }
-  .footer {
-    margin-top: 30px;
-  }
-  .footer span {
-    flex-basis: 100%;
-  }
-  .tablefoot {
-    font-size: 0.75rem;
-  }
-  .article-cover {
-    height: 170px;
-  }
 }
+
 @media (prefers-reduced-motion: reduce) {
   *,
-  *:before,
-  *:after {
+  *::before,
+  *::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
   }
 }
+
 @media (forced-colors: active) {
   .tag,
   .btn,
   .panel,
-  .quick,
-  .stat {
+  .stat,
+  .chip,
+  .pill,
+  .course-card {
     border: 1px solid CanvasText;
   }
   .bar {
     background: Highlight;
   }
-  .navlink[aria-current="page"] {
+  .navlink[aria-current="page"],
+  .tab[aria-current="true"],
+  .langswitch button[aria-pressed="true"] {
     outline: 2px solid Highlight;
   }
 }
