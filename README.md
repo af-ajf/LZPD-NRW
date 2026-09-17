@@ -4,6 +4,15 @@ Interactive design draft for the POLIZEI-ONLINE / LZPD NRW pitch.
 No backend, no build step, no dependencies. All data is sample data held in
 memory and reset on every reload.
 
+## Links
+
+| | |
+| --- | --- |
+| Figma design + design system | <https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=95-6098&t=ioWlPggJ1wffyexn-1> |
+| Click dummy (live) | <https://af-ajf.github.io/LZPD-NRW/> |
+| Repository | <https://github.com/af-ajf/LZPD-NRW> |
+| Mockups | <https://drive.google.com/drive/folders/1h7x0dAbAFc18pJkblcIazHJ0QmRwza9N?usp=sharing> |
+
 ## Run
 
 ```bash
