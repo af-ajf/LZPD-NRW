@@ -22,6 +22,7 @@ const paths = {
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   arrow: '<path d="M4 12h16m-6-6 6 6-6 6"/>',
   chevron: '<path d="m9 5 7 7-7 7"/>',
+  chevronleft: '<path d="m15 5-7 7 7 7"/>',
   chevrondown: '<path d="m6 9 6 6 6-6"/>',
   check: '<path d="m5 12 4 4L19 6"/>',
   calendar:

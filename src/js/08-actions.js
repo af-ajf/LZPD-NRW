@@ -13,6 +13,12 @@ document.addEventListener("click", (e) => {
     case "close":
       close();
       break;
+    // Back out of a detail route. Falls back to the tab the route belongs to,
+    // so a cold start on #course/3 still lands somewhere sensible.
+    case "back":
+      if (history.length > 1) history.back();
+      else location.hash = location.hash.startsWith("#course") ? "catalog" : "home";
+      break;
     case "setlang":
       if (state.lang !== a.dataset.langValue) setLang(a.dataset.langValue);
       break;
@@ -55,7 +61,8 @@ document.addEventListener("click", (e) => {
     case "profile":
       modal(
         t("Ihr Profil"),
-        `<h3>Maria Beispiel</h3><dl class="factlist"><div><dt>${t("Organisation")}</dt><dd>${t("Polizei NRW")}</dd></div><div><dt>${t("Organisationseinheit")}</dt><dd>${t("Direktion Zentrale Aufgaben")}</dd></div><div><dt>${t("Demoansicht")}</dt><dd>${t(roleNames[state.role])}</dd></div></dl><div class="dialog-actions"><a class="btn secondary" href="#login">${t("Abmelden")}</a></div>`,
+        `<h3>Maria Beispiel</h3><dl class="factlist"><div><dt>${t("Organisation")}</dt><dd>${t("Polizei NRW")}</dd></div><div><dt>${t("Organisationseinheit")}</dt><dd>${t("Direktion Zentrale Aufgaben")}</dd></div><div><dt>${t("Demoansicht")}</dt><dd>${t(roleNames[state.role])}</dd></div></dl>${profileExtras()}<div class="dialog-actions"><a class="btn secondary" href="#login">${t("Abmelden")}</a></div>`,
+        "profile-sheet",
       );
       break;
     case "search":
@@ -389,9 +396,36 @@ $("#dialog").addEventListener("close", () => {
   if (opener?.isConnected) opener.focus();
 });
 
+// On the phone shell there is no sidebar, so the routes outside the five tabs
+// (help, and the role-specific ones) plus the demo switches live in the
+// profile sheet.
+function profileExtras() {
+  if (!isMobile()) return "";
+  const extra = navItems().filter(
+    ([r]) => !tabItems().some(([tab]) => tab === r),
+  );
+  return `<nav class="menu-links mt" aria-label="${t("Mobile Navigation")}">${extra
+    .map(([r, n, i]) => `<a href="#${r}">${icon(i)}${t(n)}</a>`)
+    .join("")}<a href="#help">${icon("help")}${t("Hilfe & Kontakt")}</a></nav>${demoBox("profile")}`;
+}
+
 window.addEventListener("hashchange", () => {
   close();
   render();
 });
+
+// Desktop and phone shells are different markup, so crossing 900px re-renders
+// rather than being reflowed by CSS alone.
+mobileMQ.addEventListener("change", () => render(false));
+
+// iOS-style large title: once it has scrolled away, the compact glass bar
+// takes over. 96px is the height of the title block plus its accessory row.
+window.addEventListener(
+  "scroll",
+  () => {
+    $("#glassbar")?.classList.toggle("show", window.scrollY > 96);
+  },
+  { passive: true },
+);
 
 render(false);

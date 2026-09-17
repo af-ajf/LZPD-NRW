@@ -1,0 +1,519 @@
+/* 06-mobile.css
+   Phone shell and installed-app chrome, following the Figma frame "MOBILE"
+   (node 3059:159): an iOS-style large title over the page surface, a floating
+   Liquid Glass tab bar, and cards with the softer radii of the phone frame.
+
+   Every rule is scoped to `.shell.phone`, the shell 05-chrome.js renders below
+   900px, so nothing here can leak into the desktop layout.
+*/
+
+/* ---------- shell ---------- */
+.shell.phone {
+  display: block;
+  background: var(--surface-page);
+  /* Room for the home indicator and the floating tab bar above it. */
+  --tabbar-height: 78px;
+}
+.shell.phone .workspace {
+  margin-left: 0;
+  min-height: 100vh;
+}
+/* One gutter for the whole phone shell; the elements that run edge to edge
+   (chips, course rail) pull back out of it. */
+.shell.phone .main {
+  padding: 0 var(--space-5) var(--space-6);
+  gap: var(--space-5);
+  max-width: none;
+}
+.shell.phone .pagehead {
+  gap: var(--space-2);
+}
+.shell.phone .section,
+.shell.phone .grid {
+  gap: var(--space-3);
+}
+
+/* ---------- large title ---------- */
+.mobilehead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 8px 20px;
+}
+.mobilehead-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 36px;
+}
+.mobilehead-spacer {
+  flex: 1;
+}
+/* Back out of a detail route. Same glass as the round buttons, widened for
+   the label the way an iOS navigation bar shows one. */
+.glassbtn.backbtn {
+  width: auto;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 14px 0 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--accent-primary);
+}
+.glassbtn.backbtn .icon {
+  width: 20px;
+  height: 20px;
+}
+.mobilehead-title h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 38px;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+  margin: 0;
+}
+.mobilehead-title p {
+  margin: 2px 0 0;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Round glass button, per "btn-notifications (Apple UI Kit · Glass)". The fill
+   is a translucent navy over a blurred backdrop, with the hairline ring and
+   the soft drop shadow the kit uses. */
+.glassbtn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface-card) 62%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow:
+    0 0 0 0.5px #e8e8e8,
+    1.25px 0 0 -0.75px #d0d0d0,
+    -1.25px 0 0 -0.75px #d0d0d0,
+    0 8px 15px #0000000a;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    transform var(--fast),
+    background var(--fast);
+}
+.glassbtn:active {
+  transform: scale(0.94);
+  background: color-mix(in srgb, var(--surface-card) 82%, transparent);
+}
+/* Unread count, same dot the desktop icon buttons use. */
+.glassbtn[data-badge]::after {
+  content: attr(data-badge);
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-surface);
+  color: var(--text-on-dark);
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+.avatarbtn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.avatarbtn .avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--accent-surface);
+  color: var(--text-on-dark);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 16px;
+}
+.avatarbtn:active {
+  transform: scale(0.94);
+}
+
+/* Compact bar that takes over once the large title has scrolled away. */
+.glassbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 20px 10px;
+  text-align: center;
+  background: color-mix(in srgb, var(--surface-page) 72%, transparent);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border-bottom: 0.5px solid #ffffff00;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--slow),
+    border-color var(--slow);
+}
+.glassbar span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+.glassbar.show {
+  opacity: 1;
+  border-bottom-color: #ffffff59;
+}
+
+/* ---------- search and chips ---------- */
+.shell.phone .m-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--space-5) 0 6px;
+}
+.shell.phone .home-search {
+  height: 46px;
+  gap: var(--space-2);
+  padding: 0 6px 0 14px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  background: var(--surface-card);
+  box-shadow: 0 2px 10px #5757c70f;
+}
+.shell.phone .home-search input {
+  font-size: 1rem;
+}
+.shell.phone .home-search button {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: var(--radius-pill);
+}
+.shell.phone .chips {
+  margin: 0 calc(var(--space-5) * -1);
+  padding: 0 var(--space-5) var(--space-1);
+  gap: var(--space-2);
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+}
+.shell.phone .chips::-webkit-scrollbar {
+  display: none;
+}
+.shell.phone .chip {
+  white-space: nowrap;
+  padding: var(--space-2) 14px;
+  border-radius: 16px;
+  background: #fffc;
+  border: 1px solid var(--border);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---------- section header ---------- */
+.shell.phone .section {
+  padding-top: var(--space-4);
+}
+.shell.phone .sectionhead {
+  align-items: center;
+  gap: var(--space-2);
+}
+.shell.phone .sectionhead h2 {
+  font-size: 1.25rem;
+  line-height: 28px;
+  gap: 0;
+}
+/* The phone frame drops the square marker in front of a section title. */
+.shell.phone .sectionhead h2::before {
+  display: none;
+}
+.shell.phone .sectionhead .textlink {
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+/* ---------- course rail ---------- */
+.rail {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  margin: 0 calc(var(--space-5) * -1);
+  padding: 0 var(--space-5) var(--space-2);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* Without this the first card snaps to the scrollport edge and swallows the
+     gutter the rest of the page keeps. */
+  scroll-padding-inline: var(--space-5);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail > .course-card {
+  flex: 0 0 288px;
+  width: 288px;
+  margin: 0;
+  padding: 0;
+  scroll-snap-align: start;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px #5757c70f;
+}
+.rail > .course-card:hover {
+  transform: none;
+  border-color: var(--border);
+  box-shadow: 0 4px 16px #5757c70f;
+}
+.rail .course-art {
+  height: 171px;
+  flex-shrink: 0;
+  padding: var(--space-3);
+}
+.rail .course-body {
+  padding: 12px 14px 14px;
+  gap: 6px;
+}
+.rail .course-headline,
+.rail .course-facts {
+  gap: 6px;
+}
+.rail .course-body h3 {
+  font-size: 1rem;
+  line-height: 24px;
+}
+.rail .course-meta {
+  font-size: 0.75rem;
+  line-height: 16px;
+}
+
+/* ---------- cards ---------- */
+.shell.phone .panel:not(.course-card) {
+  padding: var(--space-4);
+  border-radius: 18px;
+  box-shadow: 0 4px 16px #5757c70f;
+  gap: var(--space-3);
+}
+.shell.phone .panel:not(.course-card) h2 {
+  font-size: 1.25rem;
+  line-height: 28px;
+}
+.shell.phone .panel:not(.course-card) .rule {
+  margin: 0;
+}
+
+/* ---------- footer ---------- */
+.shell.phone .footer {
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-6) var(--space-5) var(--space-2);
+  margin: 0;
+  background: none;
+  color: var(--text-placeholder);
+  font-size: 0.75rem;
+  text-align: center;
+}
+.shell.phone .footer-links {
+  gap: var(--space-4);
+}
+.shell.phone .footer button {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Keeps the last card clear of the floating tab bar. */
+.tabbar-space {
+  height: calc(var(--tabbar-height) + env(safe-area-inset-bottom, 0px));
+}
+
+/* ---------- Liquid Glass tab bar (Apple UI Kit, node 3059:205) ---------- */
+.tabbar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 45;
+  display: flex;
+  justify-content: center;
+  padding: 16px 25px calc(env(safe-area-inset-bottom, 0px) + 12px);
+  pointer-events: none;
+}
+.tabbar-glass {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: stretch;
+  padding: 2px;
+  border-radius: 100px;
+  pointer-events: auto;
+  /* Liquid Glass: a strongly blurred, saturated backdrop under a translucent
+     white fill, a hairline ring for the edge and a soft lift underneath. */
+  background: #ffffffa6;
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  box-shadow:
+    inset 0 0.5px 0 #ffffffe6,
+    inset 0 -0.5px 0 #ffffff40,
+    0 0 0 0.5px #ffffff59,
+    0 1px 2px #08152c14,
+    0 12px 28px #08152c1f;
+}
+
+.tab-item {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 54px;
+  padding: 6px 4px 7px;
+  border-radius: 100px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.24s var(--ease);
+}
+/* One pill for all five tabs: switching tabs moves it instead of redrawing it,
+   with a small overshoot so it settles the way the Apple kit does. */
+.tab-indicator {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc((100% - 4px) / 5);
+  border-radius: 100px;
+  background: #0054ca24;
+  transform: translateX(calc(var(--tab-index, 0) * 100%));
+  transition:
+    transform 0.42s cubic-bezier(0.34, 1.32, 0.52, 1),
+    opacity var(--fast);
+}
+.tabbar-glass.off-tab .tab-indicator {
+  opacity: 0;
+}
+.tab-item[aria-current="page"] {
+  color: var(--accent-primary);
+}
+.tab-symbol,
+.tab-label {
+  position: relative;
+}
+.tab-symbol {
+  transition: transform 0.42s cubic-bezier(0.34, 1.32, 0.52, 1);
+}
+.tab-item[aria-current="page"] .tab-symbol {
+  transform: translateY(-1px) scale(1.06);
+}
+.tab-symbol .icon {
+  width: 24px;
+  height: 24px;
+}
+.tab-label {
+  font-size: 0.625rem;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+  line-height: 12px;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tab-item:active .tab-symbol {
+  transform: scale(0.9);
+}
+
+/* ---------- profile sheet ---------- */
+/* The phone shell has no sidebar, so the profile dialog carries the remaining
+   routes and the demo switches. Both are styled for the dark mobile menu
+   elsewhere; on this white sheet they take the page colours. */
+.profile-sheet .menu-links {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-2);
+}
+.profile-sheet .menu-links a {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.profile-sheet .menu-links a:hover {
+  background: var(--surface-sunken);
+  color: var(--accent-primary);
+}
+.profile-sheet .demo-controls {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+.profile-sheet .demo-controls label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.profile-sheet .demo-controls select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-card);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+}
+
+/* ---------- installed app ---------- */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none;
+  }
+  /* Nothing in the click dummy is text the user needs to select, and long
+     presses otherwise feel like a web page rather than an app. */
+  .tabbar,
+  .mobilehead,
+  .glassbar {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* The glass layers are decoration: without backdrop-filter they fall back to
+   an opaque surface rather than an unreadable translucent one. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glassbtn,
+  .glassbar,
+  .tabbar-glass,
+  .shell.phone .chip {
+    background: var(--surface-card);
+  }
+}

@@ -7,16 +7,23 @@ reload.
 Serve it over HTTP (`file://` makes relative paths fragile):
 
 ```bash
-python3 -m http.server 4173 --directory src
+python3 tools/serve.py
 ```
 
 ## Structure
 
 ```
 src/
-  index.html          markup shell, webfonts, stylesheet/script order
+  index.html          markup shell, webfonts, stylesheet/script order,
+                      PWA manifest link and service-worker registration
+  manifest.webmanifest  name, icons, start URL and display mode of the app
+  sw.js               service worker: precaches the shell, serves it offline
   assets/
     logo.png          NRW police star, used in the sidebar brand and on login
+    icon-192.png      home-screen icons, derived from logo.png
+    icon-512.png
+    icon-maskable-512.png
+    apple-touch-icon.png
     flag-de.svg       flags for the language switch (exported from the
     flag-en.svg       Figma design system)
   css/
@@ -26,13 +33,16 @@ src/
     04-components.css pills, buttons, cards, hero band, stats, course cards,
                       tables, forms, dialogs, toast, login
     05-responsive.css breakpoints (1280 / 1100 / 900 / 600) and preference queries
+    06-mobile.css     phone shell: large title, glass bar, course rail, the
+                      Liquid Glass tab bar and the installed-app rules
   js/
     00-i18n.js        EN dictionary, t(), language switch
     01-icons.js       inline SVG icon set
     02-data.js        demo fixtures: courses, people
     03-state.js       mutable app state, role labels
     04-ui.js          $, esc, badge, btn, link
-    05-chrome.js      nav, brand, top bar, footer, shell layout, login, course card
+    05-chrome.js      nav, brand, top bar, footer, shell layout, login, course
+                      card, and the phone shell (large title, tab bar)
     06-views.js       one function per route, each returns an HTML string
     07-render.js      hash router, toast, dialog primitives
     08-actions.js     click/submit delegation, CSV export, bootstrap
@@ -40,6 +50,38 @@ src/
 
 Scripts are classic (non-module) and share one global lexical scope, so load
 order in `index.html` matters. Each file is `"use strict"`.
+
+## Two shells
+
+`layout()` in `05-chrome.js` picks the shell: the desktop one (sidebar, navy top
+bar) above 900px, the phone one below it. The phone shell follows the Figma
+frame "MOBILE" (node 3059:159) — an iOS-style large title over the page
+surface, a compact glass bar that fades in on scroll, and a floating Liquid
+Glass tab bar carrying the five main routes. `home()` branches the same way:
+`mobileHome()` keeps search, chips, the course rail, the news card and the next
+appointment, and drops the greeting, the hero copy, the open-task row and the
+stat cards. The routes outside the five tabs, the role switch and the language
+switch live in the profile sheet behind the avatar.
+
+Because the two shells are different markup rather than one reflowed layout,
+crossing 900px re-renders (`mobileMQ` listener in `08-actions.js`).
+
+The tab bar itself lives in `#tabbar-root`, outside `#app`, and `syncTabbar()`
+only updates it — it is rebuilt when it is missing or the language changed.
+That keeps its nodes across a route change, so the selection pill slides from
+one tab to the next instead of being redrawn. Routes outside the five tabs
+(help, the admin and report views) drop the pill rather than moving it, and
+`mobilehead()` gives those routes a glass "Zurück" button — the phone shell has
+no breadcrumb rail of its own, so without it a course detail is a dead end.
+
+## Installable app
+
+`manifest.webmanifest` and `sw.js` make the click dummy installable. The worker
+precaches every shell file on install, then serves it network-first: online the
+server wins, so an installed copy can never run a new `05-chrome.js` against an
+old `07-render.js`; offline every request falls back to the precache, and a
+navigation to the cached `index.html`, since routing happens in the hash. Bump
+`CACHE` in `sw.js` when a file joins or leaves the shell list.
 
 ## Design system
 

@@ -1,7 +1,28 @@
 // 05-chrome.js - Persistent chrome: navigation, brand, page header, footer,
 // shell layout, login screen and the course card.
+//
+// Below 900px the app switches to the phone shell from the Figma frame
+// "MOBILE" (node 3059:159): no sidebar and no navy top bar, an iOS-style large
+// title, and a floating Liquid Glass tab bar. The switch is decided in JS, not
+// only in CSS, because the two shells carry different markup; 08-actions.js
+// re-renders when the breakpoint is crossed.
 
 "use strict";
+
+const mobileMQ = window.matchMedia("(max-width: 900px)");
+const isMobile = () => mobileMQ.matches;
+
+// The five tabs of the phone shell, in the order of the Figma frame. Routes
+// that only exist for the admin and report roles stay in the profile sheet.
+function tabItems() {
+  return [
+    ["home", "Start", "home"],
+    ["catalog", "Angebote", "book"],
+    ["lastminute", "Last Minute", "clock"],
+    ["dashboard", "Mein iBMS", "users"],
+    ["learning", "Lernpfad", "activity"],
+  ];
+}
 
 function navItems() {
   let n = [
@@ -86,7 +107,81 @@ function topbar() {
 }
 
 function layout(content, route) {
+  if (isMobile()) return mobileLayout(content, route);
   return `<div class="shell">${sidebar(route)}<div class="workspace">${topbar()}<main class="main" id="main">${content}</main>${footer()}</div></div>`;
+}
+
+// ---------- phone shell ----------
+
+// Round glass button and avatar, floating over the page surface. On the home
+// route the large title follows underneath; every other route brings its own
+// pagehead, so only the accessory row is rendered there.
+function mobilehead(route) {
+  // A route that is not one of the five tabs was pushed on top of one, so it
+  // gets the iOS back affordance instead of relying on the system gesture.
+  const back = tabItems().some(([r]) => r === route)
+    ? ""
+    : `<button class="glassbtn backbtn" data-action="back">${icon("chevronleft", "sm")}<span>${t("Zurück")}</span></button>`;
+  const acc = `<div class="mobilehead-actions">${back}<span class="mobilehead-spacer"></span><button class="glassbtn" data-action="notifications" data-badge="2" aria-label="${t("Benachrichtigungen, 2 neue Hinweise")}">${icon("bell", "sm")}</button><button class="avatarbtn" data-action="profile" aria-label="${t("Profil von Maria Beispiel")}"><span class="avatar" aria-hidden="true">MB</span></button></div>`;
+  const title =
+    route === "home"
+      ? `<div class="mobilehead-title"><h1 id="page-title" tabindex="-1">POLIZEI-ONLINE</h1><p>iBMS 3.0 · NRW · ${t("Fortbildungsjahr")} 2026</p></div>`
+      : "";
+  return `<header class="mobilehead">${acc}${title}</header>`;
+}
+
+// Compact bar that fades in once the large title has scrolled away.
+// 08-actions.js toggles `.show` on scroll.
+function glassbar(route) {
+  const item = tabItems().find(([r]) => r === route);
+  const label = route === "home" ? "POLIZEI-ONLINE" : t(item ? item[1] : "");
+  return `<div class="glassbar" id="glassbar" aria-hidden="true"><span>${esc(label)}</span></div>`;
+}
+
+// Liquid Glass tab bar (Apple UI Kit, node 3059:205): one blurred capsule
+// floating above the content, the active tab carried by a soft blue pill.
+//
+// It is rendered once into #tabbar-root and then only updated, never rebuilt:
+// the pill is a single element moved with a transform, so switching tabs
+// animates instead of cutting.
+function syncTabbar(route) {
+  const root = $("#tabbar-root");
+  if (!root) return;
+  if (!isMobile() || route === "login") {
+    root.innerHTML = "";
+    delete root.dataset.lang;
+    return;
+  }
+  // Rebuilt only when it is missing or the labels changed language; otherwise
+  // the nodes stay put and the pill can animate between routes.
+  if (!root.firstElementChild || root.dataset.lang !== state.lang) {
+    root.dataset.lang = state.lang;
+    root.innerHTML = `<nav class="tabbar" aria-label="${t("Hauptnavigation")}"><div class="tabbar-glass"><span class="tab-indicator" aria-hidden="true"></span>${tabItems()
+      .map(
+        ([r, n, i]) =>
+          `<a class="tab-item" href="#${r}" data-route="${r}"><span class="tab-symbol">${icon(i)}</span><span class="tab-label">${t(n)}</span></a>`,
+      )
+      .join("")}</div></nav>`;
+  }
+  const items = root.querySelectorAll(".tab-item");
+  let active = -1;
+  items.forEach((el, i) => {
+    const on = el.dataset.route === route || (el.dataset.route === "catalog" && route === "course");
+    if (on) active = i;
+    if (on) el.setAttribute("aria-current", "page");
+    else el.removeAttribute("aria-current");
+  });
+  const glass = root.querySelector(".tabbar-glass");
+  // A route outside the five tabs (help, users, report) parks the pill where
+  // it is and simply drops the highlight.
+  if (glass) {
+    glass.classList.toggle("off-tab", active < 0);
+    if (active >= 0) glass.style.setProperty("--tab-index", active);
+  }
+}
+
+function mobileLayout(content, route) {
+  return `<div class="shell phone">${glassbar(route)}<div class="workspace">${mobilehead(route)}<main class="main" id="main">${content}</main>${footer()}<div class="tabbar-space" aria-hidden="true"></div></div></div>`;
 }
 
 function login() {

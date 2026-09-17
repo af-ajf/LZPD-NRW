@@ -46,6 +46,7 @@ function render(focus = true) {
         link(t("Zur Startseite"), "home");
   }
   if (content !== undefined) $("#app").innerHTML = layout(content, route);
+  syncTabbar(route);
   $(".skip").textContent = t("Zum Hauptinhalt springen");
   document.documentElement.lang = state.lang;
   document.title =

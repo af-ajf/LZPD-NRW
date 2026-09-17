@@ -12,14 +12,46 @@ memory and reset on every reload.
 | Click dummy (live) | <https://af-ajf.github.io/LZPD-NRW/> |
 | Repository | <https://github.com/af-ajf/LZPD-NRW> |
 | Mockups | <https://drive.google.com/drive/folders/1h7x0dAbAFc18pJkblcIazHJ0QmRwza9N?usp=sharing> |
+| Phone frame (MOBILE) | <https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=3059-159> |
 
 ## Run
 
 ```bash
-python3 -m http.server 4173 --directory src
+python3 tools/serve.py
 ```
 
-Then open <http://localhost:4173>.
+Then open <http://localhost:4173>. The script is `http.server` with
+`Cache-Control: no-store`, so a reload always shows the files on disk instead
+of a half-updated mix of scripts.
+
+## Install as an app
+
+The click dummy is a progressive web app: `src/manifest.webmanifest` and
+`src/sw.js` make it installable, and the service worker precaches the whole
+shell, so an installed copy also opens without a network. Install it from the
+browser menu ("Zum Startbildschirm hinzufügen" on iOS, "App installieren" in
+Chrome). It needs to be served over HTTPS or from `localhost` — the GitHub
+Pages link above qualifies.
+
+The worker serves the shell network-first: online, the files on the server
+always win, so an installed copy can never run a stale mix of scripts; offline,
+it falls back to the precached copy. Bump `CACHE` in `src/sw.js` when a shell
+file is added or removed, so the precache list stays in step.
+
+## Mobile
+
+Below 900px the app renders a phone shell instead of the desktop one, following
+the Figma frame
+[MOBILE](https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=3059-159):
+no sidebar and no navy top bar, an iOS-style large title that collapses into a
+glass bar on scroll, and a floating Liquid Glass tab bar with the five main
+routes. The home screen keeps search, the module chips, a horizontal course
+rail, the news card and the next appointment; the greeting, the hero copy, the
+open-task row and the four stat cards are left to the desktop layout, since
+Mein iBMS is one tab away. Everything the sidebar used to hold — the remaining
+routes, the role switch and the language switch — moved into the profile sheet
+behind the avatar. A route outside the five tabs (a course, an article, help)
+carries a glass "Zurück" button in its place.
 
 ## Structure
 

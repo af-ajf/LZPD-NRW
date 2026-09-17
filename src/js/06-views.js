@@ -16,6 +16,7 @@ function heroTask() {
 }
 
 function home() {
+  if (isMobile()) return mobileHome();
   const chips = [
     ["Bildung", "module"],
     ["Einsatztraining", "module"],
@@ -41,6 +42,35 @@ function home() {
   <section class="panel ruled"><p class="eyebrow">${t("Aktuelles")}</p><h2>${t("Fortbildungsnews")}</h2><hr class="rule"><div class="newsrow"><time datetime="2026-09-16">16.09.2026</time><a class="textlink" href="#article">${t("Fortbildungsplanung gemeinsam gestalten")}${icon("arrow", "xs")}</a><p>${t("Melden Sie Ihren Bedarf für das kommende Fortbildungsjahr.")}</p></div><div class="newsrow"><time datetime="2026-09-14">14.09.2026</time><a class="textlink" href="#help">${t("Gut ankommen in iBMS 3.0")}${icon("arrow", "xs")}</a><p>${t("Antworten zu Registrierung, Nachweisen und persönlicher Übersicht.")}</p></div></section>
   <section class="panel ruled"><p class="eyebrow">${t("Für Sie persönlich")}</p><h2>${t("Ihr nächster Termin")}</h2><hr class="rule"><div class="stack" style="gap:var(--space-3)"><h4 style="margin:0">${t("Deeskalation im Einsatz")}</h4><p class="factrow">${icon("calendar", "sm")}${t("15. Oktober · 09:00 Uhr")}</p><p class="factrow">${icon("pin", "sm")}${t("Fortbildungszentrum NRW")}</p></div><hr class="rule"><a class="textlink" href="#dashboard" data-action="stat-link" data-tab="Registrierungen">${t("Meine Registrierungen")}${icon("arrow", "xs")}</a></section>
 </div>`;
+}
+
+// Phone home screen, following the Figma frame "MOBILE" (node 3059:159).
+// Kept from the desktop home: search, the module chips, the course rail, the
+// news card and the next appointment. Dropped: the greeting line, the "Was
+// möchten Sie lernen?" hero copy, the open-task row and the four stat cards —
+// the large title carries the page instead, and Mein iBMS is one tab away.
+function mobileHome() {
+  const chips = [
+    ["Bildung", "module"],
+    ["Einsatztraining", "module"],
+    ["Sport", "module"],
+    ["Kurzfristig freie Plätze", "lastminute"],
+  ];
+  return `<section class="m-hero">
+  <form id="home-search" class="home-search"><label class="hidesr" for="home-q">${t("Angebote suchen")}</label><input id="home-q" name="q" type="search" placeholder="${t("z. B. Kommunikation")}"><button aria-label="${t("Angebote suchen")}">${icon("search", "sm")}</button></form>
+  <div class="chips">${chips
+    .map(
+      ([label, kind]) =>
+        `<button class="chip" data-action="chip" data-kind="${kind}" data-value="${esc(label)}">${t(label)}</button>`,
+    )
+    .join("")}</div>
+</section>
+<section class="section"><div class="sectionhead"><h2>${t("Neue Perspektiven")}</h2><a class="textlink" href="#catalog">${t("Alle Angebote")}${icon("arrow", "xs")}</a></div><div class="rail">${courses
+    .slice(0, 3)
+    .map(courseCard)
+    .join("")}</div></section>
+<section class="panel"><p class="eyebrow">${t("Aktuelles")}</p><h2>${t("Fortbildungsnews")}</h2><hr class="rule"><div class="newsrow"><time datetime="2026-09-16">16.09.2026</time><a class="textlink" href="#article">${t("Fortbildungsplanung gemeinsam gestalten")}${icon("arrow", "xs")}</a><p>${t("Melden Sie Ihren Bedarf für das kommende Fortbildungsjahr.")}</p></div><hr class="rule"><div class="newsrow"><time datetime="2026-09-14">14.09.2026</time><a class="textlink" href="#help">${t("Gut ankommen in iBMS 3.0")}${icon("arrow", "xs")}</a><p>${t("Antworten zu Registrierung, Nachweisen und persönlicher Übersicht.")}</p></div></section>
+<section class="panel"><p class="eyebrow">${t("Für Sie persönlich")}</p><h2>${t("Ihr nächster Termin")}</h2><hr class="rule"><div class="stack" style="gap:var(--space-2)"><h4 style="margin:0">${t("Deeskalation im Einsatz")}</h4><p class="factrow">${icon("calendar", "sm")}${t("15. Oktober · 09:00 Uhr")}</p><p class="factrow">${icon("pin", "sm")}${t("Fortbildungszentrum NRW")}</p></div><hr class="rule"><a class="textlink" href="#dashboard" data-action="stat-link" data-tab="Registrierungen">${t("Meine Registrierungen")}${icon("arrow", "xs")}</a></section>`;
 }
 
 function homeStats() {
