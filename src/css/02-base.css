@@ -1,7 +1,7 @@
 /* 02-base.css
    Element resets, typography scale, focus rings, utility classes.
-   Headings are Lora (Display/Heading Serif in the Figma library); everything
-   else is Inter.
+   Headings and body share one grotesque (Inter), as on
+   internetwache.polizei.nrw.
 */
 
 * {
@@ -59,7 +59,7 @@ img {
 }
 .sidebar :focus-visible,
 .mobile-nav-dialog :focus-visible {
-  outline-color: #a9b2ff;
+  outline-color: var(--accent-highlight);
 }
 #page-title:focus,
 #page-title:focus-visible {
@@ -78,11 +78,11 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   color: var(--text-primary);
 }
 h1 {
-  /* Display/Serif Large - Lora Bold 44/52 */
+  /* Display Large - Inter Bold 40/48 */
   font-size: clamp(2rem, 1.4rem + 1.7vw, 2.75rem);
   font-weight: 700;
   line-height: 1.18;
@@ -90,7 +90,7 @@ h1 {
   margin-bottom: var(--space-3);
 }
 h2 {
-  /* Heading/Serif H2 - Lora Bold 28/36 */
+  /* Heading H2 - Inter Bold 28/36 */
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.28;
@@ -98,14 +98,14 @@ h2 {
   margin-bottom: var(--space-3);
 }
 h3 {
-  /* Heading/Serif H4 - Lora Bold 20/28 */
+  /* Heading H4 - Inter Bold 20/28 */
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.4;
   margin-bottom: var(--space-2);
 }
 h4 {
-  /* Heading/Serif H6 - Lora SemiBold 16/24 */
+  /* Heading H6 - Inter Semi Bold 16/24 */
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.5;

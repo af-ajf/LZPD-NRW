@@ -97,7 +97,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--text-on-dark-subtle);
+  color: var(--accent-highlight);
   margin: 0;
   padding: 0 2px;
 }
@@ -129,6 +129,7 @@
   background: var(--accent-surface);
   color: var(--text-on-dark);
   font-weight: 600;
+  box-shadow: inset 4px 0 0 var(--accent-highlight);
 }
 .sidebar-utility {
   display: grid;
@@ -154,7 +155,8 @@
   min-height: 68px;
   padding: 14px var(--gutter);
   background: var(--surface-chrome);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--chrome-line);
+  color: var(--chrome-text);
   position: sticky;
   top: 0;
   z-index: 25;
@@ -305,9 +307,9 @@
   gap: var(--space-3) var(--space-6);
   padding: var(--space-4) var(--gutter);
   background: var(--surface-chrome);
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--chrome-line);
   font-size: 0.75rem;
-  color: var(--text-secondary);
+  color: var(--chrome-text-muted);
 }
 .footer-links {
   display: flex;
@@ -315,11 +317,65 @@
   gap: var(--space-6);
 }
 .footer button {
-  color: var(--text-secondary);
+  color: var(--chrome-text-muted);
   font-size: 0.75rem;
   padding: 4px 0;
   border-radius: 4px;
 }
 .footer button:hover {
-  color: var(--accent-primary);
+  color: var(--chrome-text);
+}
+
+/* ---------- chrome on navy ----------
+   Top bar and footer carry the same navy as the live site, so every control
+   inside them switches to the on-dark set. */
+.topbar .iconbtn {
+  color: var(--chrome-text-muted);
+}
+.topbar .iconbtn:hover {
+  background: var(--chrome-hover);
+  color: var(--chrome-text);
+}
+.topbar .topbar-divider {
+  background: var(--chrome-line);
+}
+.topbar .profile {
+  color: var(--chrome-text);
+}
+.topbar .profile:hover {
+  background: var(--chrome-hover);
+}
+.topbar .avatar {
+  background: #ffffff24;
+  color: var(--chrome-text);
+}
+.topbar .rolepill select {
+  background: #ffffff1a;
+  border-color: var(--chrome-line);
+  color: var(--chrome-text);
+}
+.topbar .rolepill select:hover {
+  border-color: #ffffff5c;
+  color: var(--chrome-text);
+}
+.topbar .rolepill .icon {
+  color: var(--chrome-text-muted);
+}
+.topbar .langswitch {
+  background: #ffffff14;
+  border-color: var(--chrome-line);
+}
+.topbar .langswitch button {
+  color: var(--chrome-text-muted);
+}
+.topbar .langswitch button:hover {
+  color: var(--chrome-text);
+}
+.topbar .langswitch button[aria-pressed="true"] {
+  background: var(--accent-surface);
+  color: var(--chrome-text);
+}
+.topbar :focus-visible,
+.footer :focus-visible {
+  outline-color: var(--accent-highlight);
 }

@@ -28,10 +28,13 @@ file-by-file breakdown, the design-token system, and how routing and state work.
 
 ## Design
 
-The interface follows the BDBOS / iBMS 3.0 Figma design system: Lora headings on
-Inter body text, a light page surface with white cards, one dark sidebar, and a
-violet accent for filled controls and links. Tokens in `src/css/01-tokens.css`
-carry the Figma style names, so a value can be traced back to the design file.
+This branch carries the NRW web style: the palette, type and shapes of
+<https://internetwache.polizei.nrw> applied to the iBMS 3.0 layout. Inter for
+headings and body, navy `#08152c` chrome and sidebar, NRW red for filled
+controls and links, lime `#ebff00` as the accent marker, square cards with
+hairline borders instead of shadows. Tokens in `src/css/01-tokens.css` mirror
+the Figma collection "NRW Web 2026", so a value can be traced back to the
+design file. The violet iBMS 3.0 styling stays on `main`.
 
 ## Language
 

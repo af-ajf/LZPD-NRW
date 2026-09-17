@@ -59,7 +59,7 @@
   .topbar {
     min-height: 60px;
     padding: 10px 18px;
-    background: #f8f8fcf2;
+    background: #08152cf2;
     backdrop-filter: blur(12px);
   }
   .mobile-menu {
@@ -70,7 +70,7 @@
     gap: var(--space-2);
     align-items: center;
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--chrome-text);
   }
   .mobile-brand .brand-badge {
     width: 32px;
@@ -85,12 +85,12 @@
     font-size: 0.75rem;
     font-weight: 800;
     line-height: 1.2;
-    color: var(--text-primary);
+    color: var(--chrome-text);
   }
   .mobile-brand .brand-text > span {
     display: block;
     font-size: 0.625rem;
-    color: var(--text-secondary);
+    color: var(--chrome-text-muted);
   }
   .rolepill,
   .langswitch,

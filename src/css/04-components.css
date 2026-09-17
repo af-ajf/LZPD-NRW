@@ -454,7 +454,7 @@ a.stat:hover {
   margin: 0;
 }
 .stat .number {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.28;
@@ -496,32 +496,14 @@ a.stat:hover {
   align-items: flex-end;
   padding: var(--space-4);
   overflow: hidden;
-  background: linear-gradient(
-    149deg,
-    #2f2e8c 0%,
-    #4b47c4 42%,
-    #6e7be0 75%,
-    #86d6ea 100%
-  );
+  background: var(--art-a);
   isolation: isolate;
 }
 .course-art[data-module="Einsatztraining"] {
-  background: linear-gradient(
-    149deg,
-    #2e2b7a 0%,
-    #5b4fcb 42%,
-    #8c6fe0 75%,
-    #b49bea 100%
-  );
+  background: var(--art-c);
 }
 .course-art[data-module="Sport"] {
-  background: linear-gradient(
-    149deg,
-    #26307f 0%,
-    #3d4fd6 42%,
-    #3f8fd8 75%,
-    #35c4c4 100%
-  );
+  background: var(--art-b);
 }
 /* Two soft light blooms, the CSS equivalent of the screen-blend glows in the
    design file. */
@@ -538,14 +520,14 @@ a.stat:hover {
   height: 260px;
   left: -60px;
   bottom: -110px;
-  background: radial-gradient(circle, #8f8bff99 0%, #8f8bff00 70%);
+  background: var(--glow-accent);
 }
 .course-art::after {
   width: 300px;
   height: 300px;
   right: -110px;
   top: -130px;
-  background: radial-gradient(circle, #cfe6ffcc 0%, #cfe6ff00 70%);
+  background: var(--glow-highlight);
 }
 .course-glyph {
   position: absolute;
@@ -698,7 +680,7 @@ a.stat:hover {
 }
 .date strong {
   display: block;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.25rem;
   line-height: 1.2;
 }
@@ -755,8 +737,8 @@ a.stat:hover {
   align-items: flex-start;
   padding: var(--space-4);
   border-radius: var(--radius-control);
-  background: var(--accent-soft);
-  color: #33357a;
+  background: var(--info-surface);
+  color: var(--info-text);
   font-size: 0.875rem;
 }
 .notice.amber {
@@ -953,13 +935,7 @@ td .avatar {
   padding: var(--space-8) var(--space-10);
   border-radius: var(--radius-card);
   color: #fff;
-  background: linear-gradient(
-    149deg,
-    #2f2e8c 0%,
-    #4b47c4 42%,
-    #6e7be0 75%,
-    #86d6ea 100%
-  );
+  background: var(--art-a);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -973,7 +949,7 @@ td .avatar {
   top: -190px;
   border-radius: 50%;
   mix-blend-mode: screen;
-  background: radial-gradient(circle, #cfe6ffb3 0%, #cfe6ff00 70%);
+  background: var(--glow-highlight);
   pointer-events: none;
 }
 .learning-banner .eyebrow,
@@ -1209,13 +1185,7 @@ td .avatar {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  background: linear-gradient(
-    149deg,
-    #26307f 0%,
-    #3d4fd6 42%,
-    #3f8fd8 75%,
-    #35c4c4 100%
-  );
+  background: var(--art-b);
 }
 .article-cover::after {
   content: "";
@@ -1226,7 +1196,7 @@ td .avatar {
   bottom: -220px;
   border-radius: 50%;
   mix-blend-mode: screen;
-  background: radial-gradient(circle, #8f8bffb3 0%, #8f8bff00 70%);
+  background: var(--glow-accent);
 }
 .articletext {
   max-width: 68ch;
@@ -1248,13 +1218,7 @@ td .avatar {
   align-items: center;
   gap: var(--space-16);
   padding: var(--space-12) max(5vw, 24px);
-  background: linear-gradient(
-    149deg,
-    #1a1f2e 0%,
-    #2f2e8c 38%,
-    #4b47c4 68%,
-    #6e7be0 100%
-  );
+  background: var(--art-login);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -1268,7 +1232,7 @@ td .avatar {
   bottom: -380px;
   border-radius: 50%;
   mix-blend-mode: screen;
-  background: radial-gradient(circle, #86d6ea66 0%, #86d6ea00 70%);
+  background: var(--glow-accent);
   pointer-events: none;
 }
 .login-brand {
