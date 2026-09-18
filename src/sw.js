@@ -6,7 +6,7 @@
 
 "use strict";
 
-const CACHE = "ibms-shell-v5";
+const CACHE = "ibms-shell-v7";
 
 const SHELL = [
   "./",
@@ -18,7 +18,7 @@ const SHELL = [
   "./css/04-components.css",
   "./css/05-responsive.css",
   "./css/06-mobile.css",
-  "./js/00-i18n.js",
+  "./css/07-motion.css",
   "./js/01-icons.js",
   "./js/02-data.js",
   "./js/03-state.js",
@@ -48,7 +48,9 @@ self.addEventListener("activate", (e) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))),
+        Promise.all(
+          keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)),
+        ),
       )
       .then(() => self.clients.claim()),
   );

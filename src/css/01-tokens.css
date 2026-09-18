@@ -63,12 +63,8 @@
   --radius-pill: 999px;
 
   /* --- elevation --- */
-  --shadow-card:
-    0 8px 24px #08152c0f,
-    0 1px 2px #08152c0d;
-  --shadow-raised:
-    0 12px 28px #08152c1a,
-    0 2px 4px #08152c0f;
+  --shadow-card: 0 8px 24px #08152c0f, 0 1px 2px #08152c0d;
+  --shadow-raised: 0 12px 28px #08152c1a, 0 2px 4px #08152c0f;
   --shadow-overlay: 0 24px 70px #08152c3d;
 
   /* --- accent rules (3px gradient hairline on the top edge of a card) --- */
@@ -140,6 +136,12 @@
   --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
   --fast: 0.14s var(--ease);
   --slow: 0.28s var(--ease);
+  /* Decelerating curve for things that enter, and a short overshoot for the
+     things that should feel physical (pill, heart, press states). */
+  --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.32, 0.52, 1);
+  --enter: 0.44s; /* duration of an enter animation */
+  --stagger: 40ms; /* delay step between siblings entering */
 
   font-family: var(--font-sans);
   color: var(--text-primary);

@@ -45,13 +45,20 @@ function render(focus = true) {
       break;
     default:
       content =
-        pagehead(t("Diese Seite ist nicht verfügbar")) +
-        link(t("Zur Startseite"), "home");
+        pagehead("Diese Seite ist nicht verfügbar") +
+        link("Zur Startseite", "home");
   }
+  // Enter motion is played only when the route actually changed. A re-render
+  // in place (a filter, a heart, a tab of Mein iBMS) keeps the page still,
+  // which is why the class is toggled rather than simply set: the new nodes
+  // are already in the DOM but have not been styled yet, so removing it here
+  // prevents the animation from ever starting.
+  const moved = r !== render.last;
+  render.last = r;
   if (content !== undefined) $("#app").innerHTML = layout(content, route);
+  $("#app").classList.toggle("enter", moved);
   syncTabbar(route);
-  $(".skip").textContent = t("Zum Hauptinhalt springen");
-  document.documentElement.lang = state.lang;
+  $(".skip").textContent = "Zum Hauptinhalt springen";
   document.title =
     ($("#page-title")?.textContent || "iBMS 3.0") + " · POLIZEI-ONLINE";
   if (focus) {
@@ -63,9 +70,15 @@ function render(focus = true) {
 function toast(text) {
   const e = $("#toast");
   e.textContent = text;
+  e.classList.remove("leaving");
   e.classList.add("show");
   clearTimeout(toast.timer);
-  toast.timer = setTimeout(() => e.classList.remove("show"), 5500);
+  clearTimeout(toast.exit);
+  // Two steps out: fade down for 240ms, then take the node out of the flow.
+  toast.timer = setTimeout(() => {
+    e.classList.add("leaving");
+    toast.exit = setTimeout(() => e.classList.remove("show", "leaving"), 240);
+  }, 5500);
 }
 
 function modal(title, body, cls = "") {
@@ -73,7 +86,7 @@ function modal(title, body, cls = "") {
   if (!d.open) opener = document.activeElement;
   d.className = cls;
   $("#dialog-content").innerHTML =
-    `<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button class="iconbtn" data-action="close" aria-label="${t("Dialog schließen")}">${icon("close")}</button></div><div class="dialog-body">${body}</div>`;
+    `<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button class="iconbtn" data-action="close" aria-label="Dialog schließen">${icon("close")}</button></div><div class="dialog-body">${body}</div>`;
   if (!d.open) d.showModal();
 }
 
@@ -88,8 +101,8 @@ function registration(id) {
   const c = courses.find((x) => x.id === id);
   if (!reg || !c) return;
   modal(
-    t("Ihre Registrierung"),
-    `<p class="eyebrow">${t(c.module)}</p><h3>${t(c.title)}</h3>${badge(reg.status)}<dl class="factlist mt"><div><dt>${t("Datum")}</dt><dd>${formatDate(c.date)}</dd></div><div><dt>${t("Ort")}</dt><dd>${t(c.place)}</dd></div><div><dt>${t("Teilnehmende Person")}</dt><dd>Maria Beispiel</dd></div></dl><h3 class="mt">${t("Historie")}</h3><p class="small muted">${t("Registrierung erfasst.")} ${reg.status === "Gebucht" ? t("Teilnahme bestätigt.") : t("Freigabe durch zuständige Stelle ausstehend.")}</p><div class="dialog-actions">${c.type === "E-Learning" && reg.status === "Gebucht" ? btn(t("E-Learning starten"), "lms") : ""}${reg.status === "Angemeldet" ? `<button class="btn secondary" data-action="withdraw" data-id="${c.id}">${t("Anmeldung widerrufen")}</button>` : ""}${btn(t("Schließen"), "close", "secondary")}</div>`,
+    "Ihre Registrierung",
+    `<p class="eyebrow">${c.module}</p><h3>${c.title}</h3>${badge(reg.status)}<dl class="factlist mt"><div><dt>Datum</dt><dd>${formatDate(c.date)}</dd></div><div><dt>Ort</dt><dd>${c.place}</dd></div><div><dt>Teilnehmende Person</dt><dd>Maria Beispiel</dd></div></dl><h3 class="mt">Historie</h3><p class="small muted">Registrierung erfasst. ${reg.status === "Gebucht" ? "Teilnahme bestätigt." : "Freigabe durch zuständige Stelle ausstehend."}</p><div class="dialog-actions">${c.type === "E-Learning" && reg.status === "Gebucht" ? btn("E-Learning starten", "lms") : ""}${reg.status === "Angemeldet" ? `<button class="btn secondary" data-action="withdraw" data-id="${c.id}">Anmeldung widerrufen</button>` : ""}${btn("Schließen", "close", "secondary")}</div>`,
   );
 }
 
@@ -97,8 +110,8 @@ function editUser(id) {
   let p = people.find((x) => x.id === id);
   if (!p) return;
   modal(
-    t("Anwender bearbeiten"),
-    `<form id="edit-user" data-id="${p.id}"><p class="eyebrow">${t("Nordrhein-Westfalen / Fachliche Berechtigung")}</p><h3>${esc(p.name)}</h3><div class="field"><label for="edit-module">${t("Modul")}</label><select id="edit-module" name="module">${["Bildung", "Einsatztraining", "Sport"].map((x) => `<option value="${x}" ${x === p.module ? "selected" : ""}>${t(x)}</option>`).join("")}</select></div><div class="field"><label for="edit-role">${t("Funktionsrolle")}</label><select id="edit-role" name="role">${roleOptions(p.module, p.role)}</select></div><div class="field"><label for="edit-oe">${t("Zuständige Organisationseinheit")}</label><select id="edit-oe" name="oe">${[...new Set(people.map((x) => x.oe))].map((x) => `<option value="${esc(x)}" ${x === p.oe ? "selected" : ""}>${esc(t(x))}</option>`).join("")}</select></div><div class="field"><label for="edit-status">${t("Kontostatus")}</label><select id="edit-status" name="status">${["Aktiv", "Gesperrt"].map((x) => `<option value="${x}" ${x === p.status ? "selected" : ""}>${t(x)}</option>`).join("")}</select></div><p class="small muted">${t("Änderungen gelten nur für den Beispielbestand dieses Clickdummys.")}</p><div class="dialog-actions">${btn(t("Abbrechen"), "close", "secondary")}<button class="btn">${t("Änderungen prüfen")}</button></div></form>`,
+    "Anwender bearbeiten",
+    `<form id="edit-user" data-id="${p.id}"><p class="eyebrow">Nordrhein-Westfalen / Fachliche Berechtigung</p><h3>${esc(p.name)}</h3><div class="field"><label for="edit-module">Modul</label><select id="edit-module" name="module">${["Bildung", "Einsatztraining", "Sport"].map((x) => `<option value="${x}" ${x === p.module ? "selected" : ""}>${x}</option>`).join("")}</select></div><div class="field"><label for="edit-role">Funktionsrolle</label><select id="edit-role" name="role">${roleOptions(p.module, p.role)}</select></div><div class="field"><label for="edit-oe">Zuständige Organisationseinheit</label><select id="edit-oe" name="oe">${[...new Set(people.map((x) => x.oe))].map((x) => `<option value="${esc(x)}" ${x === p.oe ? "selected" : ""}>${esc(x)}</option>`).join("")}</select></div><div class="field"><label for="edit-status">Kontostatus</label><select id="edit-status" name="status">${["Aktiv", "Gesperrt"].map((x) => `<option value="${x}" ${x === p.status ? "selected" : ""}>${x}</option>`).join("")}</select></div><p class="small muted">Änderungen gelten nur für den Beispielbestand dieses Clickdummys.</p><div class="dialog-actions">${btn("Abbrechen", "close", "secondary")}<button class="btn">Änderungen prüfen</button></div></form>`,
   );
 }
 
@@ -112,7 +125,7 @@ function roleOptions(module, selected) {
   )
     .map(
       (x) =>
-        `<option value="${x}" ${x === selected ? "selected" : ""}>${t(x)}</option>`,
+        `<option value="${x}" ${x === selected ? "selected" : ""}>${x}</option>`,
     )
     .join("");
 }

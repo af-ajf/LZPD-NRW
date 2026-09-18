@@ -24,6 +24,24 @@ Then open <http://localhost:4173>. The script is `http.server` with
 `Cache-Control: no-store`, so a reload always shows the files on disk instead
 of a half-updated mix of scripts.
 
+## Mockups
+
+`mockups/` holds the desktop views as presentation stills: the running click
+dummy inside the navy device bezel of the earlier mockups, on a white
+background, at 1440px and 2x, one PNG per view — login, Startseite, Mein iBMS,
+Anwender verwalten, Berichte & Statistiken and Mein Lernpfad. Regenerate them
+after a design change with
+
+```bash
+python3 tools/mockups.py
+```
+
+The script serves a copy of `src/` with one extra script that reads the demo
+role from the query string, so the administrator and Fachaufsicht views can be
+captured without switching the role by hand, and drives headless Chrome. Each
+shot carries its own height; the home screen is cut deliberately after the stats
+row, since the full page is too tall to stay readable on a slide.
+
 ## Install as an app
 
 The click dummy is a progressive web app: `src/manifest.webmanifest` and
@@ -82,7 +100,6 @@ reload; "Merkliste leeren" empties it again.
 
 ## Language
 
-The interface ships in German. There is no language switch: the language is read
-once from `localStorage` under `ibms-lang` and defaults to German, so setting
-that key to `en` before load still renders the English dictionary in
-`src/js/00-i18n.js`. German stays the source language.
+The interface is German, and German only. There is no language switch and no
+translation layer — every on-screen string is written in German in the view
+that renders it.

@@ -33,8 +33,9 @@ src/
     05-responsive.css breakpoints (1280 / 1100 / 900 / 600) and preference queries
     06-mobile.css     phone shell: large title, glass bar, course rail, the
                       Liquid Glass tab bar and the installed-app rules
+    07-motion.css     motion layer: route enter stagger, hover and press
+                      reactions, heart burst, dialog and toast transitions
   js/
-    00-i18n.js        EN dictionary and t()
     01-icons.js       inline SVG icon set
     02-data.js        demo fixtures: courses, people
     03-state.js       mutable app state, role labels
@@ -65,7 +66,7 @@ Because the two shells are different markup rather than one reflowed layout,
 crossing 900px re-renders (`mobileMQ` listener in `08-actions.js`).
 
 The tab bar itself lives in `#tabbar-root`, outside `#app`, and `syncTabbar()`
-only updates it — it is rebuilt when it is missing or the language changed.
+only updates it — it is rebuilt only when it is missing.
 That keeps its nodes across a route change, so the selection pill slides from
 one tab to the next instead of being redrawn. The selection pill is sized
 from `--tab-count`, which `syncTabbar()` sets from the number of rendered
@@ -113,23 +114,29 @@ back to the design file.
   course's subject category (see `courseGlyphs` in `05-chrome.js`). Nothing to
   commission, and it stays sharp at any size.
 
+- **Motion** lives in `07-motion.css` and nowhere else. Two kinds: enter motion,
+  played once per route change and gated behind the `enter` class `render()`
+  puts on `#app`, so a re-render in place (a filter, a heart, a Mein-iBMS tab)
+  leaves the page still; and reaction motion on single controls — hover lift,
+  press scale, the arrow that leans towards where it goes, the heart that pops
+  when a course is marked. `--ease-out-soft` is for things that arrive,
+  `--ease-spring` for things that should feel physical. No element rests at
+  `opacity: 0`: keyframes only describe where it came from, so the
+  reduced-motion query in `05-responsive.css` — which kills every animation and
+  transition with `!important` — leaves a complete page behind.
+
 There is no longer a patch/override layer — every rule lives in the file its
 name implies.
 
 ## Language
 
-German is the source language and stays canonical. Every state value, form
-`value`, `data-` attribute and comparison in the code is German; only text on its
-way to the screen passes through `t()`. English is a flat lookup in
-`00-i18n.js` — a missing key falls back to the German string, so nothing can
-render blank.
+The interface is German, and German only. There is no translation layer: every
+state value, form `value`, `data-` attribute, comparison and on-screen string is
+the same German text, written where it is used. `<html lang="de">` is set in
+`index.html`, and dates are formatted with a fixed `de-DE` locale in
+`formatDate()`.
 
-There is no language switch in the interface. The language is read once from
-`localStorage` under `ibms-lang` and defaults to German; setting that key to
-`en` before load renders the English table. `render()` keeps `<html lang>` and
-the date format.
-
-To add or correct a translation, edit the `EN` object in `00-i18n.js` only.
+To change wording, edit the string in the view that renders it.
 
 ## How the app works
 
@@ -141,8 +148,8 @@ To add or correct a translation, edit the `EN` object in `00-i18n.js` only.
   so re-rendering never leaves listeners behind.
 - **State** — one mutable `state` object plus the `courses` / `people` arrays.
   Mutate, then call `render(false)` (skips scroll/focus reset) or set
-  `location.hash`. Nothing persists across a reload, apart from the language
-  (`ibms-lang`) and the watchlist (`ibms-favorites`).
+  `location.hash`. Nothing persists across a reload, apart from the watchlist
+  (`ibms-favorites`).
 - **Watchlist** — `state.favorites` holds course ids; `isFavorite()`,
   `toggleFavorite()` and `persistFavorites()` in `03-state.js` are the only way
   to touch it. `favButton()` in `05-chrome.js` renders the toggle in both

@@ -1,17 +1,10 @@
 // 03-state.js - Mutable app state and role labels.
-// Every value here is the German canonical form and is compared as-is.
-// Translation happens only at render time, via t().
+// The interface is German throughout: every value here is the form that is
+// both compared against and rendered to the screen.
 
 "use strict";
 
 const state = {
-  lang: (() => {
-    try {
-      return localStorage.getItem("ibms-lang") === "en" ? "en" : "de";
-    } catch (e) {
-      return "de";
-    }
-  })(),
   role: "learner",
   registrations: [
     { course: 1, status: "Gebucht" },
@@ -33,8 +26,8 @@ const state = {
   needs: [],
   savedSearches: [],
   // Course ids the user has marked. Unlike the rest of the sample data this
-  // survives a reload, the same way the language does: a watchlist that is
-  // emptied by every refresh cannot be demonstrated.
+  // survives a reload: a watchlist that is emptied by every refresh cannot
+  // be demonstrated.
   favorites: (() => {
     try {
       const saved = JSON.parse(localStorage.getItem("ibms-favorites") || "[]");

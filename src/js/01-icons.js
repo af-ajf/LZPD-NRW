@@ -42,7 +42,8 @@ const paths = {
   monitor:
     '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/>',
   external: '<path d="M14 4h6v6M20 4 10 14M18 14v6H4V6h6"/>',
-  sliders: '<path d="M4 8h10m4 0h2M4 16h4m4 0h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/>',
+  sliders:
+    '<path d="M4 8h10m4 0h2M4 16h4m4 0h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/>',
 };
 
 const icon = (n, cls = "") =>

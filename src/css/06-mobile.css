@@ -534,7 +534,9 @@
 
 /* The glass layers are decoration: without backdrop-filter they fall back to
    an opaque surface rather than an unreadable translucent one. */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
   .glassbtn,
   .glassbar,
   .tabbar-glass,

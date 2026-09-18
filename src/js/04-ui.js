@@ -15,7 +15,7 @@ const esc = (s) =>
 
 let opener = null;
 
-// Tone is decided on the German canonical status, the label is translated.
+// Tone is decided on the status text itself.
 const badge = (s) =>
   `<span class="tag ${
     ["Gebucht", "Aktiv", "Abgeschlossen", "Gültig"].includes(s)
@@ -23,7 +23,7 @@ const badge = (s) =>
       : ["Angemeldet", "Rückmeldung offen", "Gesperrt"].includes(s)
         ? "amber"
         : "gray"
-  }">${esc(t(s))}</span>`;
+  }">${esc(s)}</span>`;
 
 const btn = (text, action, cls = "") =>
   `<button class="btn ${cls}" data-action="${action}">${text}</button>`;
