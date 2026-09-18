@@ -375,21 +375,6 @@
 .topbar .rolepill .icon {
   color: var(--chrome-text-muted);
 }
-.topbar .langswitch {
-  background: var(--chrome-hover);
-  border-color: var(--chrome-line);
-  border-radius: var(--radius-control);
-}
-.topbar .langswitch button {
-  color: var(--chrome-text-muted);
-}
-.topbar .langswitch button:hover {
-  color: var(--chrome-text);
-}
-.topbar .langswitch button[aria-pressed="true"] {
-  background: var(--accent-surface);
-  color: var(--chrome-text);
-}
 .topbar :focus-visible,
 .footer :focus-visible {
   outline-color: var(--text-on-dark);

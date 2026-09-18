@@ -24,8 +24,6 @@ src/
     icon-512.png
     icon-maskable-512.png
     apple-touch-icon.png
-    flag-de.svg       flags for the language switch (exported from the
-    flag-en.svg       Figma design system)
   css/
     01-tokens.css     design tokens: colour, type, spacing, radius, shadow, motion
     02-base.css       resets, type scale, focus rings, utility classes
@@ -36,7 +34,7 @@ src/
     06-mobile.css     phone shell: large title, glass bar, course rail, the
                       Liquid Glass tab bar and the installed-app rules
   js/
-    00-i18n.js        EN dictionary, t(), language switch
+    00-i18n.js        EN dictionary and t()
     01-icons.js       inline SVG icon set
     02-data.js        demo fixtures: courses, people
     03-state.js       mutable app state, role labels
@@ -60,8 +58,8 @@ surface, a compact glass bar that fades in on scroll, and a floating Liquid
 Glass tab bar carrying the six main routes. `home()` branches the same way:
 `mobileHome()` keeps search, chips, the course rail, the news card and the next
 appointment, and drops the greeting, the hero copy, the open-task row and the
-stat cards. The routes outside the tabs, the role switch and the language
-switch live in the profile sheet behind the avatar.
+stat cards. The routes outside the tabs and the role switch live in the profile
+sheet behind the avatar.
 
 Because the two shells are different markup rather than one reflowed layout,
 crossing 900px re-renders (`mobileMQ` listener in `08-actions.js`).
@@ -94,12 +92,13 @@ back to the design file.
 
 - **Colour.** One light page surface (`--surface-page`) with white cards; the
   sidebar and the top bar / footer band are the only dark areas.
-  `--accent-surface` (#0054CA) is for filled controls, the active nav item and
-  the active language, `--accent-primary` (the same blue) for links and text
-  emphasis. Status colours are success / attention only.
-- **Type.** Lora for headings and display numbers, Inter for everything else.
-  Both are loaded from Google Fonts in `index.html`; the stacks fall back to
-  Georgia and system sans.
+  `--accent-surface` (#0054CA) is for filled controls and the active nav item,
+  `--accent-primary` (the same blue) for links and text emphasis. Status colours
+  are success / attention only.
+- **Type.** Lora carries the display headline alone — `h1` on the desktop shell
+  and the iOS-style large title on the phone. Everything else, headings
+  included, is Inter. Both are loaded from Google Fonts in `index.html`; the
+  stacks fall back to Georgia and system sans.
 - **Shape.** Cards 10px, controls 8px, category badges 4px, buttons/pills/chips
   fully rounded. One card shadow (`--shadow-card`), a stronger one for hover and
   overlays.
@@ -125,9 +124,9 @@ way to the screen passes through `t()`. English is a flat lookup in
 `00-i18n.js` — a missing key falls back to the German string, so nothing can
 render blank.
 
-The switch is a segmented DE/EN control in the top bar and in the login card; the
-mobile menu uses a select instead. The choice is kept in `localStorage` under
-`ibms-lang` and defaults to German. Changing it also updates `<html lang>` and
+There is no language switch in the interface. The language is read once from
+`localStorage` under `ibms-lang` and defaults to German; setting that key to
+`en` before load renders the English table. `render()` keeps `<html lang>` and
 the date format.
 
 To add or correct a translation, edit the `EN` object in `00-i18n.js` only.
@@ -157,7 +156,7 @@ To add or correct a translation, edit the `EN` object in `00-i18n.js` only.
   what changing it does.
 - **Accessibility** — skip link, `aria-current` on nav, focus moved to
   `#page-title` on route change, focus returned to the opener on dialog close,
-  `aria-pressed` on the language switch, `role="status"` toast, and
+  `aria-pressed` on the watchlist toggles, `role="status"` toast, and
   `prefers-reduced-motion` / `forced-colors` queries.
 
 ## Home screen

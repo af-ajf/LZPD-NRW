@@ -49,9 +49,9 @@ routes. The home screen keeps search, the module chips, a horizontal course
 rail, the news card and the next appointment; the greeting, the hero copy, the
 open-task row and the four stat cards are left to the desktop layout, since
 Mein iBMS is one tab away. Everything the sidebar used to hold — the remaining
-routes, the role switch and the language switch — moved into the profile sheet
-behind the avatar. A route outside the tabs (a course, an article, help)
-carries a glass "Zurück" button in its place.
+routes and the role switch — moved into the profile sheet behind the avatar. A
+route outside the tabs (a course, an article, help) carries a glass "Zurück"
+button in its place.
 
 ## Structure
 
@@ -60,10 +60,12 @@ file-by-file breakdown, the design-token system, and how routing and state work.
 
 ## Design
 
-This branch carries the NRW web style: Lora for headings and figures, Inter for
-everything else, navy `#172b4d` chrome over a `#08152c` sidebar, `#0054ca` blue
-for filled controls, links and the active nav item, 10px cards on a soft shadow,
-and a 3px gradient rule on the top edge of the stat and summary cards. Tokens in
+This branch carries the NRW web style: Lora for the display headline only — `h1`
+on the desktop shell and the phone's large title — Inter for every other
+heading, figure and label, navy `#172b4d` chrome over a `#08152c` sidebar,
+`#0054ca` blue for filled controls, links and the active nav item, 10px cards on
+a soft shadow, and a 3px gradient rule on the top edge of the stat and summary
+cards. Tokens in
 `src/css/01-tokens.css` follow the Figma frame
 [MAIN](https://www.figma.com/design/LiWqigj56Z6YMLjFCApe5i/LZPD-NRW?node-id=3107-224),
 so a value can be traced back to the design file. The violet iBMS 3.0 styling
@@ -80,6 +82,7 @@ reload; "Merkliste leeren" empties it again.
 
 ## Language
 
-The interface ships in German (default) and English, switchable at runtime from
-the top bar, the mobile menu, or the login card. German is the source
-language; English lives in a single dictionary in `src/js/00-i18n.js`.
+The interface ships in German. There is no language switch: the language is read
+once from `localStorage` under `ibms-lang` and defaults to German, so setting
+that key to `en` before load still renders the English dictionary in
+`src/js/00-i18n.js`. German stays the source language.

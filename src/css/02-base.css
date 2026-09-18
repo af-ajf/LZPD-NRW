@@ -77,11 +77,11 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-display);
   color: var(--text-primary);
 }
 h1 {
-  /* Display Large - Lora Bold 34/52 */
+  /* Display/Serif Large - Lora Bold 34/52, the only serif left in the system */
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 1.35rem + 1.1vw, 2.125rem);
   font-weight: 700;
   line-height: 1.52;
@@ -89,23 +89,21 @@ h1 {
   margin-bottom: var(--space-3);
 }
 h2 {
-  /* Heading H2 - Lora Bold 24/36 */
+  /* Heading H2 - Inter SemiBold 24/36 */
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.5;
-  letter-spacing: -0.01em;
   margin-bottom: var(--space-3);
 }
 h3 {
-  /* Heading H4 - Lora SemiBold 18/26 */
+  /* Heading H3 - Inter SemiBold 20/28 */
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
   margin-bottom: var(--space-2);
 }
 h4 {
-  /* Heading H6 - Inter SemiBold 16/24, the one heading that stays grotesque */
-  font-family: var(--font-sans);
+  /* Heading H5 - Inter SemiBold 16/24 */
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.5;

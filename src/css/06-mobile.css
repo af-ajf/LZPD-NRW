@@ -178,8 +178,7 @@
     border-color var(--slow);
 }
 .glassbar span {
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1rem;
   color: var(--text-primary);
 }

@@ -19,9 +19,6 @@ document.addEventListener("click", (e) => {
       if (history.length > 1) history.back();
       else location.hash = location.hash.startsWith("#course") ? "catalog" : "home";
       break;
-    case "setlang":
-      if (state.lang !== a.dataset.langValue) setLang(a.dataset.langValue);
-      break;
     // Hero chips: jump into the catalogue with the filter already applied.
     case "chip":
       if (a.dataset.kind === "module") {
@@ -259,10 +256,6 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("change", (e) => {
-  if (e.target.matches("[data-lang]")) {
-    setLang(e.target.value);
-    return;
-  }
   if (e.target.matches("[data-role]")) {
     state.role = e.target.value;
     state.report = "Fachaufsichtsreport ET";

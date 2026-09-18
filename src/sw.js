@@ -6,7 +6,7 @@
 
 "use strict";
 
-const CACHE = "ibms-shell-v4";
+const CACHE = "ibms-shell-v5";
 
 const SHELL = [
   "./",
@@ -28,8 +28,6 @@ const SHELL = [
   "./js/07-render.js",
   "./js/08-actions.js",
   "./assets/logo.png",
-  "./assets/flag-de.svg",
-  "./assets/flag-en.svg",
   "./assets/icon-192.png",
   "./assets/icon-512.png",
   "./assets/icon-maskable-512.png",

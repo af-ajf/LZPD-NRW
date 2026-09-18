@@ -93,7 +93,6 @@
     color: var(--chrome-text-muted);
   }
   .rolepill,
-  .langswitch,
   .topbar-divider {
     display: none;
   }
@@ -331,7 +330,6 @@
   .navlink[aria-current="page"],
   .tab[aria-current="true"],
   .tab-item[aria-current="page"],
-  .langswitch button[aria-pressed="true"],
   .favmark[aria-pressed="true"],
   .favtoggle[aria-pressed="true"] {
     outline: 2px solid Highlight;

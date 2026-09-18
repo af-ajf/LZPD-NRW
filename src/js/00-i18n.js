@@ -1,7 +1,9 @@
-// 00-i18n.js - Language switch.
+// 00-i18n.js - Translation table.
 // German is the source language and stays canonical: every state value, form
 // value, data-attribute and comparison in the app is German. Only text that is
 // rendered to the screen passes through t(). English is a flat lookup table.
+// The interface no longer carries a language switch; the English table is kept
+// and is reached by setting "ibms-lang" to "en" in localStorage before load.
 
 "use strict";
 
@@ -643,17 +645,4 @@ const EN = {
 function t(s) {
   if (state.lang === "de") return s;
   return Object.prototype.hasOwnProperty.call(EN, s) ? EN[s] : s;
-}
-
-function setLang(l) {
-  state.lang = l;
-  try {
-    localStorage.setItem("ibms-lang", l);
-  } catch (e) {}
-  document.documentElement.lang = l;
-  render();
-}
-
-function langSelect(id) {
-  return `<label for="${id}">${t("Sprache")}</label><select id="${id}" data-lang><option value="de" ${state.lang === "de" ? "selected" : ""}>${t("Deutsch")}</option><option value="en" ${state.lang === "en" ? "selected" : ""}>${t("Englisch")}</option></select>`;
 }

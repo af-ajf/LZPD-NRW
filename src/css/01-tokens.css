@@ -37,7 +37,7 @@
 
   /* --- accent --- */
   --accent-primary: #0054ca; /* links and text emphasis - AA on white */
-  --accent-surface: #0054ca; /* filled buttons, active nav, active language */
+  --accent-surface: #0054ca; /* filled buttons and active nav */
   --accent-hover: #00449f;
   --accent-soft: #e8f0fd;
   --info-surface: #e9eef6;
@@ -126,10 +126,10 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* --- type (Lora for headings and figures, Inter for everything else) --- */
+  /* --- type (Lora for the display headline, Inter for everything else) --- */
   --font-sans:
     Inter, "Segoe UI", system-ui, -apple-system, Helvetica, Arial, sans-serif;
-  --font-display: Lora, Georgia, "Times New Roman", serif;
+  --font-display: Lora, Georgia, "Times New Roman", serif; /* h1 only */
 
   /* --- layout --- */
   --sidebar-width: 260px;
