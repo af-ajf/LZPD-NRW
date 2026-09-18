@@ -2,9 +2,20 @@
 
 "use strict";
 
+// Phone only: where each hash was left off, so returning to a tab puts the
+// user back where they were instead of at the top, the way a native tab bar
+// does. Written on scroll by 08-actions.js, read back here.
+const scrollMemory = new Map();
+
+function rememberScroll() {
+  if (render.last) scrollMemory.set(render.last, window.scrollY);
+}
+
 function render(focus = true) {
   let r = location.hash.slice(1) || "login";
   const route = r.split("/")[0];
+  // The old page is still on screen, so this is its scroll position.
+  if (r !== render.last) rememberScroll();
   let content;
   switch (route) {
     case "login":
@@ -62,23 +73,37 @@ function render(focus = true) {
   document.title =
     ($("#page-title")?.textContent || "iBMS 3.0") + " · POLIZEI-ONLINE";
   if (focus) {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, isMobile() ? scrollMemory.get(r) || 0 : 0);
     $("#page-title")?.focus({ preventScroll: true });
   }
 }
 
-function toast(text) {
+// `short` is the phone wording. On the small screen the toast drops in from
+// the top as a Dynamic-Island-style capsule, where a full sentence would wrap
+// to three lines, so callers that have a terser form pass it here.
+function toast(text, short) {
   const e = $("#toast");
-  e.textContent = text;
-  e.classList.remove("leaving");
+  const phone = isMobile();
+  e.textContent = phone && short ? short : text;
+  // Dropped and re-added around a forced reflow, so a toast that replaces one
+  // still on screen plays its entrance again instead of appearing in place.
+  e.classList.remove("leaving", "show");
+  void e.offsetWidth;
   e.classList.add("show");
   clearTimeout(toast.timer);
   clearTimeout(toast.exit);
-  // Two steps out: fade down for 240ms, then take the node out of the flow.
-  toast.timer = setTimeout(() => {
-    e.classList.add("leaving");
-    toast.exit = setTimeout(() => e.classList.remove("show", "leaving"), 240);
-  }, 5500);
+  // Two steps out: play the exit animation, then take the node out of the
+  // flow. The phone capsule sits over the content, so it leaves sooner.
+  toast.timer = setTimeout(
+    () => {
+      e.classList.add("leaving");
+      toast.exit = setTimeout(
+        () => e.classList.remove("show", "leaving"),
+        phone ? 280 : 240,
+      );
+    },
+    phone ? 3200 : 5500,
+  );
 }
 
 function modal(title, body, cls = "") {

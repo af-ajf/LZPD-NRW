@@ -169,8 +169,11 @@ function syncTabbar(route) {
   }
 }
 
+// No footer on the phone: an app has no page end, and the three notices it
+// carries would sit directly under the floating tab bar. They are reached
+// from the profile sheet instead (see profileExtras in 08-actions.js).
 function mobileLayout(content, route) {
-  return `<div class="shell phone">${glassbar(route)}<div class="workspace">${mobilehead(route)}<main class="main" id="main">${content}</main>${footer()}<div class="tabbar-space" aria-hidden="true"></div></div></div>`;
+  return `<div class="shell phone">${glassbar(route)}<div class="workspace">${mobilehead(route)}<main class="main" id="main">${content}</main><div class="tabbar-space" aria-hidden="true"></div></div></div>`;
 }
 
 function login() {
@@ -199,6 +202,52 @@ function favButton(c, variant = "mark") {
   );
   const cls = variant === "mark" ? "favmark" : "btn secondary favtoggle";
   return `<button class="${cls}${on ? " on" : ""}" data-action="fav" data-id="${c.id}" aria-pressed="${on}" title="${label}" aria-label="${label}: ${esc(c.title)}">${glyph}${variant === "mark" ? "" : `<span>${label}</span>`}</button>`;
+}
+
+// Phone only. Re-rendering the whole screen for a heart is the one place the
+// click dummy reads like a page reload, so the marks are patched where they
+// stand: same markup as favButton(), written onto the live nodes.
+function syncFavButtons(id) {
+  const c = courses.find((x) => x.id === id);
+  if (!c) return;
+  const on = isFavorite(c.id);
+  const label = on ? "Gemerkt" : "Merken";
+  document
+    .querySelectorAll(`[data-action="fav"][data-id="${c.id}"]`)
+    .forEach((el) => {
+      const mark = el.classList.contains("favmark");
+      el.classList.toggle("on", on);
+      el.setAttribute("aria-pressed", String(on));
+      el.setAttribute("title", label);
+      el.setAttribute("aria-label", `${label}: ${c.title}`);
+      el.innerHTML =
+        icon(on ? "heartfull" : "heart", mark ? "" : "sm") +
+        (mark ? "" : `<span>${label}</span>`);
+      // Focusing the mark can scroll the artwork it sits in; without the
+      // re-render that used to follow, the shift would stay on screen.
+      const art = el.closest(".course-art");
+      if (art) art.scrollTo(0, 0);
+    });
+}
+
+// Un-marking on the watchlist takes the card out from under the finger. The
+// count beside it is the live region, so it is updated and focused; an empty
+// list has its own panel and is left to a re-render.
+function dropFavoriteCard(id) {
+  const card = document
+    .querySelector(`[data-action="fav"][data-id="${id}"]`)
+    ?.closest(".course-card");
+  if (!card) return false;
+  const left = state.favorites.length;
+  if (!left) return false;
+  const count = $('.sectionhead [role="status"]');
+  if (count) {
+    count.textContent = `${left} ${left === 1 ? "gemerktes Angebot" : "gemerkte Angebote"}`;
+    count.focus({ preventScroll: true });
+  }
+  card.classList.add("leaving");
+  setTimeout(() => card.remove(), 240);
+  return true;
 }
 
 function courseCard(c) {

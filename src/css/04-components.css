@@ -57,9 +57,11 @@
     border-color var(--fast),
     color var(--fast);
 }
-.rolepill select:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
+@media (hover: hover) {
+  .rolepill select:hover {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+  }
 }
 
 /* ---------- buttons ---------- */
@@ -83,10 +85,12 @@
     box-shadow var(--fast),
     transform var(--fast);
 }
-.btn:hover {
-  background: var(--accent-hover);
-  color: #fff;
-  box-shadow: var(--shadow-raised);
+@media (hover: hover) {
+  .btn:hover {
+    background: var(--accent-hover);
+    color: #fff;
+    box-shadow: var(--shadow-raised);
+  }
 }
 .btn:active {
   transform: translateY(1px);
@@ -97,21 +101,25 @@
   color: var(--text-primary);
   border: 1px solid var(--border);
 }
-.btn.secondary:hover {
-  background: var(--surface-page);
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-  box-shadow: none;
+@media (hover: hover) {
+  .btn.secondary:hover {
+    background: var(--surface-page);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+    box-shadow: none;
+  }
 }
 .btn.ghost {
   background: none;
   color: var(--accent-primary);
   padding: 12px 0;
 }
-.btn.ghost:hover {
-  background: none;
-  color: var(--accent-hover);
-  box-shadow: none;
+@media (hover: hover) {
+  .btn.ghost:hover {
+    background: none;
+    color: var(--accent-hover);
+    box-shadow: none;
+  }
 }
 .btn:disabled {
   background: var(--surface-page);
@@ -135,9 +143,11 @@
   text-decoration: none;
   transition: gap var(--fast);
 }
-.textlink:hover {
-  color: var(--accent-hover);
-  gap: 11px;
+@media (hover: hover) {
+  .textlink:hover {
+    color: var(--accent-hover);
+    gap: 11px;
+  }
 }
 .textlink .icon {
   width: 14px;
@@ -165,10 +175,12 @@
     color var(--fast),
     border-color var(--fast);
 }
-.chip:hover {
-  background: var(--accent-soft);
-  border-color: var(--accent-surface);
-  color: var(--accent-primary);
+@media (hover: hover) {
+  .chip:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent-surface);
+    color: var(--accent-primary);
+  }
 }
 .chip[aria-pressed="true"] {
   background: var(--accent-surface);
@@ -349,8 +361,10 @@
   color: #fff;
   transition: background var(--fast);
 }
-.home-search button:hover {
-  background: var(--accent-hover);
+@media (hover: hover) {
+  .home-search button:hover {
+    background: var(--accent-hover);
+  }
 }
 
 /* Open task row inside the hero band. */
@@ -416,10 +430,12 @@
     box-shadow var(--fast),
     transform var(--fast);
 }
-a.stat:hover {
-  border-color: var(--accent-surface);
-  box-shadow: var(--shadow-raised);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  a.stat:hover {
+    border-color: var(--accent-surface);
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-2px);
+  }
 }
 /* Each figure in a row carries its own hue, left to right. */
 .stat::before,
@@ -480,10 +496,12 @@ a.stat:hover {
     box-shadow var(--fast),
     transform var(--fast);
 }
-.course-card:hover {
-  border-color: var(--accent-surface);
-  box-shadow: var(--shadow-raised);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .course-card:hover {
+    border-color: var(--accent-surface);
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-2px);
+  }
 }
 .course-art {
   position: relative;
@@ -572,9 +590,11 @@ a.stat:hover {
     background var(--fast),
     transform var(--fast);
 }
-.favmark:hover {
-  background: #fff;
-  transform: scale(1.06);
+@media (hover: hover) {
+  .favmark:hover {
+    background: #fff;
+    transform: scale(1.06);
+  }
 }
 .favmark:active {
   transform: scale(0.94);
@@ -592,10 +612,12 @@ a.stat:hover {
   border-color: var(--accent-surface);
   background: var(--accent-soft);
 }
-.favtoggle.on:hover {
-  background: var(--accent-soft);
-  color: var(--accent-hover);
-  border-color: var(--accent-hover);
+@media (hover: hover) {
+  .favtoggle.on:hover {
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
 }
 .emptyicon {
   margin: 0 auto var(--space-4);
@@ -694,9 +716,11 @@ a.stat:hover {
     background var(--fast),
     color var(--fast);
 }
-.tab:hover {
-  background: var(--surface-card);
-  color: var(--text-primary);
+@media (hover: hover) {
+  .tab:hover {
+    background: var(--surface-card);
+    color: var(--text-primary);
+  }
 }
 .tab[aria-current="true"] {
   background: var(--accent-surface);
@@ -856,10 +880,12 @@ a.stat:hover {
     border-color var(--fast),
     box-shadow var(--fast);
 }
-.field input:hover,
-.field select:hover,
-.field textarea:hover {
-  border-color: var(--border-strong);
+@media (hover: hover) {
+  .field input:hover,
+  .field select:hover,
+  .field textarea:hover {
+    border-color: var(--border-strong);
+  }
 }
 .field input:focus,
 .field select:focus,
@@ -939,8 +965,10 @@ td {
 tbody tr:last-child td {
   border-bottom: 0;
 }
-tbody tr:hover {
-  background: var(--surface-sunken);
+@media (hover: hover) {
+  tbody tr:hover {
+    background: var(--surface-sunken);
+  }
 }
 td strong {
   display: block;
@@ -1039,8 +1067,10 @@ td .avatar {
   font-size: 0.8125rem;
   transition: background var(--fast);
 }
-.pathstep:hover {
-  background: var(--surface-sunken);
+@media (hover: hover) {
+  .pathstep:hover {
+    background: var(--surface-sunken);
+  }
 }
 .pathstep strong {
   display: block;
@@ -1176,8 +1206,10 @@ td .avatar {
   font-size: 0.875rem;
   transition: background var(--fast);
 }
-.reportnav button:hover {
-  background: var(--surface-sunken);
+@media (hover: hover) {
+  .reportnav button:hover {
+    background: var(--surface-sunken);
+  }
 }
 .reportnav button[aria-current="true"] {
   background: var(--accent-soft);
@@ -1340,8 +1372,10 @@ td .avatar {
   padding: 4px 0;
   border-radius: 4px;
 }
-.login-footer > button:hover {
-  color: var(--accent-primary);
+@media (hover: hover) {
+  .login-footer > button:hover {
+    color: var(--accent-primary);
+  }
 }
 .login-note {
   margin: var(--space-5) 0 0;
@@ -1411,28 +1445,42 @@ dialog::backdrop {
 .mobile-nav-dialog .iconbtn {
   color: var(--text-on-dark-muted);
 }
-.mobile-nav-dialog .iconbtn:hover {
-  background: var(--sidebar-hover);
-  color: #fff;
+@media (hover: hover) {
+  .mobile-nav-dialog .iconbtn:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+  }
 }
 .menu-links {
   display: grid;
   gap: var(--space-1);
 }
-.menu-links a {
+/* The list carries links and, for the notices that open a dialog, buttons;
+   both are the same row. */
+.menu-links a,
+.menu-links button {
   display: flex;
   gap: var(--space-3);
   align-items: center;
+  width: 100%;
   min-height: 46px;
   padding: 12px 14px;
+  border: 0;
   border-radius: var(--radius-control);
+  background: none;
   color: var(--text-on-dark-muted);
   text-decoration: none;
+  text-align: left;
+  font: inherit;
   font-size: 0.9375rem;
+  cursor: pointer;
 }
-.menu-links a:hover {
-  background: var(--sidebar-hover);
-  color: #fff;
+@media (hover: hover) {
+  .menu-links a:hover,
+  .menu-links button:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+  }
 }
 .menu-links a[aria-current="page"] {
   background: var(--accent-surface);

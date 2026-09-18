@@ -4,6 +4,9 @@
 
 const $ = (s) => document.querySelector(s);
 
+// The route part of the hash, without any id behind it.
+const routeName = () => (location.hash.slice(1) || "login").split("/")[0];
+
 const esc = (s) =>
   String(s).replace(
     /[&<>"']/g,

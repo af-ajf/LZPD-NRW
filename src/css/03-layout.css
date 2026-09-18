@@ -119,9 +119,11 @@
     background var(--fast),
     color var(--fast);
 }
-.navlink:hover {
-  background: var(--sidebar-hover);
-  color: var(--text-on-dark);
+@media (hover: hover) {
+  .navlink:hover {
+    background: var(--sidebar-hover);
+    color: var(--text-on-dark);
+  }
 }
 .navlink[aria-current="page"] {
   background: var(--accent-surface);
@@ -197,9 +199,11 @@
     background var(--fast),
     color var(--fast);
 }
-.iconbtn:hover {
-  background: var(--surface-page);
-  color: var(--text-primary);
+@media (hover: hover) {
+  .iconbtn:hover {
+    background: var(--surface-page);
+    color: var(--text-primary);
+  }
 }
 .iconbtn[data-badge]::after {
   content: attr(data-badge);
@@ -249,8 +253,10 @@
   font-weight: 500;
   transition: background var(--fast);
 }
-.profile:hover {
-  background: var(--surface-page);
+@media (hover: hover) {
+  .profile:hover {
+    background: var(--surface-page);
+  }
 }
 .mobile-menu,
 .mobile-brand {
@@ -336,8 +342,10 @@
   padding: 4px 0;
   border-radius: 4px;
 }
-.footer button:hover {
-  color: var(--chrome-text);
+@media (hover: hover) {
+  .footer button:hover {
+    color: var(--chrome-text);
+  }
 }
 
 /* ---------- chrome on navy ----------
@@ -346,9 +354,11 @@
 .topbar .iconbtn {
   color: var(--chrome-text-muted);
 }
-.topbar .iconbtn:hover {
-  background: var(--chrome-hover);
-  color: var(--chrome-text);
+@media (hover: hover) {
+  .topbar .iconbtn:hover {
+    background: var(--chrome-hover);
+    color: var(--chrome-text);
+  }
 }
 .topbar .topbar-divider {
   background: var(--chrome-line);
@@ -356,8 +366,10 @@
 .topbar .profile {
   color: var(--chrome-text);
 }
-.topbar .profile:hover {
-  background: var(--chrome-hover);
+@media (hover: hover) {
+  .topbar .profile:hover {
+    background: var(--chrome-hover);
+  }
 }
 .topbar .avatar {
   background: var(--chrome-fill);
@@ -368,9 +380,11 @@
   border-color: var(--chrome-line);
   color: var(--chrome-text);
 }
-.topbar .rolepill select:hover {
-  border-color: #ffffff8a;
-  color: var(--chrome-text);
+@media (hover: hover) {
+  .topbar .rolepill select:hover {
+    border-color: #ffffff8a;
+    color: var(--chrome-text);
+  }
 }
 .topbar .rolepill .icon {
   color: var(--chrome-text-muted);

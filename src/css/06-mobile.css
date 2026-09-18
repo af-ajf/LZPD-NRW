@@ -276,9 +276,17 @@
 .rail::-webkit-scrollbar {
   display: none;
 }
+/* One card plus a slice of the next, whatever the device is: the gutter is
+   subtracted so the peek stays the same fraction of the screen rather than
+   growing on a large phone and swallowing the next card on a small one. */
 .rail > .course-card {
-  flex: 0 0 288px;
-  width: 288px;
+  --rail-peek: 52px;
+  flex: 0 0 auto;
+  width: clamp(
+    240px,
+    calc(100vw - var(--space-5) * 2 - var(--rail-peek)),
+    340px
+  );
   margin: 0;
   padding: 0;
   scroll-snap-align: start;
@@ -294,6 +302,14 @@
   height: 171px;
   flex-shrink: 0;
   padding: var(--space-3);
+}
+/* The decorative glow reaches past the art, so `overflow: hidden` leaves the
+   box scrollable: pressing the heart inside it makes the browser scroll the
+   artwork sideways to bring the button into view. On the phone the card is
+   not re-rendered afterwards, so that shift would stay. `clip` hides the same
+   overflow without making a scroll container. */
+.shell.phone .course-art {
+  overflow: clip;
 }
 .rail .course-body {
   padding: 12px 14px 14px;
@@ -484,13 +500,17 @@
   border-top: 1px solid var(--border);
   padding-top: var(--space-2);
 }
-.profile-sheet .menu-links a {
+.profile-sheet .menu-links a,
+.profile-sheet .menu-links button {
   color: var(--text-primary);
   font-weight: 500;
 }
-.profile-sheet .menu-links a:hover {
-  background: var(--surface-sunken);
-  color: var(--accent-primary);
+@media (hover: hover) {
+  .profile-sheet .menu-links a:hover,
+  .profile-sheet .menu-links button:hover {
+    background: var(--surface-sunken);
+    color: var(--accent-primary);
+  }
 }
 .profile-sheet .demo-controls {
   display: grid;
@@ -515,6 +535,28 @@
   background: var(--surface-card);
   color: var(--text-primary);
   font-size: 0.875rem;
+}
+
+/* ---------- toast ---------- */
+/* On the phone the toast is a Dynamic-Island-style capsule that drops in at
+   the top. The bottom of the screen belongs to the floating tab bar, which
+   the old bottom placement covered. The toast lives outside `.shell.phone`,
+   so it is the breakpoint that scopes it and not the shell class. */
+@media (max-width: 900px) {
+  .toast {
+    /* Clear of the accessory row: the glass buttons under it stay usable
+       while the capsule is on screen. */
+    top: calc(env(safe-area-inset-top, 0px) + 54px);
+    bottom: auto;
+    width: max-content;
+    max-width: calc(100% - 40px);
+    padding: 11px 20px;
+    text-align: center;
+    font-size: 0.8125rem;
+    line-height: 18px;
+    font-weight: 500;
+    z-index: 80;
+  }
 }
 
 /* ---------- installed app ---------- */

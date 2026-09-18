@@ -195,7 +195,7 @@ function favorites() {
     );
   return (
     pagehead("Merkliste", "Angebote, die Sie sich für später gemerkt haben.") +
-    `<div class="sectionhead"><p class="muted small" role="status">${list.length} ${list.length === 1 ? "gemerktes Angebot" : "gemerkte Angebote"}</p><div class="chips"><button class="chip" data-action="clear-favorites">${icon("close", "xs")}Merkliste leeren</button></div></div><div class="grid three">${list.map(courseCard).join("")}</div>`
+    `<div class="sectionhead"><p class="muted small" role="status" tabindex="-1">${list.length} ${list.length === 1 ? "gemerktes Angebot" : "gemerkte Angebote"}</p><div class="chips"><button class="chip" data-action="clear-favorites">${icon("close", "xs")}Merkliste leeren</button></div></div><div class="grid three">${list.map(courseCard).join("")}</div>`
   );
 }
 

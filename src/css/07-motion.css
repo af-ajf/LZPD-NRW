@@ -256,37 +256,47 @@
     box-shadow var(--fast),
     transform 0.18s var(--ease-spring);
 }
-.btn:hover {
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-1px);
+  }
 }
 /* Press wins over hover: the button goes under the finger, not above it. */
 .btn:active {
   transform: translateY(0) scale(0.97);
   box-shadow: none;
 }
-.btn:disabled,
-.btn:disabled:hover {
+.btn:disabled {
   transform: none;
+}
+@media (hover: hover) {
+  .btn:disabled:hover {
+    transform: none;
+  }
 }
 /* An arrow on a button leans towards where it is going. */
 .btn .icon {
   transition: transform 0.22s var(--ease-spring);
 }
-.btn:hover .icon {
-  transform: translateX(3px);
-}
-.btn.ghost:hover {
-  transform: none;
-}
-.btn.ghost:hover .icon {
-  transform: translateX(3px);
+@media (hover: hover) {
+  .btn:hover .icon {
+    transform: translateX(3px);
+  }
+  .btn.ghost:hover {
+    transform: none;
+  }
+  .btn.ghost:hover .icon {
+    transform: translateX(3px);
+  }
 }
 
 .textlink .icon {
   transition: transform 0.22s var(--ease-spring);
 }
-.textlink:hover .icon {
-  transform: translateX(2px);
+@media (hover: hover) {
+  .textlink:hover .icon {
+    transform: translateX(2px);
+  }
 }
 
 .chip {
@@ -296,8 +306,10 @@
     border-color var(--fast),
     transform 0.18s var(--ease-spring);
 }
-.chip:hover {
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .chip:hover {
+    transform: translateY(-1px);
+  }
 }
 .chip:active {
   transform: scale(0.96);
@@ -329,8 +341,10 @@
 .profile .avatar {
   transition: transform 0.24s var(--ease-spring);
 }
-.profile:hover .avatar {
-  transform: scale(1.06);
+@media (hover: hover) {
+  .profile:hover .avatar {
+    transform: scale(1.06);
+  }
 }
 
 .pathstep,
@@ -353,8 +367,10 @@
     color var(--fast),
     padding-left 0.2s var(--ease-out-soft);
 }
-.navlink:hover {
-  padding-left: 18px;
+@media (hover: hover) {
+  .navlink:hover {
+    padding-left: 18px;
+  }
 }
 .navlink[aria-current="page"] {
   transition:
@@ -372,8 +388,10 @@
     border-color var(--fast),
     box-shadow 0.24s var(--ease-out-soft);
 }
-.panel:hover {
-  box-shadow: var(--shadow-raised);
+@media (hover: hover) {
+  .panel:hover {
+    box-shadow: var(--shadow-raised);
+  }
 }
 /* The rail on a ruled panel wipes in from the left the first time it is drawn. */
 #app.enter .panel.ruled::before,
@@ -387,24 +405,30 @@
 .course-card .course-glyph {
   transition: transform 0.45s var(--ease-out-soft);
 }
-.course-card:hover .course-glyph {
-  transform: scale(1.08);
+@media (hover: hover) {
+  .course-card:hover .course-glyph {
+    transform: scale(1.08);
+  }
 }
 .course-art::before,
 .course-art::after {
   transition: transform 0.6s var(--ease-out-soft);
 }
-.course-card:hover .course-art::before {
-  transform: translate3d(16px, -12px, 0);
-}
-.course-card:hover .course-art::after {
-  transform: translate3d(-14px, 12px, 0);
+@media (hover: hover) {
+  .course-card:hover .course-art::before {
+    transform: translate3d(16px, -12px, 0);
+  }
+  .course-card:hover .course-art::after {
+    transform: translate3d(-14px, 12px, 0);
+  }
 }
 .course-card .tag {
   transition: transform 0.28s var(--ease-spring);
 }
-.course-card:hover .course-art .tag {
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .course-card:hover .course-art .tag {
+    transform: translateY(-2px);
+  }
 }
 
 /* The learning banner and the article cover breathe on their own: one very
@@ -485,8 +509,10 @@ tbody tr {
 .faq summary {
   transition: color var(--fast);
 }
-.faq summary:hover {
-  color: var(--accent-primary);
+@media (hover: hover) {
+  .faq summary:hover {
+    color: var(--accent-primary);
+  }
 }
 .faq[open] p {
   animation: enter-up 0.28s var(--ease-out-soft) both;
@@ -496,8 +522,10 @@ tbody tr {
 .sectionhead h2::before {
   transition: transform 0.3s var(--ease-spring);
 }
-.sectionhead:hover h2::before {
-  transform: translateX(2px) scale(1.06);
+@media (hover: hover) {
+  .sectionhead:hover h2::before {
+    transform: translateX(2px) scale(1.06);
+  }
 }
 
 /* ---------- dialog and toast ---------- */
@@ -532,6 +560,51 @@ dialog[open]::backdrop {
 /* `leaving` is set by toast() one beat before the node is hidden. */
 .toast.leaving {
   animation: toast-out 0.24s var(--ease) forwards;
+}
+
+/* The phone capsule comes down from the top edge instead, with the small
+   overshoot and settle a Dynamic Island notification has, and leaves the
+   same way it arrived. */
+@media (max-width: 900px) {
+  .toast.show {
+    animation: toast-drop 0.44s var(--ease-spring);
+  }
+  .toast.leaving {
+    animation: toast-lift 0.28s var(--ease) forwards;
+  }
+}
+@keyframes toast-drop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -160%) scale(0.82);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, 6%) scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+@keyframes toast-lift {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -160%) scale(0.88);
+  }
+}
+
+/* A card taken off the watchlist shrinks out from under the finger instead
+   of the list jumping. 05-chrome.js removes the node when this is over. */
+.course-card.leaving {
+  animation: card-leave 0.24s var(--ease) forwards;
+  pointer-events: none;
+}
+@keyframes card-leave {
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+  }
 }
 
 /* ---------- phone shell ---------- */

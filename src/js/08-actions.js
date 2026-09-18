@@ -88,18 +88,33 @@ document.addEventListener("click", (e) => {
         module: state.module,
         type: state.type,
       });
-      toast("Ihre Suchauswahl wurde für diese Demonstration gemerkt.");
+      toast(
+        "Ihre Suchauswahl wurde für diese Demonstration gemerkt.",
+        "Suche gemerkt",
+      );
       break;
     // Marking a course re-renders: the card, the sidebar count and the
     // watchlist itself all show the new state. Focus is put back on the
     // button that was pressed, unless un-marking removed it from the page.
+    //
+    // On the phone that re-render is the wrong answer - the whole screen
+    // blinks for a heart - so there the marks are patched in place and only
+    // the watchlist, where the card has to go away, touches the DOM further.
     case "fav": {
       const on = toggleFavorite(id);
-      render(false);
+      if (isMobile()) {
+        syncFavButtons(id);
+        // An emptied watchlist swaps in its own panel, so that one case still
+        // needs the route drawn again.
+        if (routeName() === "favorites" && !on && !dropFavoriteCard(id))
+          render(false);
+      } else {
+        render(false);
+      }
       const mark = document.querySelector(
         `[data-action="fav"][data-id="${id}"]`,
       );
-      mark?.focus({ preventScroll: true });
+      if (!isMobile()) mark?.focus({ preventScroll: true });
       // Marking pops the heart and throws off a ring; un-marking stays quiet,
       // so the two directions do not read the same.
       if (on && mark) {
@@ -110,6 +125,7 @@ document.addEventListener("click", (e) => {
         on
           ? "Angebot auf Ihrer Merkliste gespeichert."
           : "Angebot von Ihrer Merkliste entfernt.",
+        on ? "Gemerkt" : "Entfernt",
       );
       break;
     }
@@ -147,7 +163,7 @@ document.addEventListener("click", (e) => {
       state.registrations = state.registrations.filter((r) => r.course !== id);
       close();
       render(false);
-      toast("Anmeldung im Beispielbestand widerrufen.");
+      toast("Anmeldung im Beispielbestand widerrufen.", "Anmeldung widerrufen");
       break;
     case "lesson":
       state.lesson = id;
@@ -201,7 +217,10 @@ document.addEventListener("click", (e) => {
         pendingUser = null;
         close();
         render(false);
-        toast("Berechtigungen im Beispielbestand aktualisiert.");
+        toast(
+          "Berechtigungen im Beispielbestand aktualisiert.",
+          "Berechtigungen aktualisiert",
+        );
       }
       break;
     case "create-user":
@@ -228,6 +247,7 @@ document.addEventListener("click", (e) => {
       render(false);
       toast(
         "Exportauftrag eingeplant. Die Bereitstellung über Nacht wird im Dummy nicht ausgeführt.",
+        "Export eingeplant",
       );
       break;
     case "accessibility":
@@ -271,7 +291,10 @@ document.addEventListener("change", (e) => {
       close();
       render();
     } else render(false);
-    toast("Demoansicht gewechselt: " + roleNames[state.role]);
+    toast(
+      "Demoansicht gewechselt: " + roleNames[state.role],
+      "Ansicht: " + roleNames[state.role],
+    );
   }
   if (e.target.id === "edit-module")
     $("#edit-role").innerHTML = roleOptions(e.target.value, "Anwender");
@@ -330,6 +353,7 @@ document.addEventListener("submit", (e) => {
         c.approval
           ? "Teilnahme angefragt. Freigabe steht aus."
           : "Teilnahme im Beispielbestand gebucht.",
+        c.approval ? "Teilnahme angefragt" : "Teilnahme gebucht",
       );
       break;
     }
@@ -337,7 +361,7 @@ document.addEventListener("submit", (e) => {
       state.wishDone = true;
       close();
       render(false);
-      toast("Ihre Ergänzung wurde im Entwurf gespeichert.");
+      toast("Ihre Ergänzung wurde im Entwurf gespeichert.", "Ergänzung gespeichert");
       break;
     case "need-form": {
       let title = String(d.get("title"));
@@ -346,7 +370,7 @@ document.addEventListener("submit", (e) => {
       close();
       if (location.hash === "#dashboard") render(false);
       else location.hash = "dashboard";
-      toast("Beispielbedarf „" + title + "“ erfasst.");
+      toast("Beispielbedarf „" + title + "“ erfasst.", "Bedarf erfasst");
       break;
     }
     case "edit-user":
@@ -414,7 +438,7 @@ function downloadCSV() {
   a.download = "iBMS_Beispielreport.csv";
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  toast("CSV mit Beispieldaten erstellt.");
+  toast("CSV mit Beispieldaten erstellt.", "CSV erstellt");
 }
 
 document.addEventListener("click", (e) => {
@@ -425,19 +449,27 @@ $("#dialog").addEventListener("close", () => {
   if (opener?.isConnected) opener.focus();
 });
 
-// On the phone shell there is no sidebar, so the routes outside the five tabs
-// (help, and the role-specific ones) plus the demo switches live in the
-// profile sheet.
+// On the phone shell there is no sidebar and no footer, so the routes outside
+// the five tabs (help, and the role-specific ones), the three footer notices
+// and the demo switches all live in the profile sheet.
 function profileExtras() {
   if (!isMobile()) return "";
   const extra = navItems().filter(
     ([r]) => !tabItems().some(([tab]) => tab === r),
   );
+  const notices = [
+    ["accessibility", "Barrierefreiheit", "help"],
+    ["privacy", "Datenschutz", "shield"],
+    ["about", "Über diesen Entwurf", "file"],
+  ];
   return `<nav class="menu-links mt" aria-label="Mobile Navigation">${extra
     .map(([r, n, i]) => `<a href="#${r}">${icon(i)}${n}</a>`)
-    .join(
-      "",
-    )}<a href="#help">${icon("help")}Hilfe & Kontakt</a></nav>${demoBox("profile")}`;
+    .join("")}<a href="#help">${icon("help")}Hilfe & Kontakt</a>${notices
+    .map(
+      ([action, label, i]) =>
+        `<button data-action="${action}">${icon(i)}${label}</button>`,
+    )
+    .join("")}</nav>${demoBox("profile")}`;
 }
 
 window.addEventListener("hashchange", () => {
@@ -451,10 +483,12 @@ mobileMQ.addEventListener("change", () => render(false));
 
 // iOS-style large title: once it has scrolled away, the compact glass bar
 // takes over. 96px is the height of the title block plus its accessory row.
+// The same listener keeps each tab's scroll position for 07-render.js.
 window.addEventListener(
   "scroll",
   () => {
     $("#glassbar")?.classList.toggle("show", window.scrollY > 96);
+    if (isMobile()) rememberScroll();
   },
   { passive: true },
 );
