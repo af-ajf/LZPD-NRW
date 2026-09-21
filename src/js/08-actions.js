@@ -271,7 +271,7 @@ document.addEventListener("click", (e) => {
     case "help-login":
       modal(
         "Hilfe zur Anmeldung",
-        `<p>Für den Entwurf benötigen Sie kein Passwort. „Mit Behördenkonto anmelden“ öffnet die Beispielansicht.</p><p>Im Produktivsystem richtet sich die Anmeldung nach der Konfiguration des Kooperationspartners. SSO und Mehrfaktor-Authentisierung werden dort angebunden.</p>`,
+        `<p>Für den Entwurf benötigen Sie kein Passwort. „Mit Dienstkonto anmelden“ öffnet die Beispielansicht.</p><p>Im Produktivsystem richtet sich die Anmeldung nach der Konfiguration des Kooperationspartners. SSO und Mehrfaktor-Authentisierung werden dort angebunden.</p>`,
       );
       break;
     case "contact":
@@ -509,7 +509,9 @@ $("#dialog").addEventListener("close", () => {
 // the five tabs (help, and the role-specific ones), the three footer notices
 // and the demo switches all live in the profile sheet.
 function profileExtras() {
-  if (!isMobile()) return "";
+  // On the desktop shell the top bar only names the current view, so the
+  // switch between them is here as well.
+  if (!isMobile()) return demoBox("profile");
   const extra = navItems().filter(
     ([r]) => !tabItems().some(([tab]) => tab === r),
   );

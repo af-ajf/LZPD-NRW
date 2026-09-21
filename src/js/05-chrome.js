@@ -44,24 +44,16 @@ function brand(sub = "NRW") {
   return `<span class="brand-badge"><img src="assets/logo.png" alt=""></span><span class="brand-text"><strong>POLIZEI-ONLINE</strong><span>iBMS 3.0 · ${sub}</span></span>`;
 }
 
-// The top-bar context pill doubles as the click-dummy role switch: the label it
-// shows ("NRW / Anwenderin") is exactly what changing it does.
-function rolePill(id) {
-  return `<span class="rolepill"><label class="hidesr" for="${id}">Ansicht im Clickdummy</label><select id="${id}" data-role>${Object.keys(
-    roleNames,
-  )
-    .map(
-      (r) =>
-        `<option value="${r}" ${state.role === r ? "selected" : ""}>Nordrhein-Westfalen / ${roleNames[r]}</option>`,
-    )
-    .join(
-      "",
-    )}</select><span class="rolepill-sizer" aria-hidden="true">Nordrhein-Westfalen / ${roleNames[state.role]}</span>${icon("chevrondown", "xs")}</span>`;
+// The top-bar context pill names the tenant and the current view. It is a
+// label, not a control - the click-dummy role switch sits in the profile
+// dialog, where it does not read like part of the product.
+function contextPill() {
+  return `<span class="rolepill">Nordrhein-Westfalen / ${roleNames[state.role]}</span>`;
 }
 
-// Select for the mobile menu, where the role pill does not fit.
+// The role switch itself, for the profile dialog and the mobile menu.
 function demoBox(suffix) {
-  return `<div class="demo-controls"><div><label for="role-${suffix}">Ansicht im Clickdummy</label><select id="role-${suffix}" data-role>${Object.keys(
+  return `<div class="demo-controls"><div class="field"><label for="role-${suffix}">Ansicht im Clickdummy</label><select id="role-${suffix}" data-role>${Object.keys(
     roleNames,
   )
     .map(
@@ -134,9 +126,8 @@ function syncRoleControls() {
   document.querySelectorAll("[data-role]").forEach((el) => {
     if (el.value !== state.role) el.value = state.role;
   });
-  const sizer = $(".rolepill-sizer");
-  if (sizer)
-    sizer.textContent = `Nordrhein-Westfalen / ${roleNames[state.role]}`;
+  const pill = $(".rolepill");
+  if (pill) pill.textContent = `Nordrhein-Westfalen / ${roleNames[state.role]}`;
 }
 
 // Phone shell: the header carries the back affordance and, on the start
@@ -160,7 +151,7 @@ function syncChrome(route) {
 }
 
 function topbar() {
-  return `<header class="topbar">${rolePill("role-top")}<a class="mobile-brand" href="#home">${brand("NRW")}</a><div class="top-actions"><div class="icon-buttons"><button class="iconbtn" data-action="search" aria-label="Angebote suchen">${icon("search")}</button><button class="iconbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell")}</button></div><span class="topbar-divider" aria-hidden="true"></span><button class="profile" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span><span>Maria Beispiel</span></button><button class="iconbtn mobile-menu" data-action="menu" aria-label="Menü öffnen" aria-haspopup="dialog">${icon("menu")}</button></div></header>`;
+  return `<header class="topbar">${contextPill()}<a class="mobile-brand" href="#home">${brand("NRW")}</a><div class="top-actions"><div class="icon-buttons"><button class="iconbtn" data-action="search" aria-label="Angebote suchen">${icon("search")}</button><button class="iconbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell")}</button></div><span class="topbar-divider" aria-hidden="true"></span><button class="profile" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span><span>Maria Beispiel</span></button><button class="iconbtn mobile-menu" data-action="menu" aria-label="Menü öffnen" aria-haspopup="dialog">${icon("menu")}</button></div></header>`;
 }
 
 function layout(content, route) {
@@ -246,7 +237,7 @@ function mobileLayout(content, route) {
 }
 
 function login() {
-  return `<main class="login" id="main"><div class="login-brand"><div class="brand">${brand()}</div><h1 id="page-title" tabindex="-1">Gemeinsam lernen.<br>Sicher handeln.</h1><p>Ihre Plattform für polizeiliche Aus- und Fortbildung.</p></div><section class="login-card" aria-labelledby="login-title"><p class="eyebrow accent">Nordrhein-Westfalen</p><h2 id="login-title">Willkommen</h2><p class="muted">Melden Sie sich mit Ihrem Behördenkonto bei iBMS 3.0 an.</p><div class="field"><label for="organisation">Organisation</label><select id="organisation"><option>Polizei Nordrhein-Westfalen</option></select></div><a class="btn" href="#home">${icon("shield")}Mit Behördenkonto anmelden</a><div class="notice mt">${icon("help")}<span>Für den Entwurf öffnet dieser Button die Beispielansicht. Es werden keine Zugangsdaten abgefragt.</span></div><div class="login-footer"><button data-action="help-login">Hilfe zur Anmeldung</button><button data-action="accessibility">Barrierefreiheit</button></div><p class="login-note">Interaktiver Gestaltungsentwurf für LZPD NRW. Kein Produktivsystem.</p></section></main>`;
+  return `<main class="login" id="main"><div class="login-brand"><div class="brand">${brand()}</div><h1 id="page-title" tabindex="-1">Gemeinsam lernen.<br>Sicher handeln.</h1><p>Ihre Plattform für polizeiliche Aus- und Fortbildung.</p></div><section class="login-card" aria-labelledby="login-title"><p class="eyebrow accent">Nordrhein-Westfalen</p><h2 id="login-title">Willkommen</h2><p class="muted">Melden Sie sich mit Ihrem Dienstkonto bei iBMS 3.0 an.</p><a class="btn" href="#home">${icon("shield")}Mit Dienstkonto anmelden</a><div class="login-footer"><button data-action="help-login">Hilfe zur Anmeldung</button><button data-action="accessibility">Barrierefreiheit</button></div><p class="login-note">Interaktiver Gestaltungsentwurf für LZPD NRW. Kein Produktivsystem.</p></section></main>`;
 }
 
 // Banner artwork is derived from the course itself: the gradient carries the
@@ -324,6 +315,17 @@ function courseCard(c) {
   const start =
     c.type === "E-Learning" ? "Ab " + formatDate(c.date) : formatDate(c.date);
   return `<article class="panel course-card"><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span>${favButton(c)}</div><div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${c.type} · ${c.duration}</p><h3>${esc(c.title)}</h3></div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${c.place}</p><p class="course-meta">${start} · ${seats}</p></div><a class="textlink" href="#course/${c.id}">Angebot ansehen${icon("arrow", "xs")}</a></div></div></article>`;
+}
+
+// The hero's companion card: one course lifted out of the catalogue so the
+// band opens on something concrete. Same artwork as a course card, in the
+// narrower hero column and without the favourite mark.
+function heroFocusCard(c) {
+  if (!c) return "";
+  const seats = c.seats ? `${c.seats} freie Plätze` : "Ausgebucht";
+  const start =
+    c.type === "E-Learning" ? "Ab " + formatDate(c.date) : formatDate(c.date);
+  return `<article class="panel focus-card"><div class="course-art compact" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span></div><div class="focus-body"><p class="eyebrow">Kurs im Fokus</p><h3>${esc(c.title)}</h3><p class="course-meta">${c.type} · ${c.duration} · ${c.place}</p><p class="course-meta">${start} · ${seats}</p><a class="textlink" href="#course/${c.id}">Angebot ansehen${icon("arrow", "xs")}</a></div></article>`;
 }
 
 function formatDate(d) {

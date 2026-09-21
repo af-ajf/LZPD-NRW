@@ -18,50 +18,27 @@
   white-space: nowrap;
 }
 
-/* Context pill in the top bar doubles as the click-dummy role switch. */
+/* Context pill in the top bar: it names the tenant and the current view. */
 .rolepill {
-  position: relative;
   display: inline-flex;
   align-items: center;
-}
-.rolepill .icon {
-  position: absolute;
-  right: 10px;
-  pointer-events: none;
-  color: var(--text-tertiary);
-}
-/* Hidden copy of the selected label: it sets the pill width so the control
-   hugs the current option instead of the widest one in the list. */
-.rolepill-sizer {
-  padding: 6px 30px 6px 12px;
-  border: 1px solid transparent;
-  font-size: 0.75rem;
-  line-height: 1.34;
-  white-space: nowrap;
-  visibility: hidden;
-}
-.rolepill select {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  appearance: none;
-  padding: 6px 30px 6px 12px;
-  border-radius: var(--radius-pill);
+  padding: 6px 12px;
   border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
   background: var(--surface-page);
   color: var(--text-secondary);
   font-size: 0.75rem;
   line-height: 1.34;
-  cursor: pointer;
-  transition:
-    border-color var(--fast),
-    color var(--fast);
+  white-space: nowrap;
 }
-@media (hover: hover) {
-  .rolepill select:hover {
-    border-color: var(--border-strong);
-    color: var(--text-primary);
-  }
+
+/* The click-dummy role switch, as the profile dialog shows it. The mobile
+   menu and the phone profile sheet restyle it for their dark and sheet
+   surfaces. */
+.demo-controls {
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
 }
 
 /* ---------- buttons ---------- */
@@ -313,6 +290,62 @@
   margin: 0;
   max-width: 60ch;
 }
+/* Hero main row: the copy, search and chips on the left, the focus card on
+   the right, as in the Figma frame MAIN | KURS IM FOKUS. */
+.hero-main {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-8);
+}
+.hero-main-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-7);
+}
+.focus-card {
+  flex: none;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+.course-art.compact {
+  height: 132px;
+}
+.course-art.compact .course-glyph,
+.course-art.compact .course-glyph .icon {
+  width: 56px;
+  height: 56px;
+}
+.focus-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+}
+.focus-body .eyebrow,
+.focus-body p {
+  margin: 0;
+}
+.focus-body h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+.focus-body .course-meta {
+  font-size: 0.8125rem;
+}
+.focus-body .textlink {
+  align-self: flex-start;
+  padding: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
 .hero hr {
   width: 100%;
   height: 1px;

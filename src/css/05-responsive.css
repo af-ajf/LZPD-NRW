@@ -23,6 +23,15 @@
   .hero {
     padding: var(--space-7);
   }
+  /* Side by side the focus card would squeeze the search out of shape, so
+     below this width it drops under the copy. */
+  .hero-main {
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+  .focus-card {
+    width: 100%;
+  }
   .grid.three,
   .grid.split {
     grid-template-columns: repeat(2, minmax(0, 1fr));

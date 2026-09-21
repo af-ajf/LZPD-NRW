@@ -29,14 +29,19 @@ function home() {
   ];
   return `<section class="hero">
   <div class="hero-topline"><p class="eyebrow">${greeting()}</p><span class="pill">Fortbildungsjahr 2026</span></div>
-  <div class="hero-copy"><h1 id="page-title" tabindex="-1">Was möchten Sie lernen?</h1><p>Durchsuchen Sie das Gesamtangebot – Bildung, Einsatztraining und Sport.</p></div>
-  <form id="home-search" class="home-search"><label class="hidesr" for="home-q">Angebote suchen</label><input id="home-q" name="q" type="search" placeholder="z. B. Kommunikation"><button aria-label="Angebote suchen">${icon("search", "sm")}</button></form>
-  <div class="chips">${chips
-    .map(
-      ([label, kind]) =>
-        `<button class="chip" data-action="chip" data-kind="${kind}" data-value="${esc(label)}">${label}</button>`,
-    )
-    .join("")}</div>
+  <div class="hero-main">
+    <div class="hero-main-left">
+      <div class="hero-copy"><h1 id="page-title" tabindex="-1">Was bringt Sie weiter?</h1><p>Durchsuchen Sie das Gesamtangebot – Bildung, Einsatztraining und Sport.</p></div>
+      <form id="home-search" class="home-search"><label class="hidesr" for="home-q">Angebote suchen</label><input id="home-q" name="q" type="search" placeholder="z. B. Kommunikation"><button aria-label="Angebote suchen">${icon("search", "sm")}</button></form>
+      <div class="chips">${chips
+        .map(
+          ([label, kind]) =>
+            `<button class="chip" data-action="chip" data-kind="${kind}" data-value="${esc(label)}">${label}</button>`,
+        )
+        .join("")}</div>
+    </div>
+    ${heroFocusCard(courses.find((c) => c.id === 5))}
+  </div>
   <hr>
   ${heroTask()}
 </section>
@@ -50,9 +55,9 @@ function home() {
 
 // Phone home screen, following the Figma frame "MOBILE" (node 3059:159).
 // Kept from the desktop home: search, the module chips, the course rail, the
-// news card and the next appointment. Dropped: the greeting line, the "Was
-// möchten Sie lernen?" hero copy, the open-task row and the four stat cards —
-// the large title carries the page instead, and Mein iBMS is one tab away.
+// news card and the next appointment. Dropped: the greeting line, the hero
+// lead-in, the open-task row and the four stat cards — the large title carries
+// the page instead, and Mein iBMS is one tab away.
 function mobileHome() {
   const chips = [
     ["Bildung", "module"],

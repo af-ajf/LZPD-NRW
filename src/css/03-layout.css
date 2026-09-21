@@ -375,19 +375,10 @@
   background: var(--chrome-fill);
   color: var(--chrome-text);
 }
-.topbar .rolepill select {
+.topbar .rolepill {
   background: var(--chrome-fill);
   border-color: var(--chrome-line);
   color: var(--chrome-text);
-}
-@media (hover: hover) {
-  .topbar .rolepill select:hover {
-    border-color: #ffffff8a;
-    color: var(--chrome-text);
-  }
-}
-.topbar .rolepill .icon {
-  color: var(--chrome-text-muted);
 }
 .topbar :focus-visible,
 .footer :focus-visible {
