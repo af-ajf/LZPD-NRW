@@ -1,0 +1,17 @@
+{
+  // Cloudflare Workers build config. `npx wrangler deploy` reads this file.
+  //
+  // The click dummy is a folder of static files, so the Worker itself does one
+  // thing: ask for a password, then hand the files out. `run_worker_first`
+  // is what makes that work - without it Cloudflare serves a matching file
+  // straight from `src/` and the Worker never sees the request, so every page
+  // would be public.
+  "name": "lzpd-nrw",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-09-21",
+  "assets": {
+    "directory": "src",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+}
