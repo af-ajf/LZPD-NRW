@@ -2,10 +2,14 @@
 
 "use strict";
 
-// Phone only: where each hash was left off, so returning to a tab puts the
-// user back where they were instead of at the top, the way a native tab bar
-// does. Written on scroll by 08-actions.js, read back here.
+// Where each hash was left off, so returning to a tab puts the user back
+// where they were instead of at the top, the way a tab does. Written on
+// scroll by 08-actions.js, read back here.
 const scrollMemory = new Map();
+
+// Routes that have already been on screen in this session. The enter motion
+// belongs to the first sight of a tab, so it is played once per route.
+const seenRoutes = new Set();
 
 function rememberScroll() {
   if (render.last) scrollMemory.set(render.last, window.scrollY);
@@ -19,7 +23,6 @@ function render(focus = true) {
   let content;
   switch (route) {
     case "login":
-      $("#app").innerHTML = login();
       break;
     case "home":
       content = home();
@@ -59,23 +62,61 @@ function render(focus = true) {
         pagehead("Diese Seite ist nicht verfügbar") +
         link("Zur Startseite", "home");
   }
-  // Enter motion is played only when the route actually changed. A re-render
-  // in place (a filter, a heart, a tab of Mein iBMS) keeps the page still,
-  // which is why the class is toggled rather than simply set: the new nodes
-  // are already in the DOM but have not been styled yet, so removing it here
-  // prevents the animation from ever starting.
-  const moved = r !== render.last;
   render.last = r;
-  if (content !== undefined) $("#app").innerHTML = layout(content, route);
-  $("#app").classList.toggle("enter", moved);
+  // The shell is mounted once and then kept: a route change swaps the page
+  // body inside it and updates the chrome in place. Rebuilding sidebar, top
+  // bar and header on every tab is what made a click read like a page load.
+  // Only the two presentations - phone and desktop - and the login screen,
+  // which carries no chrome at all, mount markup of their own.
+  const shell = route === "login" ? "login" : isMobile() ? "phone" : "desktop";
+  // Armed before the new markup is written: the rules hang off `#app.enter`,
+  // so the class has to be there by the time the nodes are inserted.
+  armEnter(route);
+  if (shell !== render.shell) {
+    $("#app").innerHTML = route === "login" ? login() : layout(content, route);
+    render.shell = shell;
+    enterSidebar();
+  } else if (shell !== "login") {
+    $("#main").innerHTML = content;
+    syncChrome(route);
+  }
   syncTabbar(route);
   $(".skip").textContent = "Zum Hauptinhalt springen";
   document.title =
     ($("#page-title")?.textContent || "iBMS 3.0") + " · POLIZEI-ONLINE";
   if (focus) {
-    window.scrollTo(0, isMobile() ? scrollMemory.get(r) || 0 : 0);
+    window.scrollTo(0, scrollMemory.get(r) || 0);
     $("#page-title")?.focus({ preventScroll: true });
   }
+}
+
+// Enter motion belongs to the first sight of a tab: the first time a route is
+// opened it builds itself up, every later visit and every re-render in place
+// (a filter, a heart, a tab of Mein iBMS) simply shows the page.
+//
+// The class is taken off again once it has played: left on, the same rules
+// would catch every page body swapped in afterwards. The timer is what ends
+// it when nothing else happens - any further render decides for itself
+// whether its own route is being seen for the first time.
+function armEnter(route) {
+  const app = $("#app");
+  const first = route !== "login" && !seenRoutes.has(route);
+  if (route !== "login") seenRoutes.add(route);
+  clearTimeout(armEnter.timer);
+  app.classList.toggle("enter", first);
+  if (first)
+    armEnter.timer = setTimeout(() => app.classList.remove("enter"), 1000);
+}
+
+// The rail comes with the shell and then stays, so it builds itself up when
+// the app is entered and never again while it is on screen - a route change
+// only moves the marker along it.
+function enterSidebar() {
+  const nav = $(".sidenav");
+  if (!nav) return;
+  nav.classList.add("enter");
+  clearTimeout(enterSidebar.timer);
+  enterSidebar.timer = setTimeout(() => nav.classList.remove("enter"), 1000);
 }
 
 // `short` is the phone wording. On the small screen the toast drops in from

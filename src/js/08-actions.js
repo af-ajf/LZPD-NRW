@@ -283,7 +283,66 @@ document.addEventListener("click", (e) => {
   }
 });
 
+// ---------- filters ----------
+//
+// A filter takes effect as it is set: a chosen module is the filter, not a
+// draft that still has to be submitted. That also makes it part of the state
+// rather than of the form on screen, so leaving the tab and coming back shows
+// the same selection and the same result list.
+const filterForms = {
+  "catalog-filter": (d) => {
+    state.query = String(d.get("q"));
+    state.module = String(d.get("module"));
+    state.type = String(d.get("type"));
+  },
+  "user-filter": (d) => {
+    state.userquery = String(d.get("q"));
+    state.usermodule = String(d.get("module"));
+    state.userstatus = String(d.get("status"));
+  },
+  "report-filter": (d) => {
+    state.oe = String(d.get("oe"));
+    state.year = String(d.get("year"));
+  },
+};
+
+// Returns whether the form was a filter, so the callers can fall through.
+function applyFilter(form) {
+  const read = filterForms[form?.id];
+  if (!read) return false;
+  read(new FormData(form));
+  // Drawing the route replaces the form along with the rest of the page body,
+  // so the control that is being used is picked up again afterwards - with
+  // its caret, or typing would jump to the end of the field.
+  const active = document.activeElement;
+  const id = active?.id;
+  let caret = null;
+  try {
+    caret = active.selectionStart;
+  } catch (e) {}
+  render(false);
+  const back = id ? document.getElementById(id) : null;
+  if (!back) return true;
+  back.focus({ preventScroll: true });
+  try {
+    if (caret != null) back.setSelectionRange(caret, caret);
+  } catch (e) {}
+  return true;
+}
+
+// Typing is answered one pause later: every keystroke would redraw the list
+// under the hand.
+let filterTyping = null;
+document.addEventListener("input", (e) => {
+  const form = e.target.form;
+  if (e.target.tagName !== "INPUT" || !filterForms[form?.id]) return;
+  clearTimeout(filterTyping);
+  filterTyping = setTimeout(() => applyFilter(form), 300);
+});
+
 document.addEventListener("change", (e) => {
+  // A select is a deliberate choice, so it is answered at once.
+  if (e.target.tagName === "SELECT" && applyFilter(e.target.form)) return;
   if (e.target.matches("[data-role]")) {
     state.role = e.target.value;
     state.report = "Fachaufsichtsreport ET";
@@ -314,26 +373,23 @@ document.addEventListener("submit", (e) => {
       if (location.hash === "#catalog") render(false);
       else location.hash = "catalog";
       break;
+    // The filters are already applied while they are being set; submitting
+    // is the confirmation of that, and says so.
     case "catalog-filter":
-      state.query = String(d.get("q"));
-      state.module = String(d.get("module"));
-      state.type = String(d.get("type"));
-      render(false);
+      clearTimeout(filterTyping);
+      applyFilter(f);
       $("#catalog-q")?.focus();
       toast("Suchergebnisse aktualisiert.");
       break;
     case "user-filter":
-      state.userquery = String(d.get("q"));
-      state.usermodule = String(d.get("module"));
-      state.userstatus = String(d.get("status"));
-      render(false);
+      clearTimeout(filterTyping);
+      applyFilter(f);
       $("#user-q")?.focus();
       toast("Anwenderliste gefiltert.");
       break;
     case "report-filter":
-      state.oe = String(d.get("oe"));
-      state.year = String(d.get("year"));
-      render(false);
+      clearTimeout(filterTyping);
+      applyFilter(f);
       $("#report-oe")?.focus();
       toast("Auswertung aktualisiert.");
       break;
@@ -488,7 +544,7 @@ window.addEventListener(
   "scroll",
   () => {
     $("#glassbar")?.classList.toggle("show", window.scrollY > 96);
-    if (isMobile()) rememberScroll();
+    rememberScroll();
   },
   { passive: true },
 );

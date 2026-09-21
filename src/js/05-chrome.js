@@ -79,15 +79,84 @@ function footer() {
   return `<footer class="footer"><span>POLIZEI-ONLINE · LZPD Nordrhein-Westfalen</span><div class="footer-links"><button data-action="accessibility">Barrierefreiheit</button><button data-action="privacy">Datenschutz</button><button data-action="about">Über diesen Entwurf</button></div></footer>`;
 }
 
+// One rail entry. Shared by the initial markup and by syncSidebar(), so the
+// rebuilt link is the same link.
+function navLink([r, n, i], route) {
+  const count =
+    r === "favorites" && state.favorites.length
+      ? `<span class="navcount">${state.favorites.length}</span>`
+      : "";
+  return `<a class="navlink" href="#${r}" ${route === r ? 'aria-current="page"' : ""}>${icon(i)}${n}${count}</a>`;
+}
+
 function sidebar(route) {
-  return `<aside class="sidebar" aria-label="Hauptnavigation"><div class="sidebar-top"><a class="brand" href="#home">${brand()}</a><hr><div><p class="nav-label">Aus- und Fortbildung</p><nav class="sidenav">${navItems()
-    .map(
-      ([r, n, i]) =>
-        `<a class="navlink" href="#${r}" ${route === r ? 'aria-current="page"' : ""}>${icon(i)}${n}${r === "favorites" && state.favorites.length ? `<span class="navcount">${state.favorites.length}</span>` : ""}</a>`,
-    )
+  return `<aside class="sidebar" aria-label="Hauptnavigation"><div class="sidebar-top"><a class="brand" href="#home">${brand()}</a><hr><div><p class="nav-label">Aus- und Fortbildung</p><nav class="sidenav" data-key="${navKey()}">${navItems()
+    .map((item) => navLink(item, route))
     .join(
       "",
     )}</nav></div></div><div class="sidebar-bottom"><div class="sidebar-utility"><a class="navlink" href="#help" ${route === "help" ? 'aria-current="page"' : ""}>${icon("help")}Hilfe & Kontakt</a><a class="navlink" href="#login">${icon("logout")}Abmelden</a></div></div></aside>`;
+}
+
+// What the rail is made of, as opposed to which entry is current: the role
+// decides the entries, the watchlist decides the count beside one of them.
+function navKey() {
+  return navItems().map(([r]) => r).join(",") + "|" + state.favorites.length;
+}
+
+// ---------- keeping the mounted chrome current ----------
+//
+// The shell is mounted once (07-render.js) and only the page body is
+// exchanged afterwards, so the parts of the chrome that depend on the route
+// or on the state are updated here instead of being rebuilt with it.
+
+function syncSidebar(route) {
+  const nav = $(".sidenav");
+  if (!nav) return;
+  // Entries and counts only change with the role and the watchlist; the
+  // current marker changes with every route.
+  const key = navKey();
+  if (nav.dataset.key !== key) {
+    nav.innerHTML = navItems()
+      .map((item) => navLink(item, route))
+      .join("");
+    nav.dataset.key = key;
+  }
+  document.querySelectorAll(".sidebar .navlink").forEach((el) => {
+    const target = el.getAttribute("href").slice(1);
+    if (target === route) el.setAttribute("aria-current", "page");
+    else el.removeAttribute("aria-current");
+  });
+}
+
+// The role can also be changed from the mobile menu and the profile sheet, so
+// every switch is put back in step with the state after a change.
+function syncRoleControls() {
+  document.querySelectorAll("[data-role]").forEach((el) => {
+    if (el.value !== state.role) el.value = state.role;
+  });
+  const sizer = $(".rolepill-sizer");
+  if (sizer)
+    sizer.textContent = `Nordrhein-Westfalen / ${roleNames[state.role]}`;
+}
+
+// Phone shell: the header carries the back affordance and, on the start
+// route, the large title, so it follows the route. The compact bar keeps its
+// `.show` class - that one belongs to the scroll position, not to the route.
+function syncMobilehead(route) {
+  const head = $(".mobilehead");
+  if (head && head.dataset.route !== route) head.outerHTML = mobilehead(route);
+  const label = $("#glassbar span");
+  if (label) {
+    const item = tabItems().find(([r]) => r === route);
+    label.textContent =
+      route === "home" ? "POLIZEI-ONLINE" : item ? item[1] : "";
+  }
+}
+
+function syncChrome(route) {
+  if (isMobile()) syncMobilehead(route);
+  else syncSidebar(route);
+  syncRoleControls();
 }
 
 function topbar() {
@@ -115,7 +184,7 @@ function mobilehead(route) {
     route === "home"
       ? `<div class="mobilehead-title"><h1 id="page-title" tabindex="-1">POLIZEI-ONLINE</h1><p>iBMS 3.0 · NRW · Fortbildungsjahr 2026</p></div>`
       : "";
-  return `<header class="mobilehead">${acc}${title}</header>`;
+  return `<header class="mobilehead" data-route="${route}">${acc}${title}</header>`;
 }
 
 // Compact bar that fades in once the large title has scrolled away.
