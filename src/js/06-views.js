@@ -19,6 +19,23 @@ function heroTask() {
   return `<div class="taskrow"><div class="taskrow-detail"><span class="iconbox">${icon("file")}</span><div class="taskrow-text"><p class="eyebrow attention">Rückmeldung offen</p><strong>Gesprächsführung und Konfliktklärung</strong><p>Bitte ergänzen Sie die Begründung für Ihren Fortbildungswunsch.</p></div></div>${btn("Begründung ergänzen", "wish")}</div>`;
 }
 
+// The course in progress, following the Figma frame MAIN | WEITER LERNEN
+// (node 3168:20). It carries the page heading: what the user is in the middle
+// of is what the home screen is about.
+function heroResume() {
+  const c = courses.find((x) => x.id === resume.course);
+  return `<div class="hero-resume">
+  <div class="resume-art" aria-hidden="true"><strong>${resume.percent} %</strong><span>erledigt</span></div>
+  <div class="resume-body">
+    <p class="eyebrow accent">Weiter lernen</p>
+    <h1 id="page-title" tabindex="-1">${esc(c.title)}</h1>
+    <div class="progress" role="progressbar" aria-valuenow="${resume.percent}" aria-valuemin="0" aria-valuemax="100" aria-label="Fortschritt im Kurs"><span style="width:${resume.percent}%"></span></div>
+    <p class="resume-meta">${c.type} · ${resume.step} · ${resume.left} · zuletzt am ${resume.last}</p>
+  </div>
+  <div class="resume-actions">${btn("Kurs fortsetzen", "lms")}<a class="textlink" href="#dashboard" data-action="stat-link" data-tab="Registrierungen">Alle laufenden Kurse${icon("arrow", "xs")}</a></div>
+</div>`;
+}
+
 function home() {
   if (isMobile()) return mobileHome();
   const chips = [
@@ -29,9 +46,11 @@ function home() {
   ];
   return `<section class="hero">
   <div class="hero-topline"><p class="eyebrow">${greeting()}</p><span class="pill">Fortbildungsjahr 2026</span></div>
-  <div class="hero-main">
-    <div class="hero-main-left">
-      <div class="hero-copy"><h1 id="page-title" tabindex="-1">Ihre nächste Fortbildung finden</h1><p>Durchsuchen Sie das Gesamtangebot – Bildung, Einsatztraining und Sport.</p></div>
+  ${heroResume()}
+  <hr>
+  <div class="hero-discover">
+    <p class="eyebrow">Etwas Neues finden</p>
+    <div class="discover-row">
       <form id="home-search" class="home-search"><label class="hidesr" for="home-q">Angebote suchen</label><input id="home-q" name="q" type="search" placeholder="z. B. Kommunikation"><button aria-label="Angebote suchen">${icon("search", "sm")}</button></form>
       <div class="chips">${chips
         .map(
@@ -40,7 +59,6 @@ function home() {
         )
         .join("")}</div>
     </div>
-    ${heroFocusCard(courses.find((c) => c.id === 5))}
   </div>
   <hr>
   ${heroTask()}

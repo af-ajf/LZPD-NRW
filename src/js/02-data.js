@@ -100,6 +100,17 @@ const courses = [
     approval: true,
   },
 ];
+
+// What the hero opens on: the course Maria is in the middle of. The progress
+// is hers, not the course's, so it lives here and not on the catalogue entry.
+const resume = {
+  course: 2,
+  percent: 62,
+  step: "Modul 3 von 5",
+  left: "noch etwa 35 Minuten",
+  last: "18.09.2026",
+};
+
 const people = [
   {
     id: 1,

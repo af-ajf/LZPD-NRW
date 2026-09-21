@@ -23,14 +23,33 @@
   .hero {
     padding: var(--space-7);
   }
-  /* Side by side the focus card would squeeze the search out of shape, so
-     below this width it drops under the copy. */
-  .hero-main {
+  /* Below this width the band's three columns crowd each other, so they
+     become one: art, progress, then the way on across the full width. */
+  .hero-resume {
     flex-direction: column;
-    gap: var(--space-7);
+    align-items: stretch;
+    gap: var(--space-4);
+    padding: var(--space-5);
   }
-  .focus-card {
+  .resume-actions {
+    align-items: stretch;
+  }
+  .resume-actions .btn {
     width: 100%;
+  }
+  .resume-actions .textlink {
+    align-self: center;
+  }
+  /* Side by side the chips would squeeze the search out of shape, so below
+     this width they drop under it. */
+  .discover-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
+  }
+  .discover-row .home-search {
+    width: 100%;
+    max-width: 480px;
   }
   .grid.three,
   .grid.split {

@@ -40,6 +40,9 @@
   --accent-surface: #0054ca; /* filled buttons and active nav */
   --accent-hover: #00449f;
   --accent-soft: #e8f0fd;
+  --accent-tint: #f0f6ff; /* resume band inside the hero */
+  --accent-tint-border: #cee0fa;
+  --accent-track: #d6e3f7; /* progress track on the tinted band */
   --info-surface: #e9eef6;
   --info-text: #23406e;
 
@@ -57,6 +60,7 @@
 
   /* --- radius --- */
   --radius-card: 10px;
+  --radius-band: 12px; /* bands nested inside a card */
   --radius-control: 8px;
   --radius-input: 8px;
   --radius-badge: 4px;

@@ -317,17 +317,6 @@ function courseCard(c) {
   return `<article class="panel course-card"><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span>${favButton(c)}</div><div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${c.type} · ${c.duration}</p><h3>${esc(c.title)}</h3></div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${c.place}</p><p class="course-meta">${start} · ${seats}</p></div><a class="textlink" href="#course/${c.id}">Angebot ansehen${icon("arrow", "xs")}</a></div></div></article>`;
 }
 
-// The hero's companion card: one course lifted out of the catalogue so the
-// band opens on something concrete. Same artwork as a course card, in the
-// narrower hero column and without the favourite mark.
-function heroFocusCard(c) {
-  if (!c) return "";
-  const seats = c.seats ? `${c.seats} freie Plätze` : "Ausgebucht";
-  const start =
-    c.type === "E-Learning" ? "Ab " + formatDate(c.date) : formatDate(c.date);
-  return `<article class="panel focus-card"><div class="course-art compact" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span></div><div class="focus-body"><p class="eyebrow">Kurs im Fokus</p><h3>${esc(c.title)}</h3><p class="course-meta">${c.type} · ${c.duration} · ${c.place}</p><p class="course-meta">${start} · ${seats}</p><a class="textlink" href="#course/${c.id}">Angebot ansehen${icon("arrow", "xs")}</a></div></article>`;
-}
-
 function formatDate(d) {
   return new Date(d + "T12:00:00").toLocaleDateString("de-DE", {
     day: "2-digit",

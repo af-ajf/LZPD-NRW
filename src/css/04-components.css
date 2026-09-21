@@ -281,69 +281,108 @@
 .hero-topline .eyebrow {
   margin: 0;
 }
-.hero-copy h1 {
-  margin-bottom: var(--space-3);
-}
-.hero-copy p {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin: 0;
-  max-width: 60ch;
-}
-/* Hero main row: the copy, search and chips on the left, the focus card on
-   the right, as in the Figma frame MAIN | KURS IM FOKUS. */
-.hero-main {
+/* Resume band: the course the user is in the middle of, following the Figma
+   frame MAIN | WEITER LERNEN. Art on the left, progress in the middle, the
+   two ways on. */
+.hero-resume {
   display: flex;
-  align-items: stretch;
-  gap: var(--space-8);
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  background: var(--accent-tint);
+  border: 1px solid var(--accent-tint-border);
+  border-radius: var(--radius-band);
 }
-.hero-main-left {
+.resume-art {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  border-radius: var(--radius-card);
+  background: var(--art-a);
+  color: #fff;
+  text-align: center;
+}
+.resume-art strong {
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.28;
+}
+.resume-art span {
+  font-size: 0.6875rem;
+  line-height: 1.28;
+  color: #ffffffd9;
+}
+.resume-body {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: var(--space-7);
-}
-.focus-card {
-  flex: none;
-  width: 380px;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  overflow: hidden;
-}
-.course-art.compact {
-  height: 132px;
-}
-.course-art.compact .course-glyph,
-.course-art.compact .course-glyph .icon {
-  width: 56px;
-  height: 56px;
-}
-.focus-body {
-  display: flex;
-  flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-5);
 }
-.focus-body .eyebrow,
-.focus-body p {
+.resume-body > * {
   margin: 0;
 }
-.focus-body h3 {
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.4;
+/* The band carries the page heading, one step down from the standalone h1. */
+.resume-body h1 {
+  font-size: 1.5rem;
+  line-height: 1.34;
 }
-.focus-body .course-meta {
+.resume-body .progress {
+  width: 100%;
+  max-width: 420px;
+  height: 8px;
+  margin: 0;
+  background: var(--accent-track);
+}
+.resume-body .progress span {
+  background: var(--rule-blue);
+}
+.resume-meta {
   font-size: 0.8125rem;
+  color: var(--text-secondary);
 }
-.focus-body .textlink {
-  align-self: flex-start;
+.resume-actions {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.resume-actions .btn {
+  padding-inline: var(--space-7);
+}
+.resume-actions .textlink {
   padding: 0;
   font-size: 0.8125rem;
   font-weight: 700;
+}
+
+/* Search and chips, under their own label. */
+.hero-discover {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.hero-discover .eyebrow {
+  margin: 0;
+}
+.discover-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+.discover-row .home-search {
+  flex: none;
+  width: 400px;
+}
+.discover-row .chips {
+  flex: 1;
+  min-width: 0;
 }
 
 .hero hr {
