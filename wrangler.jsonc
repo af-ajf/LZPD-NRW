@@ -9,6 +9,14 @@
   "name": "lzpd-nrw",
   "main": "worker/index.js",
   "compatibility_date": "2026-09-21",
+
+  // The user name is half of the login and not a secret, so it lives here:
+  // a plain variable set in the dashboard is wiped by the next deploy,
+  // because this file is what a deploy applies. The password is SITE_PASS,
+  // a Cloudflare secret, which deploys leave alone.
+  "vars": {
+    "SITE_USER": "lzpd"
+  },
   "assets": {
     "directory": "src",
     "binding": "ASSETS",
