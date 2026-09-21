@@ -31,7 +31,7 @@ function home() {
   <div class="hero-topline"><p class="eyebrow">${greeting()}</p><span class="pill">Fortbildungsjahr 2026</span></div>
   <div class="hero-main">
     <div class="hero-main-left">
-      <div class="hero-copy"><h1 id="page-title" tabindex="-1">Was bringt Sie weiter?</h1><p>Durchsuchen Sie das Gesamtangebot – Bildung, Einsatztraining und Sport.</p></div>
+      <div class="hero-copy"><h1 id="page-title" tabindex="-1">Ihre nächste Fortbildung finden</h1><p>Durchsuchen Sie das Gesamtangebot – Bildung, Einsatztraining und Sport.</p></div>
       <form id="home-search" class="home-search"><label class="hidesr" for="home-q">Angebote suchen</label><input id="home-q" name="q" type="search" placeholder="z. B. Kommunikation"><button aria-label="Angebote suchen">${icon("search", "sm")}</button></form>
       <div class="chips">${chips
         .map(
