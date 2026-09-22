@@ -6,7 +6,7 @@
 
 "use strict";
 
-const CACHE = "ibms-shell-v9";
+const CACHE = "ibms-shell-v12";
 
 const SHELL = [
   "./",

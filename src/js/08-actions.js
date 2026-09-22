@@ -727,10 +727,12 @@ window.addEventListener("hashchange", () => {
   // small screens.
   render(!dashboardTabChange);
   if (dashboardTabChange) {
-    requestAnimationFrame(() => {
-      const tabs = $(".tabs");
-      if (tabs) tabs.scrollLeft = tabScroll;
-    });
+    // Straight after the render, not a frame later: render() has already put
+    // the new markup in place, so the offset is back before anything is
+    // painted. Restoring it from a callback showed the row at its start for
+    // one frame first, which is the jump it is there to prevent.
+    const tabs = $(".tabs");
+    if (tabs) tabs.scrollLeft = tabScroll;
   }
 });
 

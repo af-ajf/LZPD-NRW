@@ -208,6 +208,9 @@
     flex-wrap: nowrap;
     scrollbar-width: none;
   }
+  .chips::-webkit-scrollbar {
+    display: none;
+  }
   .chip {
     white-space: nowrap;
   }

@@ -19,7 +19,15 @@
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <!-- black-translucent, not default: `default` makes iOS reserve the status
+         bar strip and paint it with the theme colour, so the web view starts
+         below the notch and the glass bar can never reach the top edge. This
+         puts the view under the status bar, where `viewport-fit=cover` gives
+         the safe-area insets the chrome already pads itself with. -->
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="apple-mobile-web-app-title" content="iBMS 3.0" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

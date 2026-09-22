@@ -19,16 +19,36 @@ function heroTask() {
 // of is what the home screen is about.
 function heroResume() {
   const c = courses.find((x) => x.id === resume.course);
-  const heading = isMobile()
-    ? `<h2>${esc(c.title)}</h2>`
-    : `<h1 id="page-title" tabindex="-1">${esc(c.title)}</h1>`;
+  if (isMobile()) return mobileResume(c);
   return `<div class="hero-resume">
   <div class="resume-art" aria-hidden="true"><strong>${resume.percent} %</strong><span>erledigt</span></div>
   <div class="resume-body">
     <p class="eyebrow accent">Weiter lernen</p>
-    ${heading}
+    <h1 id="page-title" tabindex="-1">${esc(c.title)}</h1>
     <div class="progress" role="progressbar" aria-valuenow="${resume.percent}" aria-valuemin="0" aria-valuemax="100" aria-label="Fortschritt im Kurs"><span style="width:${resume.percent}%"></span></div>
     <p class="resume-meta">${c.type} · ${resume.step} · ${resume.left} · zuletzt am ${resume.last}</p>
+  </div>
+  <div class="resume-actions">${btn("Kurs fortsetzen", "lms")}<a class="textlink" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen">Alle laufenden Kurse${icon("arrow", "xs")}</a></div>
+</div>`;
+}
+
+// Phone variant of the resume band. The desktop band is three columns, which
+// on a phone becomes three stacked blocks of nearly equal weight and buries
+// the one thing that matters - the course. Here the artwork shrinks to a
+// badge beside the title, the progress carries its own figure so the badge
+// does not have to repeat it, and the way on is a full-width row.
+function mobileResume(c) {
+  return `<div class="hero-resume">
+  <div class="resume-head">
+    <span class="resume-art" aria-hidden="true">${resume.percent}<small>%</small></span>
+    <div class="resume-headline">
+      <p class="eyebrow accent">Weiter lernen</p>
+      <h2>${esc(c.title)}</h2>
+    </div>
+  </div>
+  <div class="resume-track">
+    <div class="progress" role="progressbar" aria-valuenow="${resume.percent}" aria-valuemin="0" aria-valuemax="100" aria-label="Fortschritt im Kurs"><span style="width:${resume.percent}%"></span></div>
+    <p class="resume-meta">${c.type} · ${resume.step}<br>${resume.left} · zuletzt am ${resume.last}</p>
   </div>
   <div class="resume-actions">${btn("Kurs fortsetzen", "lms")}<a class="textlink" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen">Alle laufenden Kurse${icon("arrow", "xs")}</a></div>
 </div>`;
@@ -94,9 +114,9 @@ function mobileHome() {
   <hr>
   ${heroTask()}
 </section>
-<section class="section"><div class="sectionhead"><h2>Ihre Fortbildung auf einen Blick</h2><a class="textlink" href="${dashboardHref("Registrierungen")}">Mein iBMS öffnen${icon("arrow", "xs")}</a></div><div class="grid four mobile-stats">${homeStats()}</div></section>
-<section class="section"><div class="sectionhead"><h2>Neue Perspektiven</h2><a class="textlink" href="#catalog">Alle Angebote${icon("arrow", "xs")}</a></div><div class="grid three">${courses
-    .slice(0, 3)
+<section class="section"><div class="sectionhead"><h2>Ihre Fortbildung auf einen Blick</h2><a class="textlink" href="${dashboardHref("Registrierungen")}">Mein iBMS öffnen${icon("arrow", "xs")}</a></div><div class="grid four">${homeStats()}</div></section>
+<section class="section"><div class="sectionhead"><h2>Neue Perspektiven</h2><a class="textlink" href="#catalog">Alle Angebote${icon("arrow", "xs")}</a></div><div class="rail">${courses
+    .slice(0, 6)
     .map(courseCard)
     .join("")}</div></section>
 <section class="panel"><p class="eyebrow">Aktuelles</p><h2>Fortbildungsnews</h2><hr class="rule"><div class="newsrow"><time datetime="2026-09-16">16.09.2026</time><a class="textlink" href="#article">Fortbildungsplanung gemeinsam gestalten${icon("arrow", "xs")}</a><p>Melden Sie Ihren Bedarf für das kommende Fortbildungsjahr.</p></div><hr class="rule"><div class="newsrow"><time datetime="2026-09-14">14.09.2026</time><a class="textlink" href="#help">Gut ankommen in iBMS 3.0${icon("arrow", "xs")}</a><p>Antworten zu Registrierung, Nachweisen und persönlicher Übersicht.</p></div></section>
