@@ -4,7 +4,7 @@
 
 // Where each hash was left off, so returning to a tab puts the user back
 // where they were instead of at the top, the way a tab does. Written on
-// scroll by 08-actions.js, read back here.
+// scroll by 09-actions.js, read back here.
 const scrollMemory = new Map();
 
 // Routes that have already been on screen in this session. The enter motion

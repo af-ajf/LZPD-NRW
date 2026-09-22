@@ -44,7 +44,9 @@ src/
                       card, and the phone shell (large title, tab bar)
     06-views.js       one function per route, each returns an HTML string
     07-render.js      hash router, toast, dialog primitives
-    08-actions.js     click/submit delegation, CSV export, bootstrap
+    08-haptics.js     taptic feedback on the phone shell: press ticks and
+                      outcome patterns
+    09-actions.js     click/submit delegation, CSV export, bootstrap
 ```
 
 Scripts are classic (non-module) and share one global lexical scope, so load
@@ -63,7 +65,7 @@ stat cards. The routes outside the tabs and the role switch live in the profile
 sheet behind the avatar.
 
 Because the two shells are different markup rather than one reflowed layout,
-crossing 900px re-renders (`mobileMQ` listener in `08-actions.js`).
+crossing 900px re-renders (`mobileMQ` listener in `09-actions.js`).
 
 The tab bar itself lives in `#tabbar-root`, outside `#app`, and `syncTabbar()`
 only updates it — it is rebuilt only when it is missing.
@@ -125,6 +127,18 @@ back to the design file.
   reduced-motion query in `05-responsive.css` — which kills every animation and
   transition with `!important` — leaves a complete page behind.
 
+- **Haptics** are the phone counterpart of that motion layer and live in
+  `08-haptics.js` alone. Two kinds again: a selection tick on the press of a
+  tab, chip or button, delivered in the capture phase so it is felt under the
+  finger rather than after the redraw; and an outcome pattern once something is
+  done or refused — a booking, a confirmation, a form the browser rejects.
+  `haptic(kind)` is the only entry point. It is silent on the desktop shell, on
+  a device without a vibrator, and under `prefers-reduced-motion`, which is
+  treated as covering a vibration too. Android uses `navigator.vibrate`; iOS
+  has no such API, so a hidden `<input type="checkbox" switch>` is toggled
+  instead — Safari plays the system switch haptic for it, one tick at a time,
+  and the patterns become tick counts.
+
 There is no longer a patch/override layer — every rule lives in the file its
 name implies.
 
@@ -145,7 +159,9 @@ To change wording, edit the string in the view that renders it.
   only route with a parameter. `hashchange` re-renders and closes any open dialog.
 - **Interaction** — two delegated listeners on `document`: `click` dispatches on
   `[data-action]`, `submit` dispatches on the form's `id`. No per-element handlers,
-  so re-rendering never leaves listeners behind.
+  so re-rendering never leaves listeners behind. `08-haptics.js` adds its own
+  delegated listeners in the capture phase and touches no state, so haptics can
+  be removed by dropping the one script tag.
 - **State** — one mutable `state` object plus the `courses` / `people` arrays.
   Mutate, then call `render(false)` (skips scroll/focus reset) or set
   `location.hash`. Nothing persists across a reload, apart from the watchlist

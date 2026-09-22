@@ -135,9 +135,9 @@ def stage(tmp):
     index = os.path.join(site, "index.html")
     with open(index) as f:
         html = f.read()
-    tag = '<script src="js/08-actions.js"></script>'
+    tag = '<script src="js/09-actions.js"></script>'
     if tag not in html:
-        sys.exit("index.html no longer loads js/08-actions.js — update tools/mockups.py")
+        sys.exit("index.html no longer loads js/09-actions.js — update tools/mockups.py")
     with open(index, "w") as f:
         f.write(html.replace(tag, tag + '\n<script src="capture.js"></script>'))
     return site

@@ -44,6 +44,16 @@
 - Drop-Ziele, belegte Zeiträume und Drag-Zustände visuell gekennzeichnet.
 - Rasterbreiten, Umbruch und Schriftgrößen für Ressourcen und Veranstaltungen verbessert.
 
+### Haptisches Feedback (nur mobile Ansicht)
+
+- Kurzer Auswahl-Impuls beim Antippen von Tab-Leiste, Mein-iBMS-Tabs und Filter-Chips.
+- Kurzer Druck-Impuls auf Buttons, Merken-Markierung sowie den Glas- und Profilschaltflächen.
+- Bestätigungen, Exporte und erfolgreich abgeschickte Formulare quittieren mit einem Erfolgsmuster.
+- Vom Browser abgelehnte Formulareingaben quittieren mit einem Warnmuster, einmal pro Versuch.
+- Desktop-Ansicht, Geräte ohne Vibration und `prefers-reduced-motion` bleiben ohne Feedback.
+- Android nutzt die Vibration API; unter iOS wird ersatzweise die System-Haptik eines verborgenen Schalters ausgelöst.
+- Neue Datei `js/08-haptics.js`; `js/08-actions.js` heißt jetzt `js/09-actions.js`, damit der Bootstrap zuletzt lädt.
+
 ### Tests
 
 - JavaScript-Syntaxprüfung erfolgreich.

@@ -4,7 +4,7 @@
 // Below 900px the app switches to the phone shell from the Figma frame
 // "MOBILE" (node 3059:159): no sidebar and no navy top bar, an iOS-style large
 // title, and a floating Liquid Glass tab bar. The switch is decided in JS, not
-// only in CSS, because the two shells carry different markup; 08-actions.js
+// only in CSS, because the two shells carry different markup; 09-actions.js
 // re-renders when the breakpoint is crossed.
 
 "use strict";
@@ -183,7 +183,7 @@ function mobilehead(route) {
 }
 
 // Compact bar that fades in once the large title has scrolled away.
-// 08-actions.js toggles `.show` on scroll.
+// 09-actions.js toggles `.show` on scroll.
 function glassbar(route) {
   const item = tabItems().find(([r]) => r === route);
   const label = route === "home" ? "POLIZEI-ONLINE" : item ? item[1] : "";
@@ -235,7 +235,7 @@ function syncTabbar(route) {
 
 // No footer on the phone: an app has no page end, and the three notices it
 // carries would sit directly under the floating tab bar. They are reached
-// from the profile sheet instead (see profileExtras in 08-actions.js).
+// from the profile sheet instead (see profileExtras in 09-actions.js).
 function mobileLayout(content, route) {
   return `<div class="shell phone">${glassbar(route)}<div class="workspace">${mobilehead(route)}<main class="main" id="main">${content}</main><div class="tabbar-space" aria-hidden="true"></div></div></div>`;
 }

@@ -438,7 +438,7 @@
 }
 
 /* ---------- favourite toggle ----------
-   `burst` is set by 08-actions.js on the button that was pressed, and only
+   `burst` is set by 09-actions.js on the button that was pressed, and only
    when the course was just marked; unmarking stays quiet. */
 .favmark .icon,
 .favtoggle .icon {
