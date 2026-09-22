@@ -39,6 +39,11 @@ const state = {
     }
   })(),
   exportJobs: [],
+  planningWeek: 0,
+  planningFilters: { rooms: true, trainers: true, courses: true },
+  planningResourceType: "Alle anzeigen",
+  planningMoves: {},
+  planningDrag: null,
 };
 
 const isFavorite = (id) => state.favorites.includes(id);

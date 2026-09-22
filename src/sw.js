@@ -6,7 +6,7 @@
 
 "use strict";
 
-const CACHE = "ibms-shell-v7";
+const CACHE = "ibms-shell-v9";
 
 const SHELL = [
   "./",
@@ -32,6 +32,8 @@ const SHELL = [
   "./assets/icon-512.png",
   "./assets/icon-maskable-512.png",
   "./assets/apple-touch-icon.png",
+  "./assets/nachweise/grundlagen-kommunikation.pdf",
+  "./assets/nachweise/funktionelles-training.pdf",
 ];
 
 self.addEventListener("install", (e) => {

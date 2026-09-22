@@ -391,11 +391,6 @@
     border-color var(--fast),
     box-shadow 0.24s var(--ease-out-soft);
 }
-@media (hover: hover) {
-  .panel:hover {
-    box-shadow: var(--shadow-raised);
-  }
-}
 /* The rail on a ruled panel wipes in from the left the first time it is drawn. */
 #app.enter .panel.ruled::before,
 #app.enter .stat::before {

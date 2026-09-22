@@ -69,6 +69,9 @@
   .detailgrid {
     grid-template-columns: 1fr;
   }
+  .planning-layout {
+    grid-template-columns: 1fr;
+  }
   .profile span:last-child {
     display: none;
   }
@@ -267,6 +270,30 @@
   }
   .factlist div {
     gap: var(--space-4);
+  }
+  .planning-calendar-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .planning-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .planning-body {
+    grid-template-columns: 1fr;
+  }
+  .planning-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .planning-filters h3,
+  .planning-filters hr,
+  .planning-filters select {
+    grid-column: 1 / -1;
+  }
+  .planning-grid {
+    min-width: 665px;
+    overflow-x: auto;
   }
   .dialog-head {
     padding: var(--space-5) var(--space-5) var(--space-2);
