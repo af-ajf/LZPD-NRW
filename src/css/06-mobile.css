@@ -16,6 +16,17 @@
   background: var(--surface-page);
   /* Room for the home indicator and the floating tab bar above it. */
   --tabbar-height: 78px;
+
+  /* The phone frame rounds everything harder than the desktop layout, the way
+     iOS does: a card is a continuous rounded rectangle rather than a box with
+     the corners taken off. Overriding the tokens here reaches every component
+     at once - stats, panels, dialogs, inputs, badges - instead of restating a
+     radius per rule below. */
+  --radius-card: 18px;
+  --radius-band: 18px;
+  --radius-control: 12px;
+  --radius-input: 12px;
+  --radius-badge: 8px;
 }
 .shell.phone .workspace {
   margin-left: 0;
@@ -47,7 +58,11 @@
   padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 8px 20px;
   min-width: 0;
 }
+/* The accessory row is one set of equal-sized controls, as in the design: the
+   bell and the avatar share a single size so neither reads as the larger of
+   the two. 44px of touch area is restored per control, not by the box. */
 .mobilehead-actions {
+  --navbtn-size: 36px;
   display: flex;
   gap: 10px;
   align-items: center;
@@ -60,7 +75,7 @@
    the label the way an iOS navigation bar shows one. */
 .glassbtn.backbtn {
   width: auto;
-  min-height: 44px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
   gap: 2px;
@@ -93,42 +108,64 @@
   color: var(--text-secondary);
 }
 
-/* Round glass button, per "btn-notifications (Apple UI Kit · Glass)". The fill
-   is a translucent navy over a blurred backdrop, with the hairline ring and
-   the soft drop shadow the kit uses. */
+/* Round glass button, per "btn-notifications (Apple UI Kit · Glass)". Same
+   Liquid Glass as the tab bar, scaled to a 36px disc: a translucent white
+   fill over a strongly blurred, saturated backdrop, lit along the top edge
+   and set off from the page by the kit's two-tone hairline and soft drop.
+
+   The kit draws that fill as stacked plus-lighter and luminosity passes. Those
+   blend against the backdrop in Figma; in CSS `background-blend-mode` only
+   reaches the element's own layers, which turns the disc grey - so the result
+   is matched with a plain translucent fill instead of the recipe. */
 .glassbtn {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: var(--navbtn-size);
+  height: var(--navbtn-size);
   flex-shrink: 0;
   display: grid;
   place-items: center;
   border: 0;
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--surface-card) 62%, transparent);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: #ffffffa6;
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
   box-shadow:
+    inset 0 0.5px 0 #ffffffe6,
+    inset 0 -0.5px 0 #ffffff40,
     0 0 0 0.5px #e8e8e8,
     1.25px 0 0 -0.75px #d0d0d0,
     -1.25px 0 0 -0.75px #d0d0d0,
-    0 8px 15px #0000000a;
+    0 8px 15px #00000014;
   color: var(--text-primary);
   cursor: pointer;
   transition:
     transform var(--fast),
     background var(--fast);
 }
+/* The glass itself is 36px, as in the design. A transparent ring around it
+   brings the touch area back to the 44px minimum without growing the shape. */
+.glassbtn::before,
+.avatarbtn::before {
+  content: "";
+  position: absolute;
+  inset: calc((44px - var(--navbtn-size)) / -2);
+  border-radius: inherit;
+}
+/* 18px in a 36px disc, per "btn-notifications" in the phone frame. */
+.glassbtn .icon {
+  width: 18px;
+  height: 18px;
+}
 .glassbtn:active {
-  transform: scale(0.94);
-  background: color-mix(in srgb, var(--surface-card) 82%, transparent);
+  transform: scale(0.92);
+  background: #ffffffd9;
 }
 /* Unread count, same dot the desktop icon buttons use. */
 .glassbtn[data-badge]::after {
   content: attr(data-badge);
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: -4px;
+  right: -4px;
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
@@ -139,21 +176,26 @@
   font-weight: 700;
   line-height: 16px;
   text-align: center;
+  box-shadow: 0 0 0 1.5px var(--surface-page);
 }
 
+/* The avatar is the second button of the pair, so it carries the same box:
+   same size, same round, same press. Only the fill differs. */
 .avatarbtn {
-  width: 44px;
-  height: 44px;
+  position: relative;
+  width: var(--navbtn-size);
+  height: var(--navbtn-size);
   padding: 0;
   border: 0;
   background: none;
   border-radius: var(--radius-pill);
   cursor: pointer;
   flex-shrink: 0;
+  transition: transform var(--fast);
 }
 .avatarbtn .avatar {
-  width: 34px;
-  height: 34px;
+  width: 100%;
+  height: 100%;
   display: grid;
   place-items: center;
   border-radius: var(--radius-pill);
@@ -162,9 +204,12 @@
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 16px;
+  box-shadow: 0 8px 15px #0054ca29;
 }
+/* Text button, not a disc: it sits beside the pair rather than joining it, so
+   it takes their height and the pill round but keeps its label. */
 .mobile-easy-language {
-  min-height: 44px;
+  height: var(--navbtn-size);
   padding: 0 8px;
   border-radius: var(--radius-pill);
   color: var(--accent-primary);
@@ -176,7 +221,31 @@
   background: var(--accent-soft);
 }
 .avatarbtn:active {
-  transform: scale(0.94);
+  transform: scale(0.92);
+}
+
+/* The view runs under the status bar (black-translucent, see index.html), so
+   page content passes behind the clock during the 96px of scrolling before the
+   compact bar fades in. This strip is the same glass as that bar, always on,
+   so there is never bare content under the status bar.
+
+   It steps aside once the bar itself is showing: both carry the same tint, and
+   overlapping them would darken the safe area into a visible seam across the
+   top of the bar. */
+.shell.phone::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 39;
+  background: color-mix(in srgb, var(--surface-page) 72%, transparent);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  pointer-events: none;
+  transition: opacity var(--slow);
+}
+.shell.phone:has(.glassbar.show)::before {
+  opacity: 0;
 }
 
 /* Compact bar that takes over once the large title has scrolled away. */
@@ -221,18 +290,97 @@
 .shell.phone .mobile-home-hero > *,
 .shell.phone .mobile-home-hero .hero-discover,
 .shell.phone .mobile-home-hero .discover-row,
-.shell.phone .mobile-home-hero .hero-resume,
-.shell.phone .mobile-home-hero .resume-body {
+.shell.phone .mobile-home-hero .hero-resume {
   min-width: 0;
 }
-.shell.phone .mobile-home-hero .resume-art {
-  width: 80px;
-  height: 80px;
+
+/* ---------- resume band (phone) ---------- */
+/* Three stacked blocks: what the course is, how far along it is, and the way
+   back into it. The percentage rides beside the title as a badge instead of
+   taking a block of its own. */
+.shell.phone .hero-resume {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--radius-band);
 }
-.shell.phone .mobile-home-hero .resume-body h2 {
+.resume-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.shell.phone .resume-art {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  /* The figure and its unit are one line of text, not two boxes: inline flow
+     keeps them on a single baseline, which flex here would not. */
+  display: block;
+  text-align: center;
+  line-height: 52px;
+  white-space: nowrap;
+  border-radius: 16px;
+  background: var(--art-a);
+  color: #fff;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  box-shadow: 0 6px 14px #1b3fa833;
+}
+.shell.phone .resume-art small {
+  margin-left: 1px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  opacity: 0.85;
+}
+.resume-headline {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.resume-headline .eyebrow {
   margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.35;
+}
+.resume-headline h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+}
+.resume-track {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.shell.phone .resume-track .progress {
+  width: auto;
+  max-width: none;
+  height: 8px;
+  margin: 0;
+}
+.shell.phone .resume-meta {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+/* One full-width primary action with the secondary way underneath, the shape
+   an iOS card uses for "the obvious next thing, and the other option". */
+.shell.phone .resume-actions {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.shell.phone .resume-actions .btn {
+  width: 100%;
+  padding-inline: var(--space-4);
+}
+.shell.phone .resume-actions .textlink {
+  align-self: center;
 }
 .shell.phone .home-search {
   height: 46px;
@@ -277,17 +425,28 @@
 }
 
 /* ---------- section header ---------- */
+/* The shell already puts a gap between sections; on the phone the extra pad
+   on top of it opened a hole the size of a card. */
 .shell.phone .section {
-  padding-top: var(--space-4);
+  padding-top: var(--space-1);
 }
+/* A long German section title wraps to two lines; the link beside it belongs
+   to the first of them, so the two are aligned on that baseline rather than
+   on the middle of the block. */
 .shell.phone .sectionhead {
-  align-items: center;
-  gap: var(--space-2);
+  align-items: first baseline;
+  gap: var(--space-3);
 }
 .shell.phone .sectionhead h2 {
+  flex: 1;
+  min-width: 0;
   font-size: 1.25rem;
   line-height: 28px;
+  letter-spacing: -0.01em;
   gap: 0;
+}
+.shell.phone .sectionhead .textlink {
+  flex: none;
 }
 /* The phone frame drops the square marker in front of a section title. */
 .shell.phone .sectionhead h2::before {
@@ -298,50 +457,94 @@
   white-space: nowrap;
 }
 
+/* ---------- overview tiles ---------- */
+/* Four full-width tiles is a screen and a half of scrolling for four numbers.
+   Two columns turns the section back into something read at a glance, with
+   the figure leading and its label under it. */
+.shell.phone .grid.four {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.shell.phone .stat {
+  gap: 2px;
+  padding: 14px 14px 12px;
+  border-radius: var(--radius-card);
+  box-shadow: 0 4px 16px #5757c70f;
+}
+.shell.phone .stat::before {
+  height: 3px;
+}
+.shell.phone .stat .number {
+  order: -1;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+.shell.phone .stat h3 {
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+/* The supporting line repeats what the label already says once the tiles are
+   this small, and it is what pushes the pair of rows out of one screenful. */
+.shell.phone .stat p {
+  display: none;
+}
+
 /* ---------- course rail ---------- */
+/* Horizontal scroller, per the phone frame: the cards keep the width they
+   have in the design and run off the right edge instead of paging. */
 .rail {
   display: flex;
   align-items: stretch;
   gap: 14px;
   margin: 0 calc(var(--space-5) * -1);
-  padding: 0 var(--space-5) var(--space-2);
+  padding: 4px var(--space-5) var(--space-3);
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  /* Free scrolling, not paging: the rail comes to rest wherever the finger
+     leaves it, and the cut-off card is the cue that there is more. */
+  scroll-snap-type: x proximity;
   /* Without this the first card snaps to the scrollport edge and swallows the
      gutter the rest of the page keeps. */
   scroll-padding-inline: var(--space-5);
   scrollbar-width: none;
   overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .rail::-webkit-scrollbar {
   display: none;
 }
-/* One card plus a slice of the next, whatever the device is: the gutter is
-   subtracted so the peek stays the same fraction of the screen rather than
-   growing on a large phone and swallowing the next card on a small one. */
+/* 288px, the card width of the phone frame. It is held fixed so every card in
+   the rail is the same shape on every device; only a phone narrower than the
+   design frame gives some back, so that the next card still peeks. */
 .rail > .course-card {
-  --rail-peek: 52px;
   flex: 0 0 auto;
-  width: clamp(
-    240px,
-    calc(100vw - var(--space-5) * 2 - var(--rail-peek)),
-    340px
-  );
-  margin: 0;
-  padding: 0;
+  width: min(288px, 78vw);
   scroll-snap-align: start;
-  border-radius: 20px;
-  box-shadow: 0 4px 16px #5757c70f;
 }
 .rail > .course-card:hover {
   transform: none;
-  border-color: var(--border);
   box-shadow: 0 4px 16px #5757c70f;
 }
-.rail .course-art {
+
+/* The course card of the phone frame. It applies wherever a card is shown -
+   the home rail, the catalogue, the watchlist - so the one card looks the
+   same throughout.
+
+   The `padding: 0` is load-bearing: a course card is also a `.panel`, and the
+   narrow-screen `.panel` padding in 05-responsive.css lands after the base
+   `.course-card` rule and would otherwise inset the artwork from the card. */
+.shell.phone .course-card {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px #5757c70f;
+}
+.shell.phone .course-art {
   height: 171px;
   flex-shrink: 0;
-  padding: var(--space-3);
+  padding: 0 0 15px 13px;
 }
 /* The decorative glow reaches past the art, so `overflow: hidden` leaves the
    box scrollable: pressing the heart inside it makes the browser scroll the
@@ -351,27 +554,63 @@
 .shell.phone .course-art {
   overflow: clip;
 }
-.rail .course-body {
+/* A rounded chip on the artwork, not the square tag the tables use. */
+.shell.phone .course-art .tag {
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: #ffffffeb;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 14px;
+}
+.shell.phone .course-glyph,
+.shell.phone .course-glyph .icon {
+  width: 53px;
+  height: 53px;
+}
+.shell.phone .course-body {
+  justify-content: flex-start;
   padding: 12px 14px 14px;
   gap: 6px;
 }
-.rail .course-headline,
-.rail .course-facts {
+.shell.phone .course-headline,
+.shell.phone .course-facts {
   gap: 6px;
+  margin: 0;
 }
-.rail .course-body h3 {
+.shell.phone .course-headline h3 {
+  margin: 0;
   font-size: 1rem;
+  font-weight: 600;
   line-height: 24px;
 }
-.rail .course-meta {
+.shell.phone .course-meta {
   font-size: 0.75rem;
+  line-height: 16px;
+}
+/* The date and the seat count are the quietest line of the card. */
+.shell.phone .course-facts .course-meta:last-child {
+  color: var(--text-placeholder);
+}
+/* Pushes the call to action to the bottom edge so cards of different text
+   lengths still line their links up. */
+.shell.phone .course-body > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.shell.phone .course-body .textlink {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 0.8125rem;
   line-height: 16px;
 }
 
 /* ---------- cards ---------- */
 .shell.phone .panel:not(.course-card) {
   padding: var(--space-4);
-  border-radius: 18px;
+  border: 0;
   box-shadow: 0 4px 16px #5757c70f;
   gap: var(--space-3);
 }
@@ -381,6 +620,23 @@
 }
 .shell.phone .panel:not(.course-card) .rule {
   margin: 0;
+}
+/* The open task is a row of its own inside the hero: on the phone it becomes
+   a stacked block with the action across the bottom. */
+.shell.phone .taskrow {
+  gap: var(--space-3);
+}
+.shell.phone .taskrow .iconbox {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+}
+.shell.phone .newsrow {
+  padding: var(--space-3) 0;
+}
+.shell.phone .newsrow p {
+  font-size: 0.8125rem;
+  line-height: 1.45;
 }
 
 /* ---------- footer ---------- */
@@ -524,12 +780,38 @@
   }
 }
 
-/* The favourite marker overlaps the rail card art, which is shorter. */
-.rail .favmark {
-  top: var(--space-2);
-  right: var(--space-2);
-  width: 44px;
-  height: 44px;
+/* Narrower than any phone in the design frame. One step down in label size is
+   what keeps "Mein iBMS" and "Last Minute" from being cut off. */
+@media (max-width: 360px) {
+  .tabbar {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .tab-label {
+    font-size: 0.5625rem;
+  }
+}
+
+/* The favourite marker as the phone frame draws it: a 36px white disc 8px in
+   from the top corner of the artwork. A transparent ring keeps the touch
+   area at 44px without enlarging the disc. */
+.shell.phone .favmark {
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  background: #ffffffe6;
+  box-shadow: 0 2px 4px #08152c29;
+}
+.shell.phone .favmark::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+}
+.shell.phone .favmark .icon {
+  width: 20px;
+  height: 20px;
 }
 
 @media (max-width: 390px) {
@@ -599,6 +881,16 @@
    the old bottom placement covered. The toast lives outside `.shell.phone`,
    so it is the breakpoint that scopes it and not the shell class. */
 @media (max-width: 900px) {
+  /* Dialogs are rendered outside the shell, so the phone radius scale set on
+     `.shell.phone` never reaches them; the breakpoint does. The full-height
+     nav sheet keeps its own shape. */
+  dialog:not(.mobile-nav-dialog) {
+    border-radius: 20px;
+  }
+  .dialog-head {
+    padding-top: var(--space-6);
+  }
+
   .toast {
     /* Clear of the accessory row: the glass buttons under it stay usable
        while the capsule is on screen. */
