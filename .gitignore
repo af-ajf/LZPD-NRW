@@ -1,0 +1,5 @@
+# Wrangler build and login state, written by `npx wrangler deploy`.
+.wrangler/
+
+# macOS folder metadata.
+.DS_Store

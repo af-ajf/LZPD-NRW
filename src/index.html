@@ -32,10 +32,23 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Loaded without blocking the first paint: a cold start on a phone
+         waited on Google's stylesheet before it drew anything, which is the
+         white screen an installed app opens with. `display=swap` in the URL
+         means the text is laid out in the system font and re-drawn in Inter
+         the moment the webfont arrives. -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@700&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@700&display=swap"
+      />
+    </noscript>
 
     <link rel="stylesheet" href="css/01-tokens.css" />
     <link rel="stylesheet" href="css/02-base.css" />
