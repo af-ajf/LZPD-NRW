@@ -37,6 +37,11 @@ document.addEventListener("click", (e) => {
     // Stat cards link to #dashboard; pick the tab they stand for on the way.
     case "stat-link":
       state.mytab = a.dataset.tab;
+      // On Mein iBMS the cards point at the page they already sit on, so the
+      // hash never changes and the browser has nothing to do: the picked tab
+      // is drawn here instead, which is what makes the four cards a control
+      // rather than a hover effect that leads nowhere.
+      if (location.hash === "#dashboard") render(false);
       break;
     case "menu":
       modal(
