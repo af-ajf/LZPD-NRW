@@ -39,16 +39,11 @@ const state = {
     }
   })(),
   exportJobs: [],
-  // Einfache Sprache. Like the watchlist it outlives a reload: a reading aid
-  // someone switches on because they need it should not be off again after
-  // the next click.
-  easy: (() => {
-    try {
-      return localStorage.getItem("ibms-easy") === "on";
-    } catch (e) {
-      return false;
-    }
-  })(),
+  planningWeek: 0,
+  planningFilters: { rooms: true, trainers: true, courses: true },
+  planningResourceType: "Alle anzeigen",
+  planningMoves: {},
+  planningDrag: null,
 };
 
 const isFavorite = (id) => state.favorites.includes(id);
@@ -61,12 +56,6 @@ function toggleFavorite(id) {
     : [...state.favorites, id];
   persistFavorites();
   return !on;
-}
-
-function persistEasy() {
-  try {
-    localStorage.setItem("ibms-easy", state.easy ? "on" : "off");
-  } catch (e) {}
 }
 
 function persistFavorites() {

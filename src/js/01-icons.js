@@ -44,6 +44,8 @@ const paths = {
   external: '<path d="M14 4h6v6M20 4 10 14M18 14v6H4V6h6"/>',
   sliders:
     '<path d="M4 8h10m4 0h2M4 16h4m4 0h8"/><circle cx="16" cy="8" r="2"/><circle cx="10" cy="16" r="2"/>',
+  alert:
+    '<path d="M12 3 2.8 20h18.4L12 3Z"/><path d="M12 9v5m0 3v.1"/>',
 };
 
 const icon = (n, cls = "") =>

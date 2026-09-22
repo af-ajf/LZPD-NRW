@@ -3,19 +3,14 @@
 "use strict";
 
 function greeting() {
-  const h = new Date().getHours();
-  return h < 11
-    ? "Guten Morgen, Maria"
-    : h < 18
-      ? "Guten Tag, Maria"
-      : "Guten Abend, Maria";
+  return "Guten Tag, Maria.";
 }
 
 // The open task from Mein iBMS is surfaced on the home screen too, so the one
 // thing that actually needs the user is visible without navigating first.
 function heroTask() {
   if (state.wishDone)
-    return `<div class="taskrow"><div class="taskrow-detail"><span class="iconbox green">${icon("check")}</span><div class="taskrow-text"><p class="eyebrow" style="color:var(--success)">Erledigt</p><strong>Gesprächsführung und Konfliktklärung</strong><p>Ihre Ergänzung steht zur fachlichen Prüfung bereit.</p></div></div><a class="btn secondary" href="#dashboard">Mein iBMS öffnen</a></div>`;
+    return `<div class="taskrow"><div class="taskrow-detail"><span class="iconbox green">${icon("check")}</span><div class="taskrow-text"><p class="eyebrow" style="color:var(--success)">Erledigt</p><strong>Gesprächsführung und Konfliktklärung</strong><p>Ihre Ergänzung steht zur fachlichen Prüfung bereit.</p></div></div><a class="btn secondary" href="${dashboardHref("Registrierungen")}">Mein iBMS öffnen</a></div>`;
   return `<div class="taskrow"><div class="taskrow-detail"><span class="iconbox">${icon("file")}</span><div class="taskrow-text"><p class="eyebrow attention">Rückmeldung offen</p><strong>Gesprächsführung und Konfliktklärung</strong><p>Bitte ergänzen Sie die Begründung für Ihren Fortbildungswunsch.</p></div></div>${btn("Begründung ergänzen", "wish")}</div>`;
 }
 
@@ -24,75 +19,19 @@ function heroTask() {
 // of is what the home screen is about.
 function heroResume() {
   const c = courses.find((x) => x.id === resume.course);
+  const heading = isMobile()
+    ? `<h2>${esc(c.title)}</h2>`
+    : `<h1 id="page-title" tabindex="-1">${esc(c.title)}</h1>`;
   return `<div class="hero-resume">
   <div class="resume-art" aria-hidden="true"><strong>${resume.percent} %</strong><span>erledigt</span></div>
   <div class="resume-body">
     <p class="eyebrow accent">Weiter lernen</p>
-    <h1 id="page-title" tabindex="-1">${esc(c.title)}</h1>
+    ${heading}
     <div class="progress" role="progressbar" aria-valuenow="${resume.percent}" aria-valuemin="0" aria-valuemax="100" aria-label="Fortschritt im Kurs"><span style="width:${resume.percent}%"></span></div>
     <p class="resume-meta">${c.type} · ${resume.step} · ${resume.left} · zuletzt am ${resume.last}</p>
   </div>
-  <div class="resume-actions">${btn("Kurs fortsetzen", "lms")}<a class="textlink" href="#dashboard" data-action="stat-link" data-tab="Registrierungen">Alle laufenden Kurse${icon("arrow", "xs")}</a></div>
+  <div class="resume-actions">${btn("Kurs fortsetzen", "lms")}<a class="textlink" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen">Alle laufenden Kurse${icon("arrow", "xs")}</a></div>
 </div>`;
-}
-
-// ---------- Einfache Sprache ----------
-//
-// Short plain-German sentences about the page that is open: what it is for
-// and what can be done on it. One idea per sentence, no compound nouns and
-// no abbreviations, following the DIN SPEC 33429 wording rules. The switch
-// sits in the header of both shells (05-chrome.js); the box is put above the
-// page body by render() while the mode is on.
-const easyText = {
-  home: [
-    "Das ist die Startseite.",
-    "Hier sehen Sie Ihren nächsten Kurs.",
-    "Sie können nach neuen Kursen suchen.",
-  ],
-  dashboard: [
-    "Das ist Ihr persönlicher Bereich.",
-    "Hier sehen Sie Ihre Anmeldungen.",
-    "Hier sehen Sie Ihre Nachweise.",
-  ],
-  catalog: [
-    "Hier finden Sie alle Kurse.",
-    "Sie können einen Kurs suchen.",
-    "Sie können Kurse merken.",
-  ],
-  lastminute: [
-    "Diese Kurse fangen bald an.",
-    "In diesen Kursen sind noch Plätze frei.",
-  ],
-  favorites: [
-    "Das sind Ihre gemerkten Kurse.",
-    "Sie können sich hier für einen Kurs anmelden.",
-  ],
-  course: [
-    "Das sind die Angaben zu einem Kurs.",
-    "Hier stehen Ort und Termin.",
-    "Sie können sich für den Kurs anmelden.",
-  ],
-  learning: [
-    "Das ist Ihr Lernweg.",
-    "Hier sehen Sie, was Sie schon gelernt haben.",
-    "Hier sehen Sie, was als Nächstes kommt.",
-  ],
-  users: [
-    "Hier verwalten Sie die Personen.",
-    "Sie können die Rolle einer Person ändern.",
-  ],
-  report: [
-    "Hier sehen Sie Zahlen zur Fortbildung.",
-    "Sie können die Zahlen als Datei speichern.",
-  ],
-  article: ["Das ist eine Nachricht.", "Sie können den Text in Ruhe lesen."],
-  help: ["Hier finden Sie Hilfe.", "Hier finden Sie Antworten auf Fragen."],
-};
-
-function easyBox(route) {
-  const lines = easyText[route];
-  if (!lines) return "";
-  return `<aside class="easybox" aria-label="Erklärung in Einfacher Sprache"><span class="iconbox accent">${icon("help")}</span><div><p class="eyebrow accent">Einfache Sprache</p>${lines.map((l) => `<p>${l}</p>`).join("")}</div></aside>`;
 }
 
 function home() {
@@ -122,19 +61,17 @@ function home() {
   <hr>
   ${heroTask()}
 </section>
-<section class="section"><div class="sectionhead"><h2>Ihre Fortbildung auf einen Blick</h2><a class="textlink" href="#dashboard">Mein iBMS öffnen${icon("arrow", "sm")}</a></div><div class="grid four">${homeStats()}</div></section>
+<section class="section"><div class="sectionhead"><h2>Ihre Fortbildung auf einen Blick</h2><a class="textlink" href="${dashboardHref("Registrierungen")}">Mein iBMS öffnen${icon("arrow", "sm")}</a></div><div class="grid four">${homeStats()}</div></section>
 <section class="section"><div class="sectionhead"><h2>Neue Perspektiven für Ihren Alltag</h2><a class="textlink" href="#catalog">Alle Angebote${icon("arrow", "sm")}</a></div><div class="grid three">${courses.slice(0, 3).map(courseCard).join("")}</div></section>
 <div class="grid two">
   <section class="panel ruled"><p class="eyebrow">Aktuelles</p><h2>Fortbildungsnews</h2><hr class="rule"><div class="newsrow"><time datetime="2026-09-16">16.09.2026</time><a class="textlink" href="#article">Fortbildungsplanung gemeinsam gestalten${icon("arrow", "xs")}</a><p>Melden Sie Ihren Bedarf für das kommende Fortbildungsjahr.</p></div><div class="newsrow"><time datetime="2026-09-14">14.09.2026</time><a class="textlink" href="#help">Gut ankommen in iBMS 3.0${icon("arrow", "xs")}</a><p>Antworten zu Registrierung, Nachweisen und persönlicher Übersicht.</p></div></section>
-  <section class="panel ruled"><p class="eyebrow">Für Sie persönlich</p><h2>Ihr nächster Termin</h2><hr class="rule"><div class="stack" style="gap:var(--space-3)"><h4 style="margin:0">Deeskalation im Einsatz</h4><p class="factrow">${icon("calendar", "sm")}15. Oktober · 09:00 Uhr</p><p class="factrow">${icon("pin", "sm")}Fortbildungszentrum NRW</p></div><hr class="rule"><a class="textlink" href="#dashboard" data-action="stat-link" data-tab="Registrierungen">Meine Registrierungen${icon("arrow", "xs")}</a></section>
+  <section class="panel ruled"><p class="eyebrow">Für Sie persönlich</p><h2>Ihr nächster Termin</h2><hr class="rule"><div class="stack" style="gap:var(--space-3)"><h4 style="margin:0">Deeskalation im Einsatz</h4><p class="factrow">${icon("calendar", "sm")}15. Oktober · 09:00 Uhr</p><p class="factrow">${icon("pin", "sm")}Fortbildungszentrum NRW</p></div><hr class="rule"><a class="textlink" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen">Meine Registrierungen${icon("arrow", "xs")}</a></section>
 </div>`;
 }
 
-// Phone home screen, following the Figma frame "MOBILE" (node 3059:159).
-// Kept from the desktop home: search, the module chips, the course rail, the
-// news card and the next appointment. Dropped: the greeting line, the hero
-// lead-in, the open-task row and the four stat cards — the large title carries
-// the page instead, and Mein iBMS is one tab away.
+// Phone home screen keeps the complete personal entry from desktop. The
+// content is stacked rather than reduced so greeting, current course, open
+// task and personal overview remain available at narrow phone widths.
 function mobileHome() {
   const chips = [
     ["Bildung", "module"],
@@ -142,21 +79,28 @@ function mobileHome() {
     ["Sport", "module"],
     ["Kurzfristig freie Plätze", "lastminute"],
   ];
-  return `<section class="m-hero">
+  return `<section class="hero mobile-home-hero">
+  <div class="hero-topline"><p class="eyebrow">${greeting()}</p><span class="pill">Fortbildungsjahr 2026</span></div>
+  ${heroResume()}
+  <hr>
+  <div class="hero-discover"><p class="eyebrow">Etwas Neues finden</p><div class="discover-row">
   <form id="home-search" class="home-search"><label class="hidesr" for="home-q">Angebote suchen</label><input id="home-q" name="q" type="search" placeholder="z. B. Kommunikation"><button aria-label="Angebote suchen">${icon("search", "sm")}</button></form>
   <div class="chips">${chips
     .map(
       ([label, kind]) =>
         `<button class="chip" data-action="chip" data-kind="${kind}" data-value="${esc(label)}">${label}</button>`,
     )
-    .join("")}</div>
+    .join("")}</div></div></div>
+  <hr>
+  ${heroTask()}
 </section>
-<section class="section"><div class="sectionhead"><h2>Neue Perspektiven</h2><a class="textlink" href="#catalog">Alle Angebote${icon("arrow", "xs")}</a></div><div class="rail">${courses
+<section class="section"><div class="sectionhead"><h2>Ihre Fortbildung auf einen Blick</h2><a class="textlink" href="${dashboardHref("Registrierungen")}">Mein iBMS öffnen${icon("arrow", "xs")}</a></div><div class="grid four">${homeStats()}</div></section>
+<section class="section"><div class="sectionhead"><h2>Neue Perspektiven</h2><a class="textlink" href="#catalog">Alle Angebote${icon("arrow", "xs")}</a></div><div class="grid three">${courses
     .slice(0, 3)
     .map(courseCard)
     .join("")}</div></section>
 <section class="panel"><p class="eyebrow">Aktuelles</p><h2>Fortbildungsnews</h2><hr class="rule"><div class="newsrow"><time datetime="2026-09-16">16.09.2026</time><a class="textlink" href="#article">Fortbildungsplanung gemeinsam gestalten${icon("arrow", "xs")}</a><p>Melden Sie Ihren Bedarf für das kommende Fortbildungsjahr.</p></div><hr class="rule"><div class="newsrow"><time datetime="2026-09-14">14.09.2026</time><a class="textlink" href="#help">Gut ankommen in iBMS 3.0${icon("arrow", "xs")}</a><p>Antworten zu Registrierung, Nachweisen und persönlicher Übersicht.</p></div></section>
-<section class="panel"><p class="eyebrow">Für Sie persönlich</p><h2>Ihr nächster Termin</h2><hr class="rule"><div class="stack" style="gap:var(--space-2)"><h4 style="margin:0">Deeskalation im Einsatz</h4><p class="factrow">${icon("calendar", "sm")}15. Oktober · 09:00 Uhr</p><p class="factrow">${icon("pin", "sm")}Fortbildungszentrum NRW</p></div><hr class="rule"><a class="textlink" href="#dashboard" data-action="stat-link" data-tab="Registrierungen">Meine Registrierungen${icon("arrow", "xs")}</a></section>`;
+<section class="panel"><p class="eyebrow">Für Sie persönlich</p><h2>Ihr nächster Termin</h2><hr class="rule"><div class="stack" style="gap:var(--space-2)"><h4 style="margin:0">Deeskalation im Einsatz</h4><p class="factrow">${icon("calendar", "sm")}15. Oktober · 09:00 Uhr</p><p class="factrow">${icon("pin", "sm")}Fortbildungszentrum NRW</p></div><hr class="rule"><a class="textlink" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen">Meine Registrierungen${icon("arrow", "xs")}</a></section>`;
 }
 
 function homeStats() {
@@ -189,11 +133,15 @@ function homeStats() {
   );
 }
 
+function dashboardHref(tab) {
+  return `#dashboard/${encodeURIComponent(tab)}`;
+}
+
 // `tab` turns the card into a link that opens the matching Mein-iBMS tab.
 function stat(n, label, detail = "", tone = "", tab = "") {
   const body = `<h3>${label}</h3><span class="number ${tone}">${n}</span><p>${detail}</p>`;
   return tab
-    ? `<a class="stat" href="#dashboard" data-action="stat-link" data-tab="${tab}">${body}</a>`
+    ? `<a class="stat" href="${dashboardHref(tab)}" data-action="stat-link" data-tab="${tab}">${body}</a>`
     : `<div class="stat">${body}</div>`;
 }
 
@@ -215,12 +163,12 @@ function dashboard() {
     body = `<div class="grid split"><section class="panel"><div class="panel-head"><h2>Meine nächsten Veranstaltungen</h2>${badge(state.registrations.length + " Einträge")}</div>${state.registrations.length ? state.registrations.map(eventRow).join("") : `<p class="empty">Noch keine Registrierungen vorhanden.</p>`}</section><div class="stack"><section class="panel"><p class="eyebrow">Nächster Schritt</p><h2>${state.wishDone ? "Vielen Dank für Ihre Rückmeldung" : "Ihr Fortbildungswunsch"}</h2><div class="task">${badge(state.wishDone ? "Ergänzt" : "Rückmeldung offen")}<h3>Gesprächsführung und Konfliktklärung</h3><p>${state.wishDone ? "Ihre Ergänzung steht in diesem Entwurf zur fachlichen Prüfung bereit." : "Bitte ergänzen Sie die Begründung für Ihren Fortbildungswunsch."}</p>${state.wishDone ? "" : btn("Begründung ergänzen", "wish")}</div></section><section class="panel"><h2>Ihre persönliche Entwicklung</h2><p class="muted">Registrierungen, Lernangebote und Nachweise in einer Übersicht.</p><a class="textlink" href="#learning">Lernpfad öffnen${icon("arrow", "sm")}</a></section></div></div>`;
   else if (state.mytab === "Nachweise")
     body = `<section class="panel"><div class="panel-head"><h2>Meine Nachweise</h2></div><div class="tablewrap mobilecards"><table><thead><tr><th>Fortbildung</th><th>Datum</th><th>Modul</th><th>Aktion</th></tr></thead><tbody>${[
-      ["Grundlagen der Kommunikation", "08.09.2026", "Bildung"],
-      ["Funktionelles Training", "03.09.2026", "Sport"],
+      ["Grundlagen der Kommunikation", "08.09.2026", "Bildung", "assets/nachweise/grundlagen-kommunikation.pdf"],
+      ["Funktionelles Training", "03.09.2026", "Sport", "assets/nachweise/funktionelles-training.pdf"],
     ]
       .map(
         (d) =>
-          `<tr><td><strong>${d[0]}</strong></td><td data-label="Datum">${d[1]}</td><td data-label="Modul">${d[2]}</td><td><button class="textlink" data-action="certificate">${icon("file", "sm")}Nachweis ansehen</button></td></tr>`,
+          `<tr><td><strong>${d[0]}</strong></td><td data-label="Datum">${d[1]}</td><td data-label="Modul">${d[2]}</td><td><button class="textlink" data-action="certificate">${icon("file", "sm")}Nachweis ansehen</button><a class="textlink certificate-download" href="${d[3]}" download>${icon("download", "sm")}PDF herunterladen</a></td></tr>`,
       )
       .join("")}</tbody></table></div></section>`;
   else if (state.mytab === "Fertigkeiten")
@@ -230,7 +178,7 @@ function dashboard() {
   return (
     pagehead(
       "Mein iBMS",
-      "Guten Morgen, Maria. Hier finden Sie Ihre persönliche Fortbildungsübersicht.",
+      "Guten Tag, Maria. Hier finden Sie Ihre persönliche Fortbildungsübersicht.",
     ) +
     `<div class="grid four">${homeStats()}</div><nav class="tabs" aria-label="Mein iBMS Bereiche">${tabs.map((x) => `<button class="tab" data-action="mytab" data-tab="${x}" ${state.mytab === x ? 'aria-current="true"' : ""}>${x}</button>`).join("")}</nav>${body}`
   );
@@ -314,6 +262,112 @@ function users() {
       btn(icon("plus", "sm") + "Anwender anlegen", "create-user"),
     ) +
     `<div class="grid four">${stat(people.length, "Anwender gesamt", "Im Beispielbestand")}${stat(people.filter((p) => p.status === "Aktiv").length, "Aktive Konten", "Zur Nutzung freigegeben", "green")}${stat(people.filter((p) => p.status === "Gesperrt").length, "Gesperrte Konten", "Zugang aktuell eingeschränkt", "amber")}${stat(3, "Fachmodule", "Bildung, Einsatztraining, Sport")}</div><section class="panel"><form id="user-filter" class="filterbar"><div class="field search-field"><label for="user-q">Anwender suchen</label><input id="user-q" type="search" name="q" value="${esc(state.userquery)}" placeholder="Name eingeben"></div><div class="field"><label for="user-module">Modul</label><select id="user-module" name="module">${["Alle Module", "Bildung", "Einsatztraining", "Sport"].map((x) => `<option value="${x}" ${x === state.usermodule ? "selected" : ""}>${x}</option>`).join("")}</select></div><div class="field"><label for="user-status">Status</label><select id="user-status" name="status">${["Alle Status", "Aktiv", "Gesperrt"].map((x) => `<option value="${x}" ${x === state.userstatus ? "selected" : ""}>${x}</option>`).join("")}</select></div><button class="btn secondary">${icon("sliders", "sm")}Filtern</button></form><div class="tablewrap mobilecards"><table><caption>Anwender im Zuständigkeitsbereich</caption><thead><tr><th>Name</th><th>Organisationseinheit</th><th>Rolle / Modul</th><th>Status</th><th><span class="hidesr">Aktion</span></th></tr></thead><tbody>${rows.map((p) => `<tr><td><div class="personcell"><span class="avatar">${esc(p.initials)}</span><strong>${esc(p.name)}</strong></div></td><td data-label="Organisationseinheit">${esc(p.oe)}</td><td data-label="Rolle / Modul">${esc(p.role)}<small style="display:block">${esc(p.module)}</small></td><td data-label="Status">${badge(p.status)}</td><td><button class="textlink" data-action="edit-user" data-id="${p.id}">Bearbeiten${icon("chevron", "xs")}</button></td></tr>`).join("")}</tbody></table>${!rows.length ? `<p class="empty">Keine Anwender für diese Filter gefunden.</p>` : ""}</div><div class="tablefoot"><span role="status">${rows.length} von ${people.length} Anwendern</span><span>Seite 1 von 1</span></div></section>`
+  );
+}
+
+function planning() {
+  if (state.role !== "admin")
+    return restricted(
+      "Die Planung gehört zur Ansicht BMS-Administrator.",
+      "admin",
+    );
+
+  const week = state.planningWeek === 0 ? "12. – 18. Mai 2025" : state.planningWeek < 0 ? "05. – 11. Mai 2025" : "19. – 25. Mai 2025";
+  const dayLabels = ["Mo|12. Mai", "Di|13. Mai", "Mi|14. Mai", "Do|15. Mai", "Fr|16. Mai"];
+  const rows = [
+    {
+      resource: "Raum 1",
+      detail: "Seminarraum · 30 Pers.",
+      icon: "grid",
+      kind: "room",
+      cells: [
+        ["Einsatztraining", "08:00 – 12:00", "24/30", "blue"],
+        null,
+        ["Recht im Einsatz", "09:00 – 13:00", "18/20", "green"],
+        null,
+        ["Deeskalation", "09:00 – 12:00", "16/20", "blue"],
+      ],
+    },
+    {
+      resource: "Raum 2",
+      detail: "Schulungsraum · 20 Pers.",
+      icon: "grid",
+      kind: "room",
+      cells: [
+        null,
+        ["Kommunikation", "09:00 – 12:00", "20/20", "red", true],
+        null,
+        ["Führungskräfte", "09:00 – 16:00", "12/20", "purple"],
+        null,
+      ],
+    },
+    {
+      resource: "Trainerin A. Müller",
+      detail: "",
+      icon: "users",
+      kind: "trainer",
+      cells: [
+        ["Einsatztraining", "08:00 – 12:00", "", "blue"],
+        null,
+        ["Recht im Einsatz", "09:00 – 13:00", "", "green"],
+        null,
+        null,
+      ],
+    },
+    {
+      resource: "Trainer T. Schneider",
+      detail: "",
+      icon: "users",
+      kind: "trainer",
+      cells: [
+        null,
+        ["Kommunikation", "09:00 – 12:00", "", "purple"],
+        null,
+        null,
+        ["Deeskalation", "09:00 – 12:00", "", "blue"],
+      ],
+    },
+  ];
+  const visibleRows = rows.filter((row) => state.planningFilters[row.kind === "room" ? "rooms" : "trainers"]);
+  const movedTo = new Map(
+    Object.entries(state.planningMoves || {}).map(([title, move]) => [
+      `${move.resource}|${move.day}`,
+      title,
+    ]),
+  );
+  const eventsByTitle = new Map();
+  rows.forEach((row) => row.cells.forEach((cell, day) => {
+    if (cell) {
+      eventsByTitle.set(cell[0], cell);
+    }
+  }));
+  const calendarRows = visibleRows
+    .map(
+      (row) =>
+        `<div class="planning-resource"><span class="iconbox accent">${icon(row.icon)}</span><span><strong>${row.resource}</strong>${row.detail ? `<small>${row.detail}</small>` : ""}</span></div>${row.cells
+          .map((cell, day) => {
+            const slot = `${row.resource}|${day}`;
+            const movedTitle = movedTo.get(slot);
+            let event = movedTitle ? eventsByTitle.get(movedTitle) : cell;
+            const movedAway = cell && state.planningMoves?.[cell[0]];
+            if (movedAway && `${movedAway.resource}|${movedAway.day}` !== slot) event = null;
+            if (!event || !state.planningFilters.courses) return `<div class="planning-cell" data-resource="${esc(row.resource)}" data-day="${day}" tabindex="0" aria-label="${esc(row.resource)}, ${dayLabels[day].replace("|", " ")}: freie Ablage"></div>`;
+            const [title, time, peopleCount, tone, conflict] = event;
+            const moved = state.planningMoves?.[title];
+            return `<div class="planning-cell" data-resource="${esc(row.resource)}" data-day="${day}" tabindex="0" aria-label="${esc(row.resource)}, ${dayLabels[day].replace("|", " ")}"><button draggable="true" class="planning-event ${tone}${conflict ? " conflict" : ""}" data-action="${conflict ? "planning-conflict" : "planning-event"}" data-title="${esc(title)}" data-time="${esc(time)}" data-resource="${esc(row.resource)}" data-day="${day}" data-people="${esc(peopleCount || "–")}" aria-grabbed="${moved ? "true" : "false"}" aria-label="${esc(title)}, ${esc(time)}, ${esc(row.resource)}${conflict ? ", Konflikt öffnen" : ""}. Zum Verschieben ziehen oder Leertaste drücken."><strong>${esc(title)}</strong><span>${esc(time)}</span>${peopleCount ? `<small>${icon("users", "xs")}${esc(peopleCount)}</small>` : ""}${conflict ? `<span class="planning-alert" aria-label="Konflikt">${icon("alert")}</span>` : ""}</button></div>`;
+          })
+          .join("")}`,
+    )
+    .join("");
+
+  return (
+    pagehead(
+      "Planung",
+      "Fortbildungen einfach planen. Ressourcen optimal nutzen.",
+      btn(icon("plus", "sm") + "Veranstaltung planen", "planning-new"),
+    ) +
+    `<div class="planning-stats grid four"><div class="panel planning-stat"><span class="iconbox accent">${icon("calendar")}</span><div><span>Geplante Veranstaltungen</span><strong>5</strong><small>diese Woche</small></div></div><div class="panel planning-stat"><span class="iconbox cyan">${icon("users")}</span><div><span>Freie Plätze</span><strong>48</strong><small>von 60 insgesamt</small></div></div><div class="panel planning-stat"><span class="iconbox accent">${icon("grid")}</span><div><span>Gebuchte Räume</span><strong>3</strong><small>von 6 verfügbar</small></div></div><button class="panel planning-stat planning-stat-alert" data-action="planning-conflict"><span class="iconbox red">${icon("alert")}</span><div><span>Offene Konflikte</span><strong>1</strong><small>Jetzt lösen ${icon("arrow", "xs")}</small></div></button></div>` +
+    `<div class="planning-layout"><section class="panel planning-calendar"><div class="planning-calendar-head"><div><h2>Wochenplanung</h2><p>${week}</p></div><div class="planning-controls"><button class="iconbtn" data-action="planning-prev" aria-label="Vorherige Woche">${icon("chevronleft")}</button><button class="btn secondary" data-action="planning-today">Heute</button><button class="iconbtn" data-action="planning-next" aria-label="Nächste Woche">${icon("chevron")}</button><button class="planning-range" data-action="planning-today" aria-label="Zeitraum ${week}">${icon("calendar", "sm")}${week}${icon("chevrondown", "xs")}</button></div></div><div class="planning-body"><aside class="planning-filters"><h3>Ressourcen anzeigen</h3>${[["Räume", "grid", "rooms"], ["Trainerinnen & Trainer", "users", "trainers"], ["Fortbildungen", "file", "courses"]].map(([label, i, key]) => `<label class="checkline"><input type="checkbox" data-planning-filter="${key}" ${state.planningFilters[key] ? "checked" : ""}><span>${icon(i, "sm")}${label}</span></label>`).join("")}<hr><h3>Ressourcentyp</h3><select id="planning-resource-type" aria-label="Ressourcentyp"><option ${state.planningResourceType === "Alle anzeigen" ? "selected" : ""}>Alle anzeigen</option><option ${state.planningResourceType === "Räume" ? "selected" : ""}>Räume</option><option ${state.planningResourceType === "Trainerinnen und Trainer" ? "selected" : ""}>Trainerinnen und Trainer</option></select></aside><div class="planning-grid" role="grid" aria-label="Wochenplanung ${week}"><div class="planning-corner"></div>${dayLabels.map((d) => { const [a, b] = d.split("|"); return `<div class="planning-day" role="columnheader"><strong>${a}</strong><span>${b}</span></div>`; }).join("")}${calendarRows}</div></div></section><aside class="panel planning-conflicts"><button class="planning-conflict-head" data-action="planning-conflict" aria-expanded="true"><span class="iconbox red">${icon("alert")}</span><strong>1 Konflikt gefunden</strong>${icon("chevrondown", "sm")}</button><div class="planning-conflict-body"><h3>Raumkonflikt</h3><p>Raum 2 ist am 13. Mai 2025<br>von 09:00 – 12:00 Uhr bereits belegt.</p><div class="planning-conflict-card"><strong>Kommunikation im Team</strong><span>13. Mai 2025, 09:00 – 12:00</span><small>${icon("grid", "xs")} Raum 2 · ${icon("users", "xs")} 20 Teilnehmende</small></div><h3>Vorschläge zur Lösung</h3><button class="planning-suggestion" data-action="planning-suggest">${icon("clock", "sm")}Alternative Zeit suchen</button><button class="planning-suggestion" data-action="planning-suggest">${icon("grid", "sm")}Anderen Raum wählen</button><button class="planning-suggestion" data-action="planning-solve">${icon("check", "sm")}Konflikt lösen</button><button class="textlink" data-action="planning-conflict">Details anzeigen${icon("arrow", "xs")}</button></div></aside></div>`
   );
 }
 
@@ -410,6 +464,6 @@ function help() {
       )
       .join(
         "",
-      )}</section><aside class="panel"><h2>Ihre Ansprechstelle</h2><p class="muted">Bei fachlichen Fragen wenden Sie sich an Ihre zuständige Fortbildungsstelle. Für technische Anliegen steht Ihnen der lokale Support zur Verfügung.</p>${btn("Kontaktanfrage vorbereiten", "contact", "secondary")}<div class="notice mt">${icon("help")}<span>Im Clickdummy werden keine Nachrichten versendet.</span></div></aside></div>`
+      )}</section><aside class="panel"><h2>Ihre Ansprechstelle</h2><p class="muted">Bei fachlichen Fragen wenden Sie sich an Ihre zuständige Fortbildungsstelle. Für technische Anliegen steht Ihnen der lokale Support zur Verfügung.</p><p class="small muted"><strong>Technischer Dienstleister:</strong> LZPD NRW</p>${btn("Kontaktanfrage vorbereiten", "contact", "secondary")}<div class="notice mt">${icon("help")}<span>Im Clickdummy werden keine Nachrichten versendet.</span></div></aside></div>`
   );
 }

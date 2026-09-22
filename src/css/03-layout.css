@@ -191,8 +191,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-pill);
   color: var(--text-secondary);
   transition:
@@ -251,6 +251,7 @@
   color: var(--text-primary);
   font-size: 0.875rem;
   font-weight: 500;
+  min-height: 44px;
   transition: background var(--fast);
 }
 @media (hover: hover) {
@@ -261,6 +262,21 @@
 .mobile-menu,
 .mobile-brand {
   display: none;
+}
+.easy-language-link {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  color: var(--chrome-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (hover: hover) {
+  .easy-language-link:hover {
+    background: var(--chrome-hover);
+  }
 }
 
 /* ---------- content ---------- */
@@ -331,12 +347,6 @@
   font-size: 0.75rem;
   color: var(--chrome-text-muted);
 }
-/* The line names two parties: the police the platform belongs to, and the
-   LZPD that runs it for them. */
-.footer > span {
-  line-height: 1.5;
-  max-width: 60ch;
-}
 .footer-links {
   display: flex;
   flex-wrap: wrap;
@@ -345,6 +355,7 @@
 .footer button {
   color: var(--chrome-text-muted);
   font-size: 0.75rem;
+  min-height: 44px;
   padding: 4px 0;
   border-radius: 4px;
 }
@@ -368,24 +379,6 @@
 }
 .topbar .topbar-divider {
   background: var(--chrome-line);
-}
-.topbar .easybtn {
-  border-color: var(--chrome-line);
-  color: var(--chrome-text-muted);
-}
-@media (hover: hover) {
-  .topbar .easybtn:hover {
-    background: var(--chrome-hover);
-    border-color: var(--chrome-line);
-    color: var(--chrome-text);
-  }
-}
-/* On the navy band the filled state cannot be the accent blue, so the switch
-   turns into the inverse of the bar it sits in. */
-.topbar .easybtn.on {
-  background: var(--chrome-text);
-  border-color: transparent;
-  color: var(--surface-chrome);
 }
 .topbar .profile {
   color: var(--chrome-text);

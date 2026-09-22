@@ -18,6 +18,10 @@ function rememberScroll() {
 function render(focus = true) {
   let r = location.hash.slice(1) || "login";
   const route = r.split("/")[0];
+  if (route === "dashboard" && r.split("/")[1]) {
+    const tab = decodeURIComponent(r.split("/")[1]);
+    if (["Registrierungen", "Bedarfsmeldungen", "Fortbildungswünsche", "Nachweise", "Fertigkeiten"].includes(tab)) state.mytab = tab;
+  }
   // The old page is still on screen, so this is its scroll position.
   if (r !== render.last) rememberScroll();
   let content;
@@ -45,6 +49,9 @@ function render(focus = true) {
     case "users":
       content = users();
       break;
+    case "planning":
+      content = planning();
+      break;
     case "report":
       content = report();
       break;
@@ -63,10 +70,6 @@ function render(focus = true) {
         link("Zur Startseite", "home");
   }
   render.last = r;
-  // Einfache Sprache: the explanation belongs to the page that is open, so it
-  // is put in front of the page body rather than into every view.
-  if (state.easy && route !== "login") content = easyBox(route) + content;
-  $("#app").classList.toggle("easy", state.easy && route !== "login");
   // The shell is mounted once and then kept: a route change swaps the page
   // body inside it and updates the chrome in place. Rebuilding sidebar, top
   // bar and header on every tab is what made a click read like a page load.
@@ -158,6 +161,10 @@ function modal(title, body, cls = "") {
   $("#dialog-content").innerHTML =
     `<div class="dialog-head"><h2 id="dialog-title">${title}</h2><button class="iconbtn" data-action="close" aria-label="Dialog schließen">${icon("close")}</button></div><div class="dialog-body">${body}</div>`;
   if (!d.open) d.showModal();
+  requestAnimationFrame(() => {
+    const target = d.querySelector("[autofocus], [data-action='close']");
+    target?.focus({ preventScroll: true });
+  });
 }
 
 function close() {
