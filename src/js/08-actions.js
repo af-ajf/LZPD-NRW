@@ -4,6 +4,101 @@
 
 let pendingUser = null;
 
+function planningDrop(target, payload) {
+  if (!target || !payload?.title || state.role !== "admin") return;
+  const resource = target.dataset.resource;
+  const day = Number(target.dataset.day);
+  if (!resource || Number.isNaN(day)) return;
+  if (resource === payload.resource && day === Number(payload.day)) return;
+  if (target.querySelector(".planning-event")) {
+    toast("Dieser Zeitraum ist bereits belegt.", "Zeitraum belegt");
+    return;
+  }
+  state.planningMoves[payload.title] = { resource, day };
+  state.planningDrag = null;
+  render(false);
+  toast(`${payload.title} verschoben.`, "Veranstaltung verschoben");
+}
+
+document.addEventListener("dragstart", (e) => {
+  const event = e.target.closest(".planning-event");
+  if (!event || state.role !== "admin") return;
+  const payload = {
+    title: event.dataset.title,
+    resource: event.dataset.resource,
+    day: event.dataset.day,
+  };
+  state.planningDrag = payload;
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", JSON.stringify(payload));
+  event.classList.add("dragging");
+});
+
+document.addEventListener("dragend", (e) => {
+  e.target.closest(".planning-event")?.classList.remove("dragging");
+  state.planningDrag = null;
+  document.querySelectorAll(".planning-cell.drop-target").forEach((cell) => cell.classList.remove("drop-target"));
+});
+
+document.addEventListener("dragover", (e) => {
+  const target = e.target.closest(".planning-cell");
+  if (!target || !state.planningDrag) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  target.classList.add("drop-target");
+});
+
+document.addEventListener("dragleave", (e) => {
+  e.target.closest(".planning-cell")?.classList.remove("drop-target");
+});
+
+document.addEventListener("drop", (e) => {
+  const target = e.target.closest(".planning-cell");
+  if (!target) return;
+  e.preventDefault();
+  target.classList.remove("drop-target");
+  let payload = state.planningDrag;
+  try {
+    payload = JSON.parse(e.dataTransfer.getData("text/plain")) || payload;
+  } catch (error) {
+    // The in-memory payload remains the fallback for touch/browser variants.
+  }
+  planningDrop(target, payload);
+});
+
+document.addEventListener("keydown", (e) => {
+  const event = e.target.closest(".planning-event");
+  if (event && (e.key === " " || e.key === "Spacebar")) {
+    e.preventDefault();
+    state.planningDrag = {
+      title: event.dataset.title,
+      resource: event.dataset.resource,
+      day: event.dataset.day,
+    };
+    event.setAttribute("aria-grabbed", "true");
+    toast("Veranstaltung ausgewählt. Wählen Sie ein freies Rasterfeld und drücken Sie Enter.", "Ziel auswählen");
+    return;
+  }
+  const target = e.target.closest(".planning-cell");
+  if (target && state.planningDrag && (e.key === "Enter" || e.key === " ")) {
+    e.preventDefault();
+    planningDrop(target, state.planningDrag);
+  }
+  if (e.key === "Escape" && state.planningDrag) {
+    state.planningDrag = null;
+    toast("Verschieben abgebrochen.", "Abgebrochen");
+  }
+});
+
+// Keep Escape behavior explicit across browsers and embedded clickdummy
+// contexts. `close()` also restores focus to the control that opened the
+// dialog; the native modal continues to provide focus containment.
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape" || !$("#dialog").open) return;
+  e.preventDefault();
+  close();
+});
+
 document.addEventListener("click", (e) => {
   const a = e.target.closest("[data-action]");
   if (!a) return;
@@ -36,7 +131,24 @@ document.addEventListener("click", (e) => {
       break;
     // Stat cards link to #dashboard; pick the tab they stand for on the way.
     case "stat-link":
-      state.mytab = a.dataset.tab;
+      {
+        const target = `#dashboard/${encodeURIComponent(a.dataset.tab)}`;
+        // Keep the selected tab in the URL. This is important when a link is
+        // followed from the notification sheet and when another KPI is
+        // selected while Mein iBMS is already open: the router must not
+        // restore the old tab from the previous hash segment.
+        if (location.hash !== target) location.hash = target;
+        else {
+          state.mytab = a.dataset.tab;
+          render(false);
+        }
+      }
+      break;
+    case "certificate":
+      modal(
+        "Fortbildungsnachweis",
+        `<p class="eyebrow">Beispielnachweis</p><h3>Grundlagen der Kommunikation</h3><dl class="factlist"><div><dt>Teilnehmende Person</dt><dd>Maria Beispiel</dd></div><div><dt>Modul</dt><dd>Bildung</dd></div><div><dt>Teilnahmedatum</dt><dd>08.09.2026</dd></div><div><dt>Status</dt><dd>Abgeschlossen</dd></div></dl><p class="small muted mt">Fiktiver Nachweis zur Demonstration. Kein gültiger Fortbildungsnachweis.</p><a class="btn" href="assets/nachweise/grundlagen-kommunikation.pdf" download>${icon("download")}PDF herunterladen</a>`,
+      );
       break;
     case "menu":
       modal(
@@ -55,7 +167,7 @@ document.addEventListener("click", (e) => {
     case "notifications":
       modal(
         "Benachrichtigungen",
-        `<div class="event"><span class="iconbox accent">${icon("calendar")}</span><div class="event-main"><h3>Teilnahme bestätigt</h3><p>Deeskalation im Einsatz · 15.10.2026</p><a class="textlink" href="#dashboard">Meine Registrierungen öffnen${icon("arrow", "xs")}</a></div></div><div class="event"><span class="iconbox">${icon("file")}</span><div class="event-main"><h3>Nachweis verfügbar</h3><p>Grundlagen der Kommunikation</p><button class="textlink" data-action="certificate">Nachweis ansehen${icon("arrow", "xs")}</button></div></div>`,
+        `<div class="event"><span class="iconbox accent">${icon("calendar")}</span><div class="event-main"><h3>Teilnahme bestätigt</h3><p>Deeskalation im Einsatz · 15.10.2026</p><a class="textlink" href="#dashboard/Registrierungen">Meine Registrierungen öffnen${icon("arrow", "xs")}</a></div></div><div class="event"><span class="iconbox">${icon("file")}</span><div class="event-main"><h3>Nachweis verfügbar</h3><p>Grundlagen der Kommunikation</p><button class="textlink" data-action="certificate">Nachweis ansehen${icon("arrow", "xs")}</button></div></div>`,
       );
       break;
     case "profile":
@@ -71,10 +183,71 @@ document.addEventListener("click", (e) => {
         `<form id="modal-search"><div class="field"><label for="modal-q">Angebot oder Thema</label><input id="modal-q" name="q" type="search" placeholder="z. B. Deeskalation" autofocus></div><button class="btn" type="submit">Gesamtangebot durchsuchen</button></form>`,
       );
       break;
+    case "easy-language":
+      modal(
+        "Leichte Sprache",
+        `<div class="easy-language-content"><p class="lead"><strong>iBMS hilft Ihnen bei Fortbildungen der Polizei NRW.</strong></p><p>Die Texte hier sind von der Redaktion vorbereitet. Dies ist keine automatische Übersetzung.</p><section aria-labelledby="easy-training"><h3 id="easy-training">Meine Fortbildungen</h3><p>Hier sehen Sie Ihre gebuchten Fortbildungen. Sie sehen auch Termine und offene Rückmeldungen.</p><a class="textlink" href="#dashboard/Registrierungen" data-action="stat-link" data-tab="Registrierungen">Meine Fortbildungen öffnen${icon("arrow", "xs")}</a></section><section aria-labelledby="easy-search"><h3 id="easy-search">Angebote suchen</h3><p>Hier finden Sie neue Fortbildungen. Sie können nach einem Thema suchen.</p><a class="textlink" href="#catalog">Angebote suchen${icon("arrow", "xs")}</a></section><section aria-labelledby="easy-certificates"><h3 id="easy-certificates">Nachweise</h3><p>Ein Nachweis zeigt: Sie haben an einer Fortbildung teilgenommen.</p><a class="textlink" href="#dashboard/Nachweise" data-action="stat-link" data-tab="Nachweise">Meine Nachweise öffnen${icon("arrow", "xs")}</a></section><section aria-labelledby="easy-help"><h3 id="easy-help">Hilfe</h3><p>Sie haben eine Frage? Auf der Hilfe-Seite finden Sie Antworten und Ihre Ansprechstelle.</p><a class="textlink" href="#help">Hilfe öffnen${icon("arrow", "xs")}</a></section></div>`,
+        "easy-language-dialog",
+      );
+      break;
     case "mytab":
-      state.mytab = a.dataset.tab;
+      {
+        const tabsScroll = $(".tabs")?.scrollLeft || 0;
+        const target = `#dashboard/${encodeURIComponent(a.dataset.tab)}`;
+        state.mytab = a.dataset.tab;
+        if (location.hash !== target) {
+          location.hash = target;
+        } else {
+          render(false);
+          const tabs = $(".tabs");
+          if (tabs) tabs.scrollLeft = tabsScroll;
+          document
+            .querySelector(`.tabs [data-tab="${CSS.escape(state.mytab)}"]`)
+            ?.focus({ preventScroll: true });
+        }
+      }
+      break;
+    case "planning-prev":
+      if (state.role === "admin") {
+        state.planningWeek -= 1;
+        render(false);
+      }
+      break;
+    case "planning-next":
+      if (state.role === "admin") {
+        state.planningWeek += 1;
+        render(false);
+      }
+      break;
+    case "planning-today":
+      state.planningWeek = 0;
       render(false);
-      document.querySelector(`[data-tab="${state.mytab}"]`)?.focus();
+      break;
+    case "planning-new":
+      if (state.role === "admin")
+        modal(
+          "Veranstaltung planen",
+          `<form id="planning-form"><div class="field"><label for="planning-title">Titel der Veranstaltung</label><input id="planning-title" name="title" required></div><div class="field"><label for="planning-room">Ressource</label><select id="planning-room" name="room"><option>Raum 1</option><option>Raum 2</option><option>Trainerin A. Müller</option></select></div><div class="field"><label for="planning-date">Datum</label><input id="planning-date" name="date" type="date" value="2025-05-13" required></div><div class="dialog-actions">${btn("Abbrechen", "close", "secondary")}<button class="btn">Planung speichern</button></div></form>`,
+        );
+      break;
+    case "planning-event":
+      modal(
+        a.dataset.title || "Veranstaltung",
+        `<p class="eyebrow">${esc(a.dataset.kind || "Fortbildung")}</p><dl class="factlist"><div><dt>Zeitraum</dt><dd>${esc(a.dataset.time || "09:00–12:00 Uhr")}</dd></div><div><dt>Ressource</dt><dd>${esc(a.dataset.resource || "Raum 1")}</dd></div><div><dt>Teilnehmende</dt><dd>${esc(a.dataset.people || "20")}</dd></div></dl><div class="dialog-actions">${btn("Schließen", "close", "secondary")}</div>`,
+      );
+      break;
+    case "planning-conflict":
+      modal(
+        "Raumkonflikt",
+        `<p><strong>Raum 2 ist am 13. Mai 2025 von 09:00–12:00 Uhr bereits belegt.</strong></p><p class="muted">Kommunikation im Team · 20 Teilnehmende</p><div class="dialog-actions">${btn("Alternative Zeit suchen", "planning-suggest", "secondary")}${btn("Anderen Raum wählen", "planning-suggest", "secondary")}${btn("Konflikt lösen", "planning-solve")}</div>`,
+      );
+      break;
+    case "planning-suggest":
+      toast("Planungsvorschlag im Clickdummy geöffnet.", "Vorschlag geöffnet");
+      break;
+    case "planning-solve":
+      close();
+      toast("Konflikt als gelöst markiert.", "Konflikt gelöst");
       break;
     case "reset-filter":
       state.query = "";
@@ -178,12 +351,6 @@ document.addEventListener("click", (e) => {
         `<p>In der Anwendung öffnet sich hier die zugehörige Lernmaßnahme im angebundenen LMS.</p><div class="notice">${icon("monitor")}<span>Datenschutz im Polizeialltag<br><strong>Externe Lernmaßnahme</strong></span></div><p class="small muted mt">Der Clickdummy ist mit keinem LMS verbunden und übermittelt keine Daten. Lerninhalte und Bearbeitungsfortschritt entstehen im LMS.</p>${btn("Zurück zu iBMS", "close", "secondary")}`,
       );
       break;
-    case "certificate":
-      modal(
-        "Fortbildungsnachweis",
-        `<p class="eyebrow">Beispielnachweis</p><h3>Grundlagen der Kommunikation</h3><dl class="factlist"><div><dt>Teilnehmende Person</dt><dd>Maria Beispiel</dd></div><div><dt>Modul</dt><dd>Bildung</dd></div><div><dt>Teilnahmedatum</dt><dd>08.09.2026</dd></div><div><dt>Status</dt><dd>Abgeschlossen</dd></div></dl><p class="small muted mt">Fiktiver Nachweis zur Demonstration. Kein gültiger Fortbildungsnachweis.</p>${btn("Schließen", "close", "secondary")}`,
-      );
-      break;
     case "path-event":
       location.hash = "course/1";
       break;
@@ -265,7 +432,7 @@ document.addEventListener("click", (e) => {
     case "about":
       modal(
         "Über diesen Gestaltungsentwurf",
-        `<p><strong>Fachliche Grundlage:</strong> Leistungsbeschreibung und Funktionsbeschreibung iBMS 3.0, Vergabenummer ZA 4.2/1002001550/LS.</p><p><strong>Designbasis:</strong> die gelieferten VITA- und Wissensplattform-SVGs sowie Distart-Beispiele. Das originale abstrakte Bildmotiv, der Rahmen, die Serif-/Sans-Kombination und die mobilen Kompositionen werden auf LZPD NRW übertragen.</p><p>Login: FB S. 20–21. Mein iBMS: S. 21–30. Anwenderverwaltung: S. 45–49. Reports: S. 61–65. Responsivität und Barrierefreiheit: LB S. 6–8.</p><p>Der Lernpfad ist ein Gestaltungsvorschlag zur Zusammenführung vorhandener Fachobjekte. Kein zusätzlicher Leistungsumfang oder Produktivbetrieb.</p>`,
+        `<p><strong>Fachliche Grundlage:</strong> Leistungsbeschreibung und Funktionsbeschreibung iBMS 3.0, Vergabenummer ZA 4.2/1002001550/LS.</p><p><strong>Designbasis:</strong> die gelieferten VITA- und Wissensplattform-SVGs sowie Distart-Beispiele. Das originale abstrakte Bildmotiv, der Rahmen, die Serif-/Sans-Kombination und die mobilen Kompositionen werden für Polizei NRW eingesetzt.</p><p><strong>Technischer Dienstleister:</strong> LZPD NRW</p><p>Login: FB S. 20–21. Mein iBMS: S. 21–30. Anwenderverwaltung: S. 45–49. Reports: S. 61–65. Responsivität und Barrierefreiheit: LB S. 6–8.</p><p>Der Lernpfad ist ein Gestaltungsvorschlag zur Zusammenführung vorhandener Fachobjekte. Kein zusätzlicher Leistungsumfang oder Produktivbetrieb.</p>`,
       );
       break;
     case "help-login":
@@ -357,6 +524,22 @@ document.addEventListener("change", (e) => {
   }
   if (e.target.id === "edit-module")
     $("#edit-role").innerHTML = roleOptions(e.target.value, "Anwender");
+  if (e.target.matches("[data-planning-filter]")) {
+    state.planningFilters[e.target.dataset.planningFilter] = e.target.checked;
+    render(false);
+  }
+  if (e.target.id === "planning-resource-type") {
+    state.planningResourceType = e.target.value;
+    const key = e.target.value === "Räume" ? "rooms" : e.target.value === "Trainerinnen und Trainer" ? "trainers" : null;
+    if (key) {
+      state.planningFilters.rooms = key === "rooms";
+      state.planningFilters.trainers = key === "trainers";
+    } else {
+      state.planningFilters.rooms = true;
+      state.planningFilters.trainers = true;
+    }
+    render(false);
+  }
 });
 
 document.addEventListener("submit", (e) => {
@@ -429,6 +612,10 @@ document.addEventListener("submit", (e) => {
       toast("Beispielbedarf „" + title + "“ erfasst.", "Bedarf erfasst");
       break;
     }
+    case "planning-form":
+      close();
+      toast("Veranstaltung für diese Demonstration eingeplant.", "Veranstaltung eingeplant");
+      break;
     case "edit-user":
       pendingUser = {
         id: Number(f.dataset.id),
@@ -516,6 +703,7 @@ function profileExtras() {
     ([r]) => !tabItems().some(([tab]) => tab === r),
   );
   const notices = [
+    ["easy-language", "Leichte Sprache", "book"],
     ["accessibility", "Barrierefreiheit", "help"],
     ["privacy", "Datenschutz", "shield"],
     ["about", "Über diesen Entwurf", "file"],
@@ -531,8 +719,19 @@ function profileExtras() {
 }
 
 window.addEventListener("hashchange", () => {
+  const tabScroll = $(".tabs")?.scrollLeft || 0;
+  const dashboardTabChange = location.hash.startsWith("#dashboard/");
   close();
-  render();
+  // Tab changes are in-place navigation. Do not send the user back to the
+  // top of the page, and keep the horizontally scrolled chip strip stable on
+  // small screens.
+  render(!dashboardTabChange);
+  if (dashboardTabChange) {
+    requestAnimationFrame(() => {
+      const tabs = $(".tabs");
+      if (tabs) tabs.scrollLeft = tabScroll;
+    });
+  }
 });
 
 // Desktop and phone shells are different markup, so crossing 900px re-renders
