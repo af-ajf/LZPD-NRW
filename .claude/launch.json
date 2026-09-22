@@ -4,8 +4,9 @@
     {
       "name": "clickdummy",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["tools/serve.py", "4173"],
-      "port": 4173
+      "runtimeArgs": ["tools/serve.py"],
+      "port": 4173,
+      "autoPort": true
     }
   ]
 }

@@ -9,6 +9,10 @@ always shows the files on disk.
 
     python3 tools/serve.py [port]
 
+The port is the first argument, the PORT environment variable, or 4173 - in
+that order. The environment variable is what lets a second copy run beside a
+server that already holds the default port.
+
 Use it for development. It is not part of the click dummy itself.
 """
 
@@ -27,7 +31,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
 def main():
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 4173
+    port = int(sys.argv[1] if len(sys.argv) > 1 else os.environ.get("PORT") or 4173)
     handler = functools.partial(Handler, directory=os.path.normpath(ROOT))
     with http.server.ThreadingHTTPServer(("", port), handler) as httpd:
         print(f"Serving {os.path.normpath(ROOT)} on http://localhost:{port}")
