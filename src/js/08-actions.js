@@ -43,6 +43,18 @@ document.addEventListener("click", (e) => {
       // rather than a hover effect that leads nowhere.
       if (location.hash === "#dashboard") render(false);
       break;
+    case "easy":
+      state.easy = !state.easy;
+      persistEasy();
+      render(false);
+      syncEasyButtons();
+      toast(
+        state.easy
+          ? "Einfache Sprache ist eingeschaltet."
+          : "Einfache Sprache ist ausgeschaltet.",
+        state.easy ? "Einfache Sprache an" : "Einfache Sprache aus",
+      );
+      break;
     case "menu":
       modal(
         "Menü",

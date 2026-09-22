@@ -148,10 +148,29 @@ function syncChrome(route) {
   if (isMobile()) syncMobilehead(route);
   else syncSidebar(route);
   syncRoleControls();
+  syncEasyButtons();
+}
+
+// Einfache Sprache switch. The same control in both shells, so the state it
+// carries is written in one place: `variant` only picks the presentation,
+// the flat pill of the top bar or the glass button of the phone header.
+function easyButton(variant = "bar") {
+  const on = state.easy;
+  return `<button class="${variant === "bar" ? "easybtn" : "glassbtn easybtn"}${on ? " on" : ""}" data-action="easy" aria-pressed="${on}" title="Seite in Einfacher Sprache erklären">${icon("help", "sm")}<span>Einfache Sprache</span></button>`;
+}
+
+// The switch can be reached from either shell, and neither the top bar nor
+// the phone header is rebuilt on a re-render, so the pressed state is put
+// back in step with the state here.
+function syncEasyButtons() {
+  document.querySelectorAll('[data-action="easy"]').forEach((el) => {
+    el.classList.toggle("on", state.easy);
+    el.setAttribute("aria-pressed", String(state.easy));
+  });
 }
 
 function topbar() {
-  return `<header class="topbar">${contextPill()}<a class="mobile-brand" href="#home">${brand("NRW")}</a><div class="top-actions"><div class="icon-buttons"><button class="iconbtn" data-action="search" aria-label="Angebote suchen">${icon("search")}</button><button class="iconbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell")}</button></div><span class="topbar-divider" aria-hidden="true"></span><button class="profile" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span><span>Maria Beispiel</span></button><button class="iconbtn mobile-menu" data-action="menu" aria-label="Menü öffnen" aria-haspopup="dialog">${icon("menu")}</button></div></header>`;
+  return `<header class="topbar">${contextPill()}<a class="mobile-brand" href="#home">${brand("NRW")}</a><div class="top-actions">${easyButton()}<div class="icon-buttons"><button class="iconbtn" data-action="search" aria-label="Angebote suchen">${icon("search")}</button><button class="iconbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell")}</button></div><span class="topbar-divider" aria-hidden="true"></span><button class="profile" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span><span>Maria Beispiel</span></button><button class="iconbtn mobile-menu" data-action="menu" aria-label="Menü öffnen" aria-haspopup="dialog">${icon("menu")}</button></div></header>`;
 }
 
 function layout(content, route) {
@@ -175,7 +194,11 @@ function mobilehead(route) {
     route === "home"
       ? `<div class="mobilehead-title"><h1 id="page-title" tabindex="-1">POLIZEI-ONLINE</h1><p>iBMS 3.0 · NRW · Fortbildungsjahr 2026</p></div>`
       : "";
-  return `<header class="mobilehead" data-route="${route}">${acc}${title}</header>`;
+  // The Einfache-Sprache switch keeps its label, and a labelled pill next to
+  // back, bell and avatar does not fit on a phone, so it sits on a line of
+  // its own directly under them.
+  const easy = `<div class="mobilehead-easy">${easyButton("glass")}</div>`;
+  return `<header class="mobilehead" data-route="${route}">${acc}${easy}${title}</header>`;
 }
 
 // Compact bar that fades in once the large title has scrolled away.

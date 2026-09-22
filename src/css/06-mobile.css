@@ -67,6 +67,34 @@
   width: 20px;
   height: 20px;
 }
+/* Einfache Sprache in the phone header: the glass button widens to carry its
+   label, because a switch that has to be recognised by an icon is the wrong
+   switch for the people it is there for. */
+.mobilehead-easy {
+  display: flex;
+}
+.glassbtn.easybtn {
+  width: auto;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  border: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+.glassbtn.easybtn .icon {
+  width: 18px;
+  height: 18px;
+}
+.glassbtn.easybtn.on {
+  background: var(--accent-surface);
+  color: var(--text-on-dark);
+}
 .mobilehead-title h1 {
   font-family: var(--font-display);
   font-weight: 700;

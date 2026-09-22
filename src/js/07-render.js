@@ -63,6 +63,10 @@ function render(focus = true) {
         link("Zur Startseite", "home");
   }
   render.last = r;
+  // Einfache Sprache: the explanation belongs to the page that is open, so it
+  // is put in front of the page body rather than into every view.
+  if (state.easy && route !== "login") content = easyBox(route) + content;
+  $("#app").classList.toggle("easy", state.easy && route !== "login");
   // The shell is mounted once and then kept: a route change swaps the page
   // body inside it and updates the chrome in place. Rebuilding sidebar, top
   // bar and header on every tab is what made a click read like a page load.

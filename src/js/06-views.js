@@ -36,6 +36,65 @@ function heroResume() {
 </div>`;
 }
 
+// ---------- Einfache Sprache ----------
+//
+// Short plain-German sentences about the page that is open: what it is for
+// and what can be done on it. One idea per sentence, no compound nouns and
+// no abbreviations, following the DIN SPEC 33429 wording rules. The switch
+// sits in the header of both shells (05-chrome.js); the box is put above the
+// page body by render() while the mode is on.
+const easyText = {
+  home: [
+    "Das ist die Startseite.",
+    "Hier sehen Sie Ihren nächsten Kurs.",
+    "Sie können nach neuen Kursen suchen.",
+  ],
+  dashboard: [
+    "Das ist Ihr persönlicher Bereich.",
+    "Hier sehen Sie Ihre Anmeldungen.",
+    "Hier sehen Sie Ihre Nachweise.",
+  ],
+  catalog: [
+    "Hier finden Sie alle Kurse.",
+    "Sie können einen Kurs suchen.",
+    "Sie können Kurse merken.",
+  ],
+  lastminute: [
+    "Diese Kurse fangen bald an.",
+    "In diesen Kursen sind noch Plätze frei.",
+  ],
+  favorites: [
+    "Das sind Ihre gemerkten Kurse.",
+    "Sie können sich hier für einen Kurs anmelden.",
+  ],
+  course: [
+    "Das sind die Angaben zu einem Kurs.",
+    "Hier stehen Ort und Termin.",
+    "Sie können sich für den Kurs anmelden.",
+  ],
+  learning: [
+    "Das ist Ihr Lernweg.",
+    "Hier sehen Sie, was Sie schon gelernt haben.",
+    "Hier sehen Sie, was als Nächstes kommt.",
+  ],
+  users: [
+    "Hier verwalten Sie die Personen.",
+    "Sie können die Rolle einer Person ändern.",
+  ],
+  report: [
+    "Hier sehen Sie Zahlen zur Fortbildung.",
+    "Sie können die Zahlen als Datei speichern.",
+  ],
+  article: ["Das ist eine Nachricht.", "Sie können den Text in Ruhe lesen."],
+  help: ["Hier finden Sie Hilfe.", "Hier finden Sie Antworten auf Fragen."],
+};
+
+function easyBox(route) {
+  const lines = easyText[route];
+  if (!lines) return "";
+  return `<aside class="easybox" aria-label="Erklärung in Einfacher Sprache"><span class="iconbox accent">${icon("help")}</span><div><p class="eyebrow accent">Einfache Sprache</p>${lines.map((l) => `<p>${l}</p>`).join("")}</div></aside>`;
+}
+
 function home() {
   if (isMobile()) return mobileHome();
   const chips = [
