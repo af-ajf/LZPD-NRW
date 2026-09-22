@@ -94,7 +94,7 @@ function mobileHome() {
   <hr>
   ${heroTask()}
 </section>
-<section class="section"><div class="sectionhead"><h2>Ihre Fortbildung auf einen Blick</h2><a class="textlink" href="${dashboardHref("Registrierungen")}">Mein iBMS öffnen${icon("arrow", "xs")}</a></div><div class="grid four">${homeStats()}</div></section>
+<section class="section"><div class="sectionhead"><h2>Ihre Fortbildung auf einen Blick</h2><a class="textlink" href="${dashboardHref("Registrierungen")}">Mein iBMS öffnen${icon("arrow", "xs")}</a></div><div class="grid four mobile-stats">${homeStats()}</div></section>
 <section class="section"><div class="sectionhead"><h2>Neue Perspektiven</h2><a class="textlink" href="#catalog">Alle Angebote${icon("arrow", "xs")}</a></div><div class="grid three">${courses
     .slice(0, 3)
     .map(courseCard)
@@ -180,7 +180,7 @@ function dashboard() {
       "Mein iBMS",
       "Guten Tag, Maria. Hier finden Sie Ihre persönliche Fortbildungsübersicht.",
     ) +
-    `<div class="grid four">${homeStats()}</div><nav class="tabs" aria-label="Mein iBMS Bereiche">${tabs.map((x) => `<button class="tab" data-action="mytab" data-tab="${x}" ${state.mytab === x ? 'aria-current="true"' : ""}>${x}</button>`).join("")}</nav>${body}`
+    `<div class="grid four mobile-stats">${homeStats()}</div><nav class="tabs" aria-label="Mein iBMS Bereiche">${tabs.map((x) => `<button class="tab" data-action="mytab" data-tab="${x}" ${state.mytab === x ? 'aria-current="true"' : ""}>${x}</button>`).join("")}</nav>${body}`
   );
 }
 
