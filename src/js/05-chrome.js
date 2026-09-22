@@ -174,7 +174,7 @@ function mobilehead(route) {
   const back = tabItems().some(([r]) => r === route)
     ? ""
     : `<button class="glassbtn backbtn" data-action="back">${icon("chevronleft", "sm")}<span>Zurück</span></button>`;
-  const acc = `<div class="mobilehead-actions">${back}<span class="mobilehead-spacer"></span><button class="glassbtn" data-action="easy-language" aria-label="Leichte Sprache" aria-haspopup="dialog">${icon("plainlanguage", "sm")}</button><button class="glassbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell", "sm")}</button><button class="avatarbtn" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span></button></div>`;
+  const acc = `<div class="mobilehead-actions">${back}<span class="mobilehead-spacer"></span><button class="mobile-easy-language" data-action="easy-language" aria-haspopup="dialog">Leichte Sprache</button><button class="glassbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell", "sm")}</button><button class="avatarbtn" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span></button></div>`;
   const title =
     route === "home"
       ? `<div class="mobilehead-title"><h1 id="page-title" tabindex="-1">POLIZEI-ONLINE</h1><p>iBMS 3.0 · NRW · Fortbildungsjahr 2026</p></div>`
