@@ -200,7 +200,7 @@ function dashboard() {
       "Mein iBMS",
       "Guten Tag, Maria. Hier finden Sie Ihre persönliche Fortbildungsübersicht.",
     ) +
-    `<div class="grid four">${homeStats()}</div><nav class="tabs" aria-label="Mein iBMS Bereiche">${tabs.map((x) => `<button class="tab" data-action="mytab" data-tab="${x}" ${state.mytab === x ? 'aria-current="true"' : ""}>${x}</button>`).join("")}</nav>${body}`
+    `<div class="grid four mobile-stats">${homeStats()}</div><nav class="tabs" aria-label="Mein iBMS Bereiche">${tabs.map((x) => `<button class="tab" data-action="mytab" data-tab="${x}" ${state.mytab === x ? 'aria-current="true"' : ""}>${x}</button>`).join("")}</nav>${body}`
   );
 }
 
