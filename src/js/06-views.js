@@ -50,7 +50,7 @@ function mobileResume(c) {
     <div class="progress" role="progressbar" aria-valuenow="${resume.percent}" aria-valuemin="0" aria-valuemax="100" aria-label="Fortschritt im Kurs"><span style="width:${resume.percent}%"></span></div>
     <p class="resume-meta">${c.type} · ${resume.step}<br>${resume.left} · zuletzt am ${resume.last}</p>
   </div>
-  <div class="resume-actions">${btn("Kurs fortsetzen", "lms")}<a class="textlink" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen">Alle laufenden Kurse${icon("arrow", "xs")}</a></div>
+  <div class="resume-actions">${btn("Kurs fortsetzen", "lms")}</div>
 </div>`;
 }
 
@@ -119,8 +119,15 @@ function mobileHome() {
     .slice(0, 6)
     .map(courseCard)
     .join("")}</div></section>
-<section class="panel"><p class="eyebrow">Aktuelles</p><h2>Fortbildungsnews</h2><hr class="rule"><div class="newsrow"><time datetime="2026-09-16">16.09.2026</time><a class="textlink" href="#article">Fortbildungsplanung gemeinsam gestalten${icon("arrow", "xs")}</a><p>Melden Sie Ihren Bedarf für das kommende Fortbildungsjahr.</p></div><hr class="rule"><div class="newsrow"><time datetime="2026-09-14">14.09.2026</time><a class="textlink" href="#help">Gut ankommen in iBMS 3.0${icon("arrow", "xs")}</a><p>Antworten zu Registrierung, Nachweisen und persönlicher Übersicht.</p></div></section>
-<section class="panel"><p class="eyebrow">Für Sie persönlich</p><h2>Ihr nächster Termin</h2><hr class="rule"><div class="stack" style="gap:var(--space-2)"><h4 style="margin:0">Deeskalation im Einsatz</h4><p class="factrow">${icon("calendar", "sm")}15. Oktober · 09:00 Uhr</p><p class="factrow">${icon("pin", "sm")}Fortbildungszentrum NRW</p></div><hr class="rule"><a class="textlink" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen">Meine Registrierungen${icon("arrow", "xs")}</a></section>`;
+<section class="panel"><p class="eyebrow">Aktuelles</p><h2>Fortbildungsnews</h2><hr class="rule">${mobileNewsRow("#article", "2026-09-16", "16.09.2026", "Fortbildungsplanung gemeinsam gestalten", "Melden Sie Ihren Bedarf für das kommende Fortbildungsjahr.")}<hr class="rule">${mobileNewsRow("#help", "2026-09-14", "14.09.2026", "Gut ankommen in iBMS 3.0", "Antworten zu Registrierung, Nachweisen und persönlicher Übersicht.")}</section>
+<a class="panel panel-link" href="${dashboardHref("Registrierungen")}" data-action="stat-link" data-tab="Registrierungen" aria-label="Ihr nächster Termin – meine Registrierungen öffnen"><div class="panel-linkhead"><div><p class="eyebrow">Für Sie persönlich</p><h2>Ihr nächster Termin</h2></div><span class="panel-chevron" aria-hidden="true">${icon("chevron", "sm")}</span></div><hr class="rule"><div class="stack" style="gap:var(--space-2)"><h4 style="margin:0">Deeskalation im Einsatz</h4><p class="factrow">${icon("calendar", "sm")}15. Oktober · 09:00 Uhr</p><p class="factrow">${icon("pin", "sm")}Fortbildungszentrum NRW</p></div></a>`;
+}
+
+// A news entry on the phone: the row is the link, so the headline is plain
+// text and the chevron carries the affordance. Desktop keeps the inline link,
+// where a row that wide would give the eye nothing to aim at.
+function mobileNewsRow(href, iso, date, title, text) {
+  return `<a class="newsrow newsrow-link" href="${href}"><span class="newsrow-body"><time datetime="${iso}">${date}</time><strong>${esc(title)}</strong><p>${esc(text)}</p></span><span class="newsrow-chevron" aria-hidden="true">${icon("chevron", "xs")}</span></a>`;
 }
 
 function homeStats() {

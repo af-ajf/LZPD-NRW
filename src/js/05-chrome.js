@@ -174,7 +174,7 @@ function mobilehead(route) {
   const back = tabItems().some(([r]) => r === route)
     ? ""
     : `<button class="glassbtn backbtn" data-action="back">${icon("chevronleft", "sm")}<span>Zurück</span></button>`;
-  const acc = `<div class="mobilehead-actions">${back}<span class="mobilehead-spacer"></span><button class="mobile-easy-language" data-action="easy-language" aria-haspopup="dialog">Leichte Sprache</button><button class="glassbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell", "sm")}</button><button class="avatarbtn" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span></button></div>`;
+  const acc = `<div class="mobilehead-actions">${back}<span class="mobilehead-spacer"></span><button class="glassbtn" data-action="easy-language" aria-label="Leichte Sprache" aria-haspopup="dialog">${icon("plainlanguage", "sm")}</button><button class="glassbtn" data-action="notifications" data-badge="2" aria-label="Benachrichtigungen, 2 neue Hinweise">${icon("bell", "sm")}</button><button class="avatarbtn" data-action="profile" aria-label="Profil von Maria Beispiel"><span class="avatar" aria-hidden="true">MB</span></button></div>`;
   const title =
     route === "home"
       ? `<div class="mobilehead-title"><h1 id="page-title" tabindex="-1">POLIZEI-ONLINE</h1><p>iBMS 3.0 · NRW · Fortbildungsjahr 2026</p></div>`
@@ -318,7 +318,17 @@ function courseCard(c) {
   const seats = c.seats ? `${c.seats} freie Plätze` : "Ausgebucht";
   const start =
     c.type === "E-Learning" ? "Ab " + formatDate(c.date) : formatDate(c.date);
-  return `<article class="panel course-card"><a class="course-card-link" href="#course/${c.id}" aria-label="${esc(c.title)} – Angebot ansehen"><span class="hidesr">${esc(c.title)} – Angebot ansehen</span></a><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span>${favButton(c)}</div><div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${c.type} · ${c.duration}</p><h3>${esc(c.title)}</h3></div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${c.place}</p><p class="course-meta">${start} · ${seats}</p></div><span class="textlink" aria-hidden="true">Angebot ansehen${icon("arrow", "xs")}</span></div></div></article>`;
+  const phone = isMobile();
+  // The whole card is already one link. On the phone that is the only
+  // affordance it gets: a chevron beside the title in place of the written
+  // call to action, which on a 288px card only repeated what the card is.
+  const heading = phone
+    ? `<div class="course-titlerow"><h3>${esc(c.title)}</h3><span class="course-chevron" aria-hidden="true">${icon("chevron", "xs")}</span></div>`
+    : `<h3>${esc(c.title)}</h3>`;
+  const cta = phone
+    ? ""
+    : `<span class="textlink" aria-hidden="true">Angebot ansehen${icon("arrow", "xs")}</span>`;
+  return `<article class="panel course-card"><a class="course-card-link" href="#course/${c.id}" aria-label="${esc(c.title)} – Angebot ansehen"><span class="hidesr">${esc(c.title)} – Angebot ansehen</span></a><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span>${favButton(c)}</div><div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${c.type} · ${c.duration}</p>${heading}</div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${c.place}</p><p class="course-meta">${start} · ${seats}</p></div>${cta}</div></div></article>`;
 }
 
 function formatDate(d) {

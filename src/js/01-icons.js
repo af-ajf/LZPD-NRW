@@ -24,6 +24,10 @@ const paths = {
   bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/>',
   help: '<circle cx="12" cy="12" r="9"/><path d="M9.6 9.6a2.4 2.4 0 0 1 4.8 0c0 1.7-2.4 2.1-2.4 3.8"/><path d="M12 16.2v.6"/>',
   menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+  // Leichte Sprache: the same sentence said in simpler words, so a speech
+  // bubble with two short lines rather than the assistive-access symbol.
+  plainlanguage:
+    '<path d="M7 3h10a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4h-5l-5 4v-4a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Z"/><path d="M8 8h8M8 12h5"/>',
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   arrow: '<path d="M4 12h16m-6-6 6 6-6 6"/>',
   chevron: '<path d="m9 5 7 7-7 7"/>',

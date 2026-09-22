@@ -206,20 +206,6 @@
   line-height: 16px;
   box-shadow: 0 8px 15px #0054ca29;
 }
-/* Text button, not a disc: it sits beside the pair rather than joining it, so
-   it takes their height and the pill round but keeps its label. */
-.mobile-easy-language {
-  height: var(--navbtn-size);
-  padding: 0 8px;
-  border-radius: var(--radius-pill);
-  color: var(--accent-primary);
-  font-size: 0.75rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.mobile-easy-language:active {
-  background: var(--accent-soft);
-}
 .avatarbtn:active {
   transform: scale(0.92);
 }
@@ -287,6 +273,21 @@
   min-width: 0;
   max-width: 100%;
 }
+/* 05-responsive.css stacks the greeting and the year for narrow screens. On
+   the phone frame they belong on one line - the year is a quiet label, and
+   under the greeting it read as a second heading. */
+.shell.phone .hero-topline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.shell.phone .hero-topline .eyebrow {
+  min-width: 0;
+}
+.shell.phone .hero-topline .pill {
+  flex: none;
+}
 .shell.phone .mobile-home-hero > *,
 .shell.phone .mobile-home-hero .hero-discover,
 .shell.phone .mobile-home-hero .discover-row,
@@ -308,19 +309,19 @@
 }
 .resume-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   min-width: 0;
 }
 .shell.phone .resume-art {
-  width: 52px;
-  height: 52px;
+  width: 60px;
+  height: 60px;
   flex-shrink: 0;
   /* The figure and its unit are one line of text, not two boxes: inline flow
      keeps them on a single baseline, which flex here would not. */
   display: block;
   text-align: center;
-  line-height: 52px;
+  line-height: 60px;
   white-space: nowrap;
   border-radius: 16px;
   background: var(--art-a);
@@ -383,10 +384,10 @@
   align-self: center;
 }
 .shell.phone .home-search {
-  height: 46px;
+  height: 52px;
   gap: var(--space-2);
-  padding: 0 6px 0 14px;
-  border-radius: 15px;
+  padding: 0 6px 0 16px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border);
   background: var(--surface-card);
   box-shadow: 0 2px 10px #5757c70f;
@@ -395,21 +396,20 @@
   font-size: 1rem;
 }
 .shell.phone .home-search button {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
   border-radius: var(--radius-pill);
 }
+/* Scrolling the chips sideways hid the fourth one behind the screen edge with
+   nothing to announce it. Four short labels wrap into two rows instead, so the
+   whole set is readable without a gesture. */
 .shell.phone .chips {
-  margin: 0 calc(var(--space-5) * -1);
-  padding: 0 var(--space-5) var(--space-1);
+  margin: 0;
+  padding: 0;
   gap: var(--space-2);
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  scrollbar-width: none;
-}
-.shell.phone .chips::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
+  flex-wrap: wrap;
 }
 .shell.phone .chip {
   white-space: nowrap;
@@ -592,19 +592,31 @@
 .shell.phone .course-facts .course-meta:last-child {
   color: var(--text-placeholder);
 }
-/* Pushes the call to action to the bottom edge so cards of different text
-   lengths still line their links up. */
+/* Keeps the facts on the bottom edge so cards of different text lengths still
+   line their last line up. */
 .shell.phone .course-body > div:last-child {
   display: flex;
   flex-direction: column;
   gap: 6px;
   flex: 1;
 }
-.shell.phone .course-body .textlink {
-  margin-top: auto;
-  padding-top: 6px;
-  font-size: 0.8125rem;
-  line-height: 16px;
+/* The card is one link already, so the chevron beside the title is the whole
+   affordance - "Angebot ansehen" underneath only said the same thing again. */
+.course-titlerow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.course-titlerow h3 {
+  flex: 1;
+  min-width: 0;
+}
+.course-chevron {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 24px;
+  color: var(--accent-primary);
 }
 
 /* ---------- cards ---------- */
@@ -637,6 +649,71 @@
 .shell.phone .newsrow p {
   font-size: 0.8125rem;
   line-height: 1.45;
+}
+/* The row is the link: headline in text colour, chevron on the right edge. */
+.shell.phone .newsrow-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: inherit;
+  text-decoration: none;
+}
+.shell.phone .newsrow-body {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+.shell.phone .newsrow-body strong {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--text-primary);
+}
+.shell.phone .newsrow-chevron {
+  display: flex;
+  flex: none;
+  align-items: center;
+  color: var(--accent-primary);
+}
+.shell.phone .newsrow-link:active {
+  opacity: 0.6;
+}
+/* A card with one destination becomes that link. The chevron sits on the
+   eyebrow and heading, where the eye enters the card. */
+.shell.phone .panel-link {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+.shell.phone .panel-linkhead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.shell.phone .panel-linkhead .eyebrow {
+  margin-bottom: 4px;
+}
+.shell.phone .panel-linkhead h2 {
+  margin: 0;
+}
+.shell.phone .panel-chevron {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 28px;
+  color: var(--accent-primary);
+}
+.shell.phone .panel-link:active {
+  opacity: 0.7;
+}
+/* The fact rows carry their own bottom margin, which inside the stack grid
+   added to its gap and left a hole under the last line of the card. */
+.shell.phone .panel-link .factrow {
+  margin: 0;
 }
 
 /* ---------- footer ---------- */
@@ -820,10 +897,6 @@
   }
   .mobilehead-actions {
     gap: 6px;
-  }
-  .mobile-easy-language {
-    padding-inline: 4px;
-    font-size: 0.6875rem;
   }
   .shell.phone .mobile-home-hero {
     padding: var(--space-4);
