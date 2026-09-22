@@ -68,7 +68,7 @@ function pagehead(title, desc = "", action = "") {
 }
 
 function footer() {
-  return `<footer class="footer"><span>POLIZEI-ONLINE · LZPD Nordrhein-Westfalen</span><div class="footer-links"><button data-action="accessibility">Barrierefreiheit</button><button data-action="privacy">Datenschutz</button><button data-action="about">Über diesen Entwurf</button></div></footer>`;
+  return `<footer class="footer"><span>POLIZEI-ONLINE · Polizei Nordrhein-Westfalen · Technischer Betrieb: LZPD NRW (Landesamt für Zentrale Polizeiliche Dienste)</span><div class="footer-links"><button data-action="accessibility">Barrierefreiheit</button><button data-action="privacy">Datenschutz</button><button data-action="about">Über diesen Entwurf</button></div></footer>`;
 }
 
 // One rail entry. Shared by the initial markup and by syncSidebar(), so the

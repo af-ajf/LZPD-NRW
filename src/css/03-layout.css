@@ -331,6 +331,12 @@
   font-size: 0.75rem;
   color: var(--chrome-text-muted);
 }
+/* The line names two parties: the police the platform belongs to, and the
+   LZPD that runs it for them. */
+.footer > span {
+  line-height: 1.5;
+  max-width: 60ch;
+}
 .footer-links {
   display: flex;
   flex-wrap: wrap;
