@@ -71,11 +71,21 @@ document.addEventListener("click", (e) => {
         `<form id="modal-search"><div class="field"><label for="modal-q">Angebot oder Thema</label><input id="modal-q" name="q" type="search" placeholder="z. B. Deeskalation" autofocus></div><button class="btn" type="submit">Gesamtangebot durchsuchen</button></form>`,
       );
       break;
-    case "mytab":
+    case "mytab": {
+      // The page body is rebuilt in place, so the rail of tabs comes back
+      // scrolled to its start. Its offset is carried across the render, and
+      // the focus is set without one of its own, so the tab that was tapped
+      // stays where the finger left it instead of jumping to the front.
+      const railLeft = a.closest(".tabs")?.scrollLeft ?? 0;
       state.mytab = a.dataset.tab;
       render(false);
-      document.querySelector(`[data-tab="${state.mytab}"]`)?.focus();
+      const rail = $(".tabs");
+      if (rail) rail.scrollLeft = railLeft;
+      document
+        .querySelector(`[data-tab="${state.mytab}"]`)
+        ?.focus({ preventScroll: true });
       break;
+    }
     case "reset-filter":
       state.query = "";
       state.module = "Alle Module";
