@@ -285,7 +285,7 @@ function syncFavButtons(id) {
         (mark ? "" : `<span>${label}</span>`);
       // Focusing the mark can scroll the artwork it sits in; without the
       // re-render that used to follow, the shift would stay on screen.
-      const art = el.closest(".course-art");
+      const art = el.closest(".course-card")?.querySelector(".course-art");
       if (art) art.scrollTo(0, 0);
     });
 }
@@ -314,7 +314,7 @@ function courseCard(c) {
   const seats = c.seats ? `${c.seats} freie Plätze` : "Ausgebucht";
   const start =
     c.type === "E-Learning" ? "Ab " + formatDate(c.date) : formatDate(c.date);
-  return `<article class="panel course-card"><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span>${favButton(c)}</div><div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${c.type} · ${c.duration}</p><h3>${esc(c.title)}</h3></div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${c.place}</p><p class="course-meta">${start} · ${seats}</p></div><a class="textlink" href="#course/${c.id}">Angebot ansehen${icon("arrow", "xs")}</a></div></div></article>`;
+  return `<article class="panel course-card"><div class="course-art" data-module="${esc(c.module)}"><span class="course-glyph">${icon(courseGlyphs[c.category] || "book")}</span><span class="tag">${c.module}</span></div>${favButton(c)}<div class="course-body"><div class="course-headline"><p class="course-meta">${icon(c.type === "E-Learning" ? "monitor" : "calendar", "xs")}${c.type} · ${c.duration}</p><h3>${esc(c.title)}</h3></div><div><div class="course-facts"><p class="course-meta">${icon("pin", "xs")}${c.place}</p><p class="course-meta">${start} · ${seats}</p></div><a class="textlink" href="#course/${c.id}">Angebot ansehen${icon("arrow", "xs")}</a></div></div></article>`;
 }
 
 function formatDate(d) {
